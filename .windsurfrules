@@ -1,0 +1,20 @@
+# Windsurf Cascade Rules for egy_tracker
+
+Project: Two-Currency Expense Tracker (USD & EGP) for Egypt trip.
+Source document: two_currency_expense_tracker_mvp.md
+
+1. Domain Rules:
+- USD and EGP are strictly independent balances.
+- Never calculate a combined total of USD and EGP.
+- Never automatically convert between currencies.
+- No global exchange rate; every exchange records its own historical transaction rate.
+- Every expense has exactly one currency (USD or EGP).
+- `paid_by` subtracts the full cash amount from the payer's balance.
+- Split percentages (me_percentage + friend_percentage = 100) calculate personal share.
+- Initial balances are configured in Settings, not fake transactions.
+- Never introduce DZD, categories, trip naming, or debt optimization.
+
+2. Code Requirements:
+- Flutter 3.x with Material 3.
+- Run `flutter analyze` after Dart changes.
+- Navigation: Home, My Tracker, Settings.

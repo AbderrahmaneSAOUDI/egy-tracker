@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Git pre-commit hook for egy_tracker
+# Runs invariant guard and static analysis before allowing commits.
+
+set -e
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+
+echo "[Git Hook] Checking domain invariants..."
+python3 "$REPO_ROOT/scripts/invariant_guard.py"
+
+echo "[Git Hook] Running scenario checks..."
+dart run "$REPO_ROOT/.agents/skills/egy-tracker-qa-verifier/scripts/verify_scenarios.dart"
+
+echo "[Git Hook] Running flutter analyze..."
+flutter analyze
+
+echo "[Git Hook] Pre-commit validations passed successfully."

@@ -1,0 +1,7 @@
+{
+  "name": "flutter-test-daemon",
+  "description": "Background test runner and scenario verifier daemon for egy_tracker",
+  "command": "bash",
+  "args": ["run_daemon.sh"],
+  "restart_policy": "always"
+}

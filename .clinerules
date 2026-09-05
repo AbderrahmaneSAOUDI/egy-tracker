@@ -1,0 +1,22 @@
+# Cline / Roo-Code Rules for egy_tracker
+
+## Role & Project Purpose
+You are building and maintaining `egy_tracker`, a lightweight two-user Flutter expense app for an Egypt trip.
+Strictly adhere to the requirements in `two_currency_expense_tracker_mvp.md`.
+
+## Core Invariants (Zero Tolerance)
+- **Currency Isolation**: USD and EGP are completely separate. Never combine their amounts into an equivalent total. Never convert one to the other automatically.
+- **Transaction-Specific Exchange Rates**: There is no global exchange rate. Every exchange has its own historical rate.
+- **One Currency Per Expense**: Expenses cannot mix USD and EGP.
+- **Split Mechanics**:
+  - Cash outflow: 100% of expense amount deducted from `paid_by` user.
+  - Personal share: `amount * (percent / 100)`. Sum of percentages must equal 100%.
+  - Single record storage: never duplicate expense records.
+- **Exchanges**: Transfers between a user's own currency balances, not expenses.
+- **Settings**: Initial balances set here (not fake transactions). Whitelist allowed emails.
+- **Wipe Operation**: Single action to delete all application data.
+- **Strictly Out of Scope**: No DZD, no trip naming, no categories, no budget optimization, no debt settlement graphs.
+
+## Execution Standards
+- Always run `flutter analyze` after modifying Dart files.
+- Validate balance calculations against Scenarios A–E in the MVP documentation.

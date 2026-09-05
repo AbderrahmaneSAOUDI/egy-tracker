@@ -1,0 +1,25 @@
+---
+description: Flutter and Dart clean architecture standards for egy_tracker
+globs: lib/**/*.dart, test/**/*.dart
+alwaysApply: true
+---
+
+# Flutter Architecture & Standards
+
+1. **Layer Separation**:
+   - `lib/models/`: Immutable data models (`Expense`, `Exchange`, `InitialBalance`, `UserProfile`).
+   - `lib/services/`: Calculation engine (`calculation_service.dart`), Auth service (`auth_service.dart`), Repository interfaces and implementations.
+   - `lib/screens/`: 3 core tabs:
+     * `home_screen.dart` (Current balances per currency per user, chronological activity feed, Add button).
+     * `my_tracker_screen.dart` (Personal USD/EGP balances, 100% personal expenses, shared expenses with exact share).
+     * `settings_screen.dart` (Initial balances editor, allowed emails whitelist CRUD, "Delete all data" button).
+   - `lib/widgets/`: Reusable components (currency badge, split selector, balance card, activity tile).
+
+2. **Form Standards**:
+   - `Add Expense`: Title, Amount, Currency (USD or EGP radio/segmented button), Paid By (Me or Friend), Split Type (100% default, 50/50, Custom), Date/Time picker.
+   - `Add Exchange`: From Currency, Amount Given, To Currency, Amount Received, Exchange Rate, Date/Time picker.
+   - Input validation: Ensure custom split percentages strictly sum to 100. Amounts must be positive numbers.
+
+3. **Tooling**:
+   - Verify code with `flutter analyze` after every change.
+   - Ensure clean null safety and absence of unused imports.
