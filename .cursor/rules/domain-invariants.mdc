@@ -1,0 +1,30 @@
+---
+description: Critical two-currency and calculation invariants for egy_tracker
+globs: lib/**, test/**
+alwaysApply: true
+---
+
+# Domain Invariants for egy_tracker
+
+When generating or editing any code under `lib/` or `test/`:
+
+1. **Currency Independence**:
+   - Currencies allowed: `USD` and `EGP`.
+   - Never combine USD and EGP into a single aggregated total (e.g., "$141 total" is forbidden).
+   - Never automatically convert between USD and EGP.
+   - Never implement a global exchange rate. Every exchange has its own historical recorded rate.
+   - Each expense must have exactly one currency (`USD` or `EGP`).
+
+2. **Cash Balance vs. Consumption Share**:
+   - Cash deduction is 100% applied to `paid_by`.
+   - Personal consumption is `expense.amount * (personal_percentage / 100)`.
+   - Validation constraint: `me_percentage + friend_percentage == 100`.
+   - Split types: `default_100`, `fifty_fifty`, `custom`.
+   - The expense is stored only once in the database.
+
+3. **Exchanges**:
+   - Exchanges are personal transfers between a user's own USD and EGP balances.
+   - They are not expenses.
+
+4. **Forbidden Concepts**:
+   - DZD, trip categories, budget tracking, debt optimization.

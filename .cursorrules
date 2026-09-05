@@ -1,0 +1,26 @@
+# Cursor Rules for egy_tracker
+
+You are assisting on `egy_tracker`, a private Flutter app for 2 users tracking expenses in Egypt across USD and EGP.
+Refer to `two_currency_expense_tracker_mvp.md` and `AGENTS.md` for full requirements.
+
+## Absolute Rules
+1. **USD and EGP are strictly independent**:
+   - Never combine USD and EGP into one total.
+   - Never automatically convert between currencies.
+   - Never introduce a global or daily exchange rate.
+   - Each expense must be strictly either USD or EGP.
+2. **Payer vs Split Share**:
+   - `paid_by` decreases the payer's cash balance by the entire expense amount.
+   - Split percentages (me + friend = 100%) dictate personal share: `amount * (percent / 100)`.
+   - Expenses are stored once; never duplicate expense records for each user.
+3. **Exchanges are Balance Transfers**:
+   - They move money between a user's own USD and EGP balances.
+   - Never treat an exchange as spending/expense.
+   - Record the actual historical exchange rate entered for that specific transaction.
+4. **Initial Balances in Settings**:
+   - Stored directly in user initial balances. Never generate dummy/fake expense transactions for starting balances.
+5. **Blacklist (Do NOT implement)**:
+   - DZD, multiple trips, categories, budget optimization, debt settlement graphs, recurring subscriptions.
+6. **Code Quality**:
+   - Always adhere to Flutter Material 3.
+   - Run `flutter analyze` after creating or modifying Dart code.
