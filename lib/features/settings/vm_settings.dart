@@ -5,6 +5,7 @@ import '../../core/models/mod_initial_balance.dart';
 import '../../core/models/mod_user_profile.dart';
 import '../../core/services/f_auth.dart';
 import '../../core/services/f_firestore.dart';
+import '../../core/utils/m_auth_helpers.dart';
 
 /// ViewModel managing settings actions: initial balances, whitelist emails,
 /// user profile display name editing, and the complete data wipe protocol.
@@ -111,7 +112,7 @@ class SettingsViewModel extends ChangeNotifier {
           id: user.uid,
           name: trimmed,
           email: user.email ?? '',
-          photoUrl: user.photoURL,
+          photoUrl: resolveUserPhoto(user),
           createdAt: DateTime.now(),
         ),
       );

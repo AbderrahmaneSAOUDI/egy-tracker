@@ -4,7 +4,9 @@ import '../../../core/components/c_alert_banner.dart';
 import '../../../core/components/c_empty_state.dart';
 import '../../../core/components/c_section_card.dart';
 import '../../../core/models/mod_allowed_email.dart';
+import '../../../core/models/mod_user_profile.dart';
 import '../../../core/theme/t_app_theme.dart';
+import '../../../core/utils/m_auth_helpers.dart';
 import '../vm_settings.dart';
 import 'c_add_email_dialog.dart';
 import 'c_allowed_email_tile.dart';
@@ -23,14 +25,12 @@ class AllowedEmailsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return SectionCard(
       icon: Icons.shield_rounded,
       iconColor: isDark ? AppTheme.googleBlueDark : AppTheme.googleBlue,
       title: 'Allowed Emails',
-      subtitle: 'Authorized Google accounts',
       trailing: FilledButton.icon(
         onPressed: () => showAddEmailDialog(
           context: context,
@@ -77,7 +77,14 @@ class AllowedEmailsCard extends StatelessWidget {
             );
           }
 
-          final emails = snapshot.data ?? [];
+          final rawEmails = snapshot.data ?? [];
+          // Deduplicate by normalized email address to guarantee no duplicates appear
+          final seen = <String>{};
+          final emails = rawEmails.where((e) {
+            final key = e.email.toLowerCase().trim();
+            return seen.add(key);
+          }).toList();
+
           if (emails.isEmpty) {
             return EmptyState(
               icon: Icons.mail_outline_rounded,
@@ -89,24 +96,48 @@ class AllowedEmailsCard extends StatelessWidget {
             );
           }
 
-          return Column(
-            children: emails.map((allowed) {
-              final isCurrentUser = allowed.email.toLowerCase() ==
-                  (user.email ?? '').toLowerCase();
+          return StreamBuilder<List<UserProfile>>(
+            stream: viewModel.usersStream,
+            builder: (context, usersSnapshot) {
+              final users = usersSnapshot.data ?? [];
 
-              return AllowedEmailTile(
-                allowedEmail: allowed,
-                isCurrentUser: isCurrentUser,
-                currentUserPhotoUrl: user.photoURL,
-                currentUserName: user.displayName,
-                onDelete: () => showConfirmDeleteEmailDialog(
-                  context: context,
-                  allowedEmail: allowed,
-                  isCurrentUser: isCurrentUser,
-                  onDeleteEmail: viewModel.deleteAllowedEmail,
-                ),
+              return Column(
+                children: emails.map((allowed) {
+                  final normEmail = allowed.email.toLowerCase().trim();
+                  final isCurrentUser =
+                      normEmail == (user.email ?? '').toLowerCase().trim();
+
+                  // Look up matching user profile for profile picture and name
+                  UserProfile? matchingProfile;
+                  for (final u in users) {
+                    if (u.email.toLowerCase().trim() == normEmail) {
+                      matchingProfile = u;
+                      break;
+                    }
+                  }
+
+                  final photoUrl = isCurrentUser
+                      ? resolveUserPhoto(user, matchingProfile?.photoUrl)
+                      : matchingProfile?.photoUrl;
+                  final displayName = isCurrentUser
+                      ? resolveUserName(user, matchingProfile?.name)
+                      : matchingProfile?.name;
+
+                  return AllowedEmailTile(
+                    allowedEmail: allowed,
+                    isCurrentUser: isCurrentUser,
+                    photoUrl: photoUrl,
+                    displayName: displayName,
+                    onDelete: () => showConfirmDeleteEmailDialog(
+                      context: context,
+                      allowedEmail: allowed,
+                      isCurrentUser: isCurrentUser,
+                      onDeleteEmail: viewModel.deleteAllowedEmail,
+                    ),
+                  );
+                }).toList(),
               );
-            }).toList(),
+            },
           );
         },
       ),

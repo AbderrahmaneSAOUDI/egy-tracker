@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/models/mod_user_profile.dart';
 import '../../core/services/f_auth.dart';
 import '../../core/services/f_firestore.dart';
+import '../../core/utils/m_auth_helpers.dart';
 import '../home/s_home.dart';
 import 's_login.dart';
 
@@ -104,13 +105,23 @@ class _AuthGateState extends State<AuthGate> {
         }
 
         if (isAllowed) {
+          final photoUrl = resolveUserPhoto(user);
+          final displayName = resolveUserName(user);
+
+          // If root photoURL is null on first login but provider has it, update in background
+          if (user.photoURL == null && photoUrl != null) {
+            try {
+              user.updatePhotoURL(photoUrl).then((_) => user.reload()).catchError((_) {});
+            } catch (_) {}
+          }
+
           // Sync profile to Firestore
           widget.firestoreService.saveUserProfile(
             UserProfile(
               id: user.uid,
-              name: user.displayName ?? user.email?.split('@').first ?? 'Traveler',
+              name: displayName,
               email: user.email ?? '',
-              photoUrl: user.photoURL,
+              photoUrl: photoUrl,
               createdAt: DateTime.now(),
             ),
           ).catchError((e) {

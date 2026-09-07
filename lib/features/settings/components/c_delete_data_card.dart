@@ -24,27 +24,13 @@ class DeleteDataCard extends StatelessWidget {
       iconColor: colorScheme.error,
       borderColor: colorScheme.error.withValues(alpha: isDark ? 0.35 : 0.25),
       title: 'Trip Data & Reset',
-      subtitle: 'Manage temporary travel records',
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Upon returning from Egypt, easily wipe all expenses, exchanges, starting balances, and profiles to reset the app.',
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: colorScheme.onSurfaceVariant,
-              height: 1.35,
-            ),
-          ),
-          const SizedBox(height: 16),
-          DangerButton(
-            key: const ValueKey('delete_all_data_button'),
-            label: 'Delete all data',
-            onPressed: () => showDeleteAllDataDialog(
-              context: context,
-              onDeleteAllData: viewModel.deleteAllTripData,
-            ),
-          ),
-        ],
+      child: DangerButton(
+        key: const ValueKey('delete_all_data_button'),
+        label: 'Delete all data',
+        onPressed: () => showDeleteAllDataDialog(
+          context: context,
+          onDeleteAllData: viewModel.deleteAllTripData,
+        ),
       ),
     );
   }

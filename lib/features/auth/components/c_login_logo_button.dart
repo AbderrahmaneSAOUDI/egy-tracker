@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/animations/a_press_scale.dart';
 
 /// App logo button used on Login screen with tap-to-auto-login feature for developer convenience.
 class LoginLogoButton extends StatelessWidget {
@@ -15,7 +16,7 @@ class LoginLogoButton extends StatelessWidget {
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
-      child: GestureDetector(
+      child: PressScale(
         key: const Key('login_logo_button'),
         onTap: onTap,
         child: Container(

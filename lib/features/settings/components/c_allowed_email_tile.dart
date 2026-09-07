@@ -8,24 +8,23 @@ import '../../../core/theme/t_app_theme.dart';
 class AllowedEmailTile extends StatelessWidget {
   final AllowedEmail allowedEmail;
   final bool isCurrentUser;
-  final String? currentUserPhotoUrl;
-  final String? currentUserName;
+  final String? photoUrl;
+  final String? displayName;
   final VoidCallback onDelete;
 
   const AllowedEmailTile({
     super.key,
     required this.allowedEmail,
     required this.isCurrentUser,
-    this.currentUserPhotoUrl,
-    this.currentUserName,
+    this.photoUrl,
+    this.displayName,
     required this.onDelete,
   });
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final isDark = theme.brightness == Brightness.dark;
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final accentColor = isCurrentUser
         ? (isDark ? AppTheme.usdColorDark : AppTheme.usdColorLight)
@@ -61,8 +60,8 @@ class AllowedEmailTile extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           UserAvatar(
-            photoUrl: isCurrentUser ? currentUserPhotoUrl : null,
-            name: isCurrentUser ? currentUserName : null,
+            photoUrl: photoUrl,
+            name: displayName ?? allowedEmail.email,
             email: allowedEmail.email,
             radius: 17,
             backgroundColor: isCurrentUser
@@ -74,41 +73,26 @@ class AllowedEmailTile extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               children: [
-                Row(
-                  children: [
-                    Flexible(
-                      child: Text(
-                        allowedEmail.email,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: -0.1,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                Flexible(
+                  child: Text(
+                    allowedEmail.email,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: -0.1,
                     ),
-                    if (isCurrentUser) ...[
-                      const SizedBox(width: 6),
-                      StatusBadge(
-                        label: 'You',
-                        color: accentColor,
-                      ),
-                    ],
-                  ],
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  isCurrentUser
-                      ? 'Active Account • Admin'
-                      : 'Authorized Traveler',
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: colorScheme.outline,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
+                if (isCurrentUser) ...[
+                  const SizedBox(width: 6),
+                  StatusBadge(
+                    label: 'You',
+                    color: accentColor,
+                  ),
+                ],
               ],
             ),
           ),

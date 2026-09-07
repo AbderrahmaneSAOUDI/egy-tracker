@@ -5,6 +5,7 @@ import '../../../core/models/mod_allowed_email.dart';
 import '../../../core/models/mod_initial_balance.dart';
 import '../../../core/models/mod_user_profile.dart';
 import '../../../core/theme/t_app_theme.dart';
+import '../../../core/utils/m_auth_helpers.dart';
 import '../vm_settings.dart';
 import 'c_balance_user_card.dart';
 import 'c_edit_initial_balances_dialog.dart';
@@ -30,7 +31,6 @@ class InitialBalancesCard extends StatelessWidget {
       icon: Icons.account_balance_wallet_rounded,
       iconColor: isDark ? AppTheme.usdColorDark : AppTheme.usdColorLight,
       title: 'Initial Balances',
-      subtitle: 'Trip starting cash (USD & EGP)',
       child: StreamBuilder<List<InitialBalance>>(
         stream: viewModel.initialBalancesStream,
         builder: (context, balancesSnap) {
@@ -51,6 +51,15 @@ class InitialBalancesCard extends StatelessWidget {
                     if (b.userId == user.uid ||
                         b.userId.toLowerCase().trim() == myEmail) {
                       myBalance = b;
+                      break;
+                    }
+                  }
+
+                  // Current user profile resolution
+                  UserProfile? myProfile;
+                  for (final u in users) {
+                    if (u.id == user.uid || u.email.toLowerCase().trim() == myEmail) {
+                      myProfile = u;
                       break;
                     }
                   }
@@ -95,20 +104,23 @@ class InitialBalancesCard extends StatelessWidget {
                     }
                   }
 
+                  final myDisplayName = resolveUserName(user, myProfile?.name);
+                  final myPhotoUrl = resolveUserPhoto(user, myProfile?.photoUrl);
+
                   return Column(
                     children: [
                       // 1. You Starting Balance Item
                       BalanceUserCard(
                         isCurrentUser: true,
-                        name: user.displayName ?? 'You',
+                        name: myDisplayName,
                         email: user.email ?? '',
-                        photoUrl: user.photoURL,
+                        photoUrl: myPhotoUrl,
                         usdAmount: myBalance?.usdAmount ?? 0.0,
                         egpAmount: myBalance?.egpAmount ?? 0.0,
                         onEdit: () => showEditInitialBalancesDialog(
                           context: context,
                           userId: user.uid,
-                          userName: user.displayName ?? 'You',
+                          userName: myDisplayName,
                           currentUsd: myBalance?.usdAmount ?? 0.0,
                           currentEgp: myBalance?.egpAmount ?? 0.0,
                           onSave: viewModel.setInitialBalances,

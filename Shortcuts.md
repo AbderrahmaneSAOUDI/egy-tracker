@@ -9,7 +9,7 @@ Quick reference for file prefixes and MVVM architectural roles across the codeba
 | `main.dart` | **Entry Point** | App bootstrap, Firebase init, theme wrapper *(kept untouched)* | `lib/main.dart` |
 | `s_*.dart` | **Screens (Views)** | Top-level screen views and page layouts | `s_home.dart`, `s_settings.dart`, `s_login.dart` |
 | `c_*.dart` | **Components** | Reusable UI widgets, cards, buttons, badges, tiles, dialogs | `c_section_card.dart`, `c_app_dialog.dart`, `c_badge.dart` |
-| `a_*.dart` | **Animations** | Animation builders, transitions, and motion helpers | `a_fade_slide_transition.dart` |
+| `a_*.dart` | **Animations** | Animation builders, transitions, and motion helpers | `a_fade_slide_transition.dart`, `a_press_scale.dart`, `a_staggered_item.dart`, `a_animated_amount.dart`, `a_shimmer.dart` |
 | `vm_*.dart` | **ViewModels** | State management, UI logic, business workflows (`ChangeNotifier`) | `vm_home.dart`, `vm_settings.dart`, `vm_auth.dart` |
 | `mod_*.dart` | **Models** | Immutable domain entities and data classes | `mod_expense.dart`, `mod_exchange.dart`, `mod_user_profile.dart` |
 | `m_*.dart` | **Methods / Functions** | Pure Dart helper functions (calculations, formatters, validators) | `m_calculations.dart`, `m_formatters.dart`, `m_validators.dart` |

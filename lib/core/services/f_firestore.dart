@@ -33,7 +33,11 @@ class FirestoreService {
   }
 
   Future<void> saveUserProfile(UserProfile user) async {
-    await _usersCollection.doc(user.id).set(user.toMap(), SetOptions(merge: true));
+    final data = user.toMap();
+    if (user.photoUrl == null || user.photoUrl!.trim().isEmpty) {
+      data.remove('photo_url');
+    }
+    await _usersCollection.doc(user.id).set(data, SetOptions(merge: true));
   }
 
   // ===================== ALLOWED EMAILS =====================
@@ -65,6 +69,15 @@ class FirestoreService {
 
   Future<void> addAllowedEmail(String email) async {
     final normalized = email.toLowerCase().trim();
+    final snapshot = await _allowedEmailsCollection.get();
+    final alreadyExists = snapshot.docs.any((doc) {
+      final docEmail = (doc.data()['email'] as String? ?? '').toLowerCase().trim();
+      return docEmail == normalized;
+    });
+    if (alreadyExists) {
+      return;
+    }
+
     final docRef = _allowedEmailsCollection.doc();
     final allowedEmail = AllowedEmail(
       id: docRef.id,
