@@ -1144,8 +1144,7 @@ EGP      0 EGP
 
 ALLOWED EMAILS
 
-you@example.com
-friend@example.com
+abderrahmane.saoudi.26@gmail.com
 
 [ Add Email ]
 

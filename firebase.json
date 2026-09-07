@@ -1,0 +1,34 @@
+{
+  "auth": {
+    "providers": {
+      "googleSignIn": {
+        "oAuthBrandDisplayName": "egy_tracker",
+        "supportEmail": "abderrahmane.saoudi.26@gmail.com"
+      }
+    }
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "egy-tracker",
+          "appId": "1:27615434041:android:11f01ca8685dead82fc4e8",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "egy-tracker",
+          "configurations": {
+            "android": "1:27615434041:android:11f01ca8685dead82fc4e8",
+            "web": "1:27615434041:web:ec571467505326de2fc4e8"
+          }
+        }
+      }
+    }
+  }
+}

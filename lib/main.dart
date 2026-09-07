@@ -1,25 +1,63 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'core/services/f_auth.dart';
+import 'core/services/f_firestore.dart';
+import 'core/theme/t_app_theme.dart';
+import 'features/auth/s_auth_gate.dart';
+import 'firebase_options.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  final authService = AuthService();
+  await authService.tryRestoreSession();
+  final firestoreService = FirestoreService();
+
+  runApp(
+    MyApp(
+      authService: authService,
+      firestoreService: firestoreService,
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final AuthService? authService;
+  final FirestoreService? firestoreService;
+
+  const MyApp({
+    super.key,
+    this.authService,
+    this.firestoreService,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'egy_tracker',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
-        useMaterial3: true,
-      ),
-      home: const Scaffold(
-        body: Center(
-          child: Text('egy_tracker'),
-        ),
-      ),
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: AppTheme.themeModeNotifier,
+      builder: (context, themeMode, _) {
+        return MaterialApp(
+          title: 'egy_tracker',
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: themeMode,
+          debugShowCheckedModeBanner: false,
+          home: authService != null && firestoreService != null
+              ? AuthGate(
+                  authService: authService!,
+                  firestoreService: firestoreService!,
+                )
+              : const Scaffold(
+                  body: Center(
+                    child: Text('egy_tracker'),
+                  ),
+                ),
+        );
+      },
     );
   }
 }
