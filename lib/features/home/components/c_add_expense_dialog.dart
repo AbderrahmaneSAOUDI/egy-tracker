@@ -25,7 +25,6 @@ Future<void> showAddExpenseDialog({
 
   String selectedCurrency = 'EGP'; // Default to EGP for Egypt trip
   String paidByMode = 'you'; // 'you', 'both', 'friend'
-  String billPayerId = currentUserId;
   String sharedSplitType = 'fifty_fifty'; // 'fifty_fifty' or 'custom'
   double customMePercentage = 50.0;
   double customFriendPercentage = 50.0;
@@ -35,7 +34,7 @@ Future<void> showAddExpenseDialog({
   final friendId = friendUserId ?? 'friend';
   final friendName = friendUserName ?? 'Friend';
 
-  return showDialog<void>(
+  return showAnimatedDialog<void>(
     context: context,
     builder: (dialogContext) {
       return StatefulBuilder(
@@ -48,12 +47,8 @@ Future<void> showAddExpenseDialog({
               ? (isDark ? AppTheme.usdColorDark : AppTheme.usdColorLight)
               : (isDark ? AppTheme.egpColorDark : AppTheme.egpColorLight);
 
-          // Payer ID calculation
-          final actualPayerId = paidByMode == 'you'
-              ? currentUserId
-              : paidByMode == 'friend'
-                  ? friendId
-                  : billPayerId;
+          // Payer ID calculation: friend if friend mode, otherwise current user
+          final actualPayerId = paidByMode == 'friend' ? friendId : currentUserId;
 
           // Available balance for the actual payer
           final isMePayer = actualPayerId == currentUserId;
@@ -140,188 +135,148 @@ Future<void> showAddExpenseDialog({
             },
             content: Form(
               key: formKey,
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // 1. Title Field
-                    TextFormField(
-                      controller: titleController,
-                      textCapitalization: TextCapitalization.sentences,
-                      decoration: const InputDecoration(
-                        labelText: 'Title',
-                        hintText: 'e.g. Taxi, Dinner, Museum',
-                        prefixIcon: Icon(Icons.edit_outlined),
+              child: SizedBox(
+                width: double.maxFinite,
+                height: 400,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // 1. Title Field
+                      TextFormField(
+                        controller: titleController,
+                        textCapitalization: TextCapitalization.sentences,
+                        decoration: const InputDecoration(
+                          labelText: 'Title',
+                          hintText: 'e.g. Taxi, Dinner, Museum',
+                          prefixIcon: Icon(Icons.edit_outlined),
+                        ),
+                        validator: (val) =>
+                            Validators.validateRequired(val, 'Title'),
                       ),
-                      validator: (val) =>
-                          Validators.validateRequired(val, 'Title'),
-                    ),
-                    const SizedBox(height: 12),
+                      const SizedBox(height: 12),
 
-                    // 2. Amount & Currency
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Amount input
-                        Expanded(
-                          flex: 3,
-                          child: TextFormField(
-                            controller: amountController,
-                            keyboardType: const TextInputType.numberWithOptions(
-                                decimal: true),
-                            onChanged: (_) => setDialogState(() {}),
-                            decoration: InputDecoration(
-                              labelText: 'Amount',
-                              hintText: '0.00',
-                              prefixIcon: Icon(
-                                selectedCurrency == 'USD'
-                                    ? Icons.attach_money_rounded
-                                    : Icons.payments_outlined,
-                                color: currencyColor,
-                              ),
-                            ),
-                            validator: (val) =>
-                                Validators.validatePositiveAmount(
-                                    val, selectedCurrency),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-
-                        // Currency Toggle
-                        Expanded(
-                          flex: 2,
-                          child: Container(
-                            height: 52,
-                            padding: const EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(14),
-                              border: Border.all(
-                                color: currencyColor.withValues(alpha: 0.4),
-                              ),
-                            ),
-                            child: Row(
-                              children: [
-                                _buildCurrencyOption(
-                                  label: 'EGP',
-                                  isSelected: selectedCurrency == 'EGP',
-                                  color: isDark
-                                      ? AppTheme.egpColorDark
-                                      : AppTheme.egpColorLight,
-                                  onTap: () => setDialogState(
-                                      () => selectedCurrency = 'EGP'),
+                      // 2. Amount & Currency
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Amount input
+                          Expanded(
+                            flex: 3,
+                            child: TextFormField(
+                              controller: amountController,
+                              keyboardType: const TextInputType.numberWithOptions(
+                                  decimal: true),
+                              enabled: !isSubmitting,
+                              onChanged: (_) => setDialogState(() {}),
+                              decoration: InputDecoration(
+                                labelText: 'Amount',
+                                hintText: '0.00',
+                                prefixIcon: Icon(
+                                  selectedCurrency == 'USD'
+                                      ? Icons.attach_money_rounded
+                                      : Icons.payments_outlined,
+                                  color: currencyColor,
                                 ),
-                                _buildCurrencyOption(
-                                  label: 'USD',
-                                  isSelected: selectedCurrency == 'USD',
-                                  color: isDark
-                                      ? AppTheme.usdColorDark
-                                      : AppTheme.usdColorLight,
-                                  onTap: () => setDialogState(
-                                      () => selectedCurrency = 'USD'),
-                                ),
-                              ],
+                              ),
+                              validator: (val) =>
+                                  Validators.validatePositiveAmount(
+                                      val, selectedCurrency),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
+                          const SizedBox(width: 8),
 
-                    // Insufficient Cash Warning Hint
-                    if (isOverBudget) ...[
-                      const SizedBox(height: 8),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: (isDark
-                                  ? AppTheme.googleYellowDark
-                                  : AppTheme.googleYellow)
-                              .withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
+                          // Currency Toggle
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              height: 52,
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(14),
+                                color: isDark
+                                    ? Colors.white.withValues(alpha: 0.05)
+                                    : Colors.black.withValues(alpha: 0.04),
+                                border: Border.all(
+                                  color: currencyColor.withValues(alpha: 0.4),
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  _buildCurrencyOption(
+                                    label: 'EGP',
+                                    isSelected: selectedCurrency == 'EGP',
+                                    color: isDark
+                                        ? AppTheme.egpColorDark
+                                        : AppTheme.egpColorLight,
+                                    onTap: () => setDialogState(
+                                        () => selectedCurrency = 'EGP'),
+                                  ),
+                                  _buildCurrencyOption(
+                                    label: 'USD',
+                                    isSelected: selectedCurrency == 'USD',
+                                    color: isDark
+                                        ? AppTheme.usdColorDark
+                                        : AppTheme.usdColorLight,
+                                    onTap: () => setDialogState(
+                                        () => selectedCurrency = 'USD'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      // Insufficient Cash Warning Hint
+                      if (isOverBudget) ...[
+                        const SizedBox(height: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 6),
+                          decoration: BoxDecoration(
                             color: (isDark
                                     ? AppTheme.googleYellowDark
                                     : AppTheme.googleYellow)
-                                .withValues(alpha: 0.35),
+                                .withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: (isDark
+                                      ? AppTheme.googleYellowDark
+                                      : AppTheme.googleYellow)
+                                  .withValues(alpha: 0.35),
+                            ),
                           ),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(Icons.info_outline_rounded,
-                                size: 15,
-                                color: isDark
-                                    ? AppTheme.googleYellowDark
-                                    : AppTheme.googleYellow),
-                            const SizedBox(width: 6),
-                            Expanded(
-                              child: Text(
-                                'Amount exceeds available cash (${Formatters.formatCurrency(availableCash, selectedCurrency)}). You may need to exchange or borrow currency.',
-                                style: TextStyle(
-                                  fontSize: 11,
+                          child: Row(
+                            children: [
+                              Icon(Icons.info_outline_rounded,
+                                  size: 15,
                                   color: isDark
                                       ? AppTheme.googleYellowDark
-                                      : AppTheme.googleYellow,
-                                  fontWeight: FontWeight.w600,
+                                      : AppTheme.googleYellow),
+                              const SizedBox(width: 6),
+                              Expanded(
+                                child: Text(
+                                  'Amount exceeds available cash (${Formatters.formatCurrency(availableCash, selectedCurrency)}). You may need to exchange or borrow currency.',
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    color: isDark
+                                        ? AppTheme.googleYellowDark
+                                        : AppTheme.googleYellow,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                    const SizedBox(height: 14),
-
-                    // 3. Paid By Selector (You / Both / Friend)
-                    Text(
-                      'Paid By',
-                      style: theme.textTheme.labelMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _buildChoiceChip(
-                            label: 'You',
-                            isSelected: paidByMode == 'you',
-                            onTap: () => setDialogState(() {
-                              paidByMode = 'you';
-                            }),
-                            isDark: isDark,
-                          ),
-                        ),
-                        const SizedBox(width: 6),
-                        Expanded(
-                          child: _buildChoiceChip(
-                            label: 'Both',
-                            isSelected: paidByMode == 'both',
-                            onTap: () => setDialogState(() {
-                              paidByMode = 'both';
-                            }),
-                            isDark: isDark,
-                          ),
-                        ),
-                        const SizedBox(width: 6),
-                        Expanded(
-                          child: _buildChoiceChip(
-                            label: friendName,
-                            isSelected: paidByMode == 'friend',
-                            onTap: () => setDialogState(() {
-                              paidByMode = 'friend';
-                            }),
-                            isDark: isDark,
+                            ],
                           ),
                         ),
                       ],
-                    ),
-
-                    // 4. Split section (ONLY visible when 'Both' is selected)
-                    if (paidByMode == 'both') ...[
                       const SizedBox(height: 14),
+
+                      // 3. Paid By Selector (You / Both / Friend)
                       Text(
-                        'Who paid the bill?',
+                        'Paid By',
                         style: theme.textTheme.labelMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -332,153 +287,207 @@ Future<void> showAddExpenseDialog({
                           Expanded(
                             child: _buildChoiceChip(
                               label: 'You',
-                              isSelected: billPayerId == currentUserId,
-                              onTap: () => setDialogState(
-                                  () => billPayerId = currentUserId),
+                              isSelected: paidByMode == 'you',
+                              onTap: () => setDialogState(() {
+                                paidByMode = 'you';
+                              }),
                               isDark: isDark,
                             ),
                           ),
-                          const SizedBox(width: 8),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: _buildChoiceChip(
+                              label: 'Both',
+                              isSelected: paidByMode == 'both',
+                              onTap: () => setDialogState(() {
+                                paidByMode = 'both';
+                              }),
+                              isDark: isDark,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
                           Expanded(
                             child: _buildChoiceChip(
                               label: friendName,
-                              isSelected: billPayerId == friendId,
-                              onTap: () =>
-                                  setDialogState(() => billPayerId = friendId),
+                              isSelected: paidByMode == 'friend',
+                              onTap: () => setDialogState(() {
+                                paidByMode = 'friend';
+                              }),
                               isDark: isDark,
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 12),
-                      Text(
-                        'Split',
-                        style: theme.textTheme.labelMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: _buildChoiceChip(
-                              label: '50 / 50',
-                              isSelected: sharedSplitType == 'fifty_fifty',
-                              onTap: () => setDialogState(
-                                  () => sharedSplitType = 'fifty_fifty'),
-                              isDark: isDark,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: _buildChoiceChip(
-                              label: 'Custom',
-                              isSelected: sharedSplitType == 'custom',
-                              onTap: () => setDialogState(
-                                  () => sharedSplitType = 'custom'),
-                              isDark: isDark,
-                            ),
-                          ),
-                        ],
-                      ),
-                      if (sharedSplitType == 'custom') ...[
-                        const SizedBox(height: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: isDark
-                                ? Colors.white.withValues(alpha: 0.04)
-                                : Colors.black.withValues(alpha: 0.03),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('You: ${customMePercentage.toInt()}%',
-                                      style: const TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold)),
-                                  Text(
-                                      '$friendName: ${customFriendPercentage.toInt()}%',
-                                      style: const TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold)),
-                                ],
-                              ),
-                              Slider(
-                                value: customMePercentage,
-                                min: 0,
-                                max: 100,
-                                divisions: 20,
-                                onChanged: (val) {
-                                  setDialogState(() {
-                                    customMePercentage = val;
-                                    customFriendPercentage = 100 - val;
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ],
-                    const SizedBox(height: 14),
 
-                    // 5. Date Selector
-                    InkWell(
-                      onTap: () async {
-                        final picked = await showDatePicker(
-                          context: context,
-                          initialDate: selectedDate,
-                          firstDate: DateTime(2025),
-                          lastDate: DateTime(2030),
-                        );
-                        if (picked != null) {
-                          setDialogState(() {
-                            selectedDate = DateTime(
-                              picked.year,
-                              picked.month,
-                              picked.day,
-                              selectedDate.hour,
-                              selectedDate.minute,
-                            );
-                          });
-                        }
-                      },
-                      borderRadius: BorderRadius.circular(10),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: Row(
+                      // 4. Split section (ONLY visible when 'Both' is selected)
+                      if (paidByMode == 'both') ...[
+                        const SizedBox(height: 14),
+                        Text(
+                          'Split',
+                          style: theme.textTheme.labelMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Row(
                           children: [
-                            Icon(Icons.calendar_today_rounded,
-                                size: 16,
-                                color: colorScheme.onSurfaceVariant),
-                            const SizedBox(width: 8),
-                            Text(
-                              Formatters.formatDate(selectedDate),
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: colorScheme.onSurfaceVariant,
+                            Expanded(
+                              child: _buildChoiceChip(
+                                label: '50 / 50',
+                                isSelected: sharedSplitType == 'fifty_fifty',
+                                onTap: () => setDialogState(
+                                    () => sharedSplitType = 'fifty_fifty'),
+                                isDark: isDark,
                               ),
                             ),
-                            const Spacer(),
-                            Text(
-                              'Change',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: colorScheme.primary,
-                                fontWeight: FontWeight.bold,
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: _buildChoiceChip(
+                                label: 'Custom',
+                                isSelected: sharedSplitType == 'custom',
+                                onTap: () => setDialogState(
+                                    () => sharedSplitType = 'custom'),
+                                isDark: isDark,
                               ),
                             ),
                           ],
                         ),
+
+                        // Custom percentage sliders
+                        if (sharedSplitType == 'custom') ...[
+                          const SizedBox(height: 12),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'You: ${customMePercentage.toInt()}%',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                  color: isDark
+                                      ? AppTheme.googleBlueDark
+                                      : AppTheme.googleBlue,
+                                ),
+                              ),
+                              Text(
+                                '$friendName: ${customFriendPercentage.toInt()}%',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                  color: colorScheme.outline,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SliderTheme(
+                            data: SliderTheme.of(context).copyWith(
+                              activeTrackColor: isDark
+                                  ? AppTheme.googleBlueDark
+                                  : AppTheme.googleBlue,
+                              thumbColor: isDark
+                                  ? AppTheme.googleBlueDark
+                                  : AppTheme.googleBlue,
+                              overlayColor: (isDark
+                                      ? AppTheme.googleBlueDark
+                                      : AppTheme.googleBlue)
+                                  .withValues(alpha: 0.15),
+                            ),
+                            child: Slider(
+                              value: customMePercentage,
+                              min: 0,
+                              max: 100,
+                              divisions: 20,
+                              onChanged: (val) {
+                                setDialogState(() {
+                                  customMePercentage = val;
+                                  customFriendPercentage = 100 - val;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ],
+                      const SizedBox(height: 16),
+
+                      // 5. Date Selector with Reset to Now button
+                      Row(
+                        children: [
+                          Expanded(
+                            child: InkWell(
+                              onTap: () async {
+                                final picked = await showDatePicker(
+                                  context: dialogContext,
+                                  initialDate: selectedDate,
+                                  firstDate: DateTime(2025),
+                                  lastDate: DateTime(2030),
+                                );
+                                if (picked != null && dialogContext.mounted) {
+                                  final time = await showTimePicker(
+                                    context: dialogContext,
+                                    initialTime:
+                                        TimeOfDay.fromDateTime(selectedDate),
+                                  );
+                                  if (dialogContext.mounted) {
+                                    setDialogState(() {
+                                      selectedDate = DateTime(
+                                        picked.year,
+                                        picked.month,
+                                        picked.day,
+                                        time?.hour ?? selectedDate.hour,
+                                        time?.minute ?? selectedDate.minute,
+                                      );
+                                    });
+                                  }
+                                }
+                              },
+                              borderRadius: BorderRadius.circular(10),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 4),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.calendar_today_rounded,
+                                        size: 16,
+                                        color: colorScheme.onSurfaceVariant),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      Formatters.formatDate(selectedDate),
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: colorScheme.onSurfaceVariant,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      'Change',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: colorScheme.primary,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          IconButton(
+                            icon: const Icon(Icons.restore_rounded, size: 18),
+                            tooltip: 'Reset to now',
+                            onPressed: () {
+                              setDialogState(() {
+                                selectedDate = DateTime.now();
+                              });
+                            },
+                            visualDensity: VisualDensity.compact,
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(
+                                minWidth: 32, minHeight: 32),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

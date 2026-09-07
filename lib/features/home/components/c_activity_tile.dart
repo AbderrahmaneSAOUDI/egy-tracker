@@ -5,7 +5,7 @@ import '../../../core/utils/m_formatters.dart';
 import '../models/mod_activity_item.dart';
 
 /// Clean activity list item displaying either an Expense or a Currency Exchange.
-class ActivityTile extends StatelessWidget {
+class ActivityTile extends StatefulWidget {
   final ActivityItem item;
   final String currentUserId;
   final String? friendName;
@@ -20,17 +20,66 @@ class ActivityTile extends StatelessWidget {
   });
 
   @override
+  State<ActivityTile> createState() => _ActivityTileState();
+}
+
+class _ActivityTileState extends State<ActivityTile>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _fade;
+  late final Animation<Offset> _slide;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 220),
+    );
+    final curve = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOutCubic,
+    );
+    _fade = curve;
+    _slide = Tween<Offset>(
+      begin: const Offset(0, 0.05),
+      end: Offset.zero,
+    ).animate(curve);
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  ActivityItem get item => widget.item;
+  String get currentUserId => widget.currentUserId;
+  String? get friendName => widget.friendName;
+  VoidCallback? get onDelete => widget.onDelete;
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    if (item.isExpense) {
-      return _buildExpenseTile(context, isDark);
-    } else if (item.isExchange) {
-      return _buildExchangeTile(context, isDark);
+    Widget content;
+    if (widget.item.isExpense) {
+      content = _buildExpenseTile(context, isDark);
+    } else if (widget.item.isExchange) {
+      content = _buildExchangeTile(context, isDark);
     } else {
-      return _buildBorrowTile(context, isDark);
+      content = _buildBorrowTile(context, isDark);
     }
+
+    return SlideTransition(
+      position: _slide,
+      child: FadeTransition(
+        opacity: _fade,
+        child: content,
+      ),
+    );
   }
 
   Widget _buildExpenseTile(BuildContext context, bool isDark) {

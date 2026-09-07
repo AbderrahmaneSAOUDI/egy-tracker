@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'c_icon_badge.dart';
 
+export '../animations/a_dialog_transition.dart';
+
 /// Reusable application dialog shell with unified styling,
 /// title badge, content padding, and standardized Cancel + Action buttons.
 class AppDialog extends StatelessWidget {

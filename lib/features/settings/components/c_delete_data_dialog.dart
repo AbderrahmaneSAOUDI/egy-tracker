@@ -8,7 +8,7 @@ Future<void> showDeleteAllDataDialog({
 }) {
   bool isDeleting = false;
 
-  return showDialog<void>(
+  return showAnimatedDialog<void>(
     context: context,
     builder: (dialogContext) {
       final theme = Theme.of(context);
