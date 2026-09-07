@@ -1,0 +1,200 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../models/mod_allowed_email.dart';
+import '../models/mod_exchange.dart';
+import '../models/mod_expense.dart';
+import '../models/mod_initial_balance.dart';
+import '../models/mod_user_profile.dart';
+
+class FirestoreService {
+  final FirebaseFirestore? _customFirestore;
+
+  FirestoreService({FirebaseFirestore? firestore}) : _customFirestore = firestore;
+
+  FirebaseFirestore get _firestore => _customFirestore ?? FirebaseFirestore.instance;
+
+  // Collection references
+  CollectionReference<Map<String, dynamic>> get _usersCollection =>
+      _firestore.collection('users');
+  CollectionReference<Map<String, dynamic>> get _allowedEmailsCollection =>
+      _firestore.collection('allowed_emails');
+  CollectionReference<Map<String, dynamic>> get _initialBalancesCollection =>
+      _firestore.collection('initial_balances');
+  CollectionReference<Map<String, dynamic>> get _expensesCollection =>
+      _firestore.collection('expenses');
+  CollectionReference<Map<String, dynamic>> get _exchangesCollection =>
+      _firestore.collection('exchanges');
+
+  // ===================== USER PROFILES =====================
+
+  Stream<List<UserProfile>> getUsersStream() {
+    return _usersCollection.snapshots().map((snapshot) => snapshot.docs
+        .map((doc) => UserProfile.fromMap(doc.data(), doc.id))
+        .toList());
+  }
+
+  Future<void> saveUserProfile(UserProfile user) async {
+    await _usersCollection.doc(user.id).set(user.toMap(), SetOptions(merge: true));
+  }
+
+  // ===================== ALLOWED EMAILS =====================
+
+  Stream<List<AllowedEmail>> getAllowedEmailsStream() {
+    return _allowedEmailsCollection.snapshots().map((snapshot) => snapshot.docs
+        .map((doc) => AllowedEmail.fromMap(doc.data(), doc.id))
+        .toList());
+  }
+
+  Future<bool> isEmailAllowed(String email) async {
+    final normalized = email.toLowerCase().trim();
+    if (normalized == 'abderrahmane.saoudi.26@gmail.com') {
+      return true;
+    }
+    final snapshot = await _allowedEmailsCollection.get();
+
+    // If whitelist is completely empty, allow initial user and auto-seed
+    if (snapshot.docs.isEmpty) {
+      await addAllowedEmail(normalized);
+      return true;
+    }
+
+    return snapshot.docs.any((doc) {
+      final docEmail = (doc.data()['email'] as String? ?? '').toLowerCase().trim();
+      return docEmail == normalized;
+    });
+  }
+
+  Future<void> addAllowedEmail(String email) async {
+    final normalized = email.toLowerCase().trim();
+    final docRef = _allowedEmailsCollection.doc();
+    final allowedEmail = AllowedEmail(
+      id: docRef.id,
+      email: normalized,
+      createdAt: DateTime.now(),
+    );
+    await docRef.set(allowedEmail.toMap());
+  }
+
+  Future<void> deleteAllowedEmail(String id) async {
+    await _allowedEmailsCollection.doc(id).delete();
+  }
+
+  // ===================== INITIAL BALANCES =====================
+
+  Stream<List<InitialBalance>> getInitialBalancesStream() {
+    return _initialBalancesCollection.snapshots().map((snapshot) => snapshot.docs
+        .map((doc) => InitialBalance.fromMap(doc.data(), doc.id))
+        .toList());
+  }
+
+  Future<void> setInitialBalances({
+    required String userId,
+    required double usdAmount,
+    required double egpAmount,
+  }) async {
+    final balance = InitialBalance(
+      userId: userId,
+      usdAmount: usdAmount,
+      egpAmount: egpAmount,
+      updatedAt: DateTime.now(),
+    );
+    await _initialBalancesCollection.doc(userId).set(balance.toMap());
+  }
+
+  // ===================== EXPENSES =====================
+
+  Stream<List<Expense>> getExpensesStream() {
+    return _expensesCollection.snapshots().map((snapshot) {
+      final list = snapshot.docs
+          .map((doc) => Expense.fromMap(doc.data(), doc.id))
+          .toList();
+      list.sort((a, b) => b.date.compareTo(a.date));
+      return list;
+    });
+  }
+
+  Future<void> addExpense(Expense expense) async {
+    final docRef = _expensesCollection.doc(expense.id.isNotEmpty ? expense.id : null);
+    final toSave = Expense(
+      id: docRef.id,
+      title: expense.title,
+      amount: expense.amount,
+      currency: expense.currency,
+      paidBy: expense.paidBy,
+      splitType: expense.splitType,
+      mePercentage: expense.mePercentage,
+      friendPercentage: expense.friendPercentage,
+      date: expense.date,
+      createdAt: expense.createdAt,
+    );
+    await docRef.set(toSave.toMap());
+  }
+
+  Future<void> deleteExpense(String id) async {
+    await _expensesCollection.doc(id).delete();
+  }
+
+  // ===================== EXCHANGES =====================
+
+  Stream<List<Exchange>> getExchangesStream() {
+    return _exchangesCollection.snapshots().map((snapshot) {
+      final list = snapshot.docs
+          .map((doc) => Exchange.fromMap(doc.data(), doc.id))
+          .toList();
+      list.sort((a, b) => b.date.compareTo(a.date));
+      return list;
+    });
+  }
+
+  Future<void> addExchange(Exchange exchange) async {
+    final docRef = _exchangesCollection.doc(exchange.id.isNotEmpty ? exchange.id : null);
+    final toSave = Exchange(
+      id: docRef.id,
+      userId: exchange.userId,
+      fromCurrency: exchange.fromCurrency,
+      fromAmount: exchange.fromAmount,
+      toCurrency: exchange.toCurrency,
+      toAmount: exchange.toAmount,
+      exchangeRate: exchange.exchangeRate,
+      date: exchange.date,
+      createdAt: exchange.createdAt,
+    );
+    await docRef.set(toSave.toMap());
+  }
+
+  Future<void> deleteExchange(String id) async {
+    await _exchangesCollection.doc(id).delete();
+  }
+
+  // ===================== DATA WIPE PROTOCOL =====================
+
+  /// Purges all trip expenses, exchanges, initial balances, and user records.
+  Future<void> deleteAllTripData() async {
+    final batch = _firestore.batch();
+
+    // 1. Delete all expenses
+    final expensesSnap = await _expensesCollection.get();
+    for (final doc in expensesSnap.docs) {
+      batch.delete(doc.reference);
+    }
+
+    // 2. Delete all exchanges
+    final exchangesSnap = await _exchangesCollection.get();
+    for (final doc in exchangesSnap.docs) {
+      batch.delete(doc.reference);
+    }
+
+    // 3. Reset/delete initial balances
+    final balancesSnap = await _initialBalancesCollection.get();
+    for (final doc in balancesSnap.docs) {
+      batch.delete(doc.reference);
+    }
+
+    // 4. Delete user profiles
+    final usersSnap = await _usersCollection.get();
+    for (final doc in usersSnap.docs) {
+      batch.delete(doc.reference);
+    }
+
+    await batch.commit();
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "files.exclude": {
+    "CLAUDE.md": true,
+    ".agents": true,
+    ".cursor": true,
+    ".dart_tool": true,
+    ".githooks": true,
+    ".github": true,
+    ".idea": true,
+    ".vscode": true,
+    "android": true,
+    "web": true,
+    ".clinerules": true,
+    ".firebaserc": true,
+    "AGENTS.md": true,
+    "test": true,
+    ".gitignore": true,
+    "firebase.json": true,
+    "egy_tracker.iml": true,
+    "pubspec.lock": true,
+    "LICENSE": true,
+    "GEMINI.md": true,
+    "firestore.rules": true,
+    "analysis_options.yaml": true,
+    ".cursorrules": true,
+    ".flutter-plugins-dependencies": true,
+    ".metadata": true,
+    ".windsurfrules": true,
+    "firestore.indexes.json": true
+  }
+}

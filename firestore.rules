@@ -1,0 +1,25 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Whitelist and app collections for the private 2-user tracker
+    match /users/{userId} {
+      allow read, write: if true;
+    }
+
+    match /allowed_emails/{emailId} {
+      allow read, write: if true;
+    }
+
+    match /initial_balances/{balanceId} {
+      allow read, write: if true;
+    }
+
+    match /expenses/{expenseId} {
+      allow read, write: if true;
+    }
+
+    match /exchanges/{exchangeId} {
+      allow read, write: if true;
+    }
+  }
+}
