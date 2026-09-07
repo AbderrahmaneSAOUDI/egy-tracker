@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/mod_allowed_email.dart';
+import '../models/mod_borrow.dart';
 import '../models/mod_exchange.dart';
 import '../models/mod_expense.dart';
 import '../models/mod_initial_balance.dart';
@@ -23,6 +24,8 @@ class FirestoreService {
       _firestore.collection('expenses');
   CollectionReference<Map<String, dynamic>> get _exchangesCollection =>
       _firestore.collection('exchanges');
+  CollectionReference<Map<String, dynamic>> get _borrowsCollection =>
+      _firestore.collection('borrows');
 
   // ===================== USER PROFILES =====================
 
@@ -116,13 +119,17 @@ class FirestoreService {
   // ===================== EXPENSES =====================
 
   Stream<List<Expense>> getExpensesStream() {
-    return _expensesCollection.snapshots().map((snapshot) {
-      final list = snapshot.docs
-          .map((doc) => Expense.fromMap(doc.data(), doc.id))
-          .toList();
-      list.sort((a, b) => b.date.compareTo(a.date));
-      return list;
-    });
+    try {
+      return _expensesCollection.snapshots().map((snapshot) {
+        final list = snapshot.docs
+            .map((doc) => Expense.fromMap(doc.data(), doc.id))
+            .toList();
+        list.sort((a, b) => b.date.compareTo(a.date));
+        return list;
+      });
+    } catch (_) {
+      return const Stream.empty();
+    }
   }
 
   Future<void> addExpense(Expense expense) async {
@@ -149,13 +156,17 @@ class FirestoreService {
   // ===================== EXCHANGES =====================
 
   Stream<List<Exchange>> getExchangesStream() {
-    return _exchangesCollection.snapshots().map((snapshot) {
-      final list = snapshot.docs
-          .map((doc) => Exchange.fromMap(doc.data(), doc.id))
-          .toList();
-      list.sort((a, b) => b.date.compareTo(a.date));
-      return list;
-    });
+    try {
+      return _exchangesCollection.snapshots().map((snapshot) {
+        final list = snapshot.docs
+            .map((doc) => Exchange.fromMap(doc.data(), doc.id))
+            .toList();
+        list.sort((a, b) => b.date.compareTo(a.date));
+        return list;
+      });
+    } catch (_) {
+      return const Stream.empty();
+    }
   }
 
   Future<void> addExchange(Exchange exchange) async {
@@ -178,9 +189,43 @@ class FirestoreService {
     await _exchangesCollection.doc(id).delete();
   }
 
+  // ===================== BORROWS =====================
+
+  Stream<List<Borrow>> getBorrowsStream() {
+    try {
+      return _borrowsCollection.snapshots().map((snapshot) {
+        final list = snapshot.docs
+            .map((doc) => Borrow.fromMap(doc.data(), doc.id))
+            .toList();
+        list.sort((a, b) => b.date.compareTo(a.date));
+        return list;
+      });
+    } catch (_) {
+      return const Stream.empty();
+    }
+  }
+
+  Future<void> addBorrow(Borrow borrow) async {
+    final docRef = _borrowsCollection.doc(borrow.id.isNotEmpty ? borrow.id : null);
+    final toSave = Borrow(
+      id: docRef.id,
+      borrowerId: borrow.borrowerId,
+      lenderId: borrow.lenderId,
+      usdAmount: borrow.usdAmount,
+      egpAmount: borrow.egpAmount,
+      date: borrow.date,
+      createdAt: borrow.createdAt,
+    );
+    await docRef.set(toSave.toMap());
+  }
+
+  Future<void> deleteBorrow(String id) async {
+    await _borrowsCollection.doc(id).delete();
+  }
+
   // ===================== DATA WIPE PROTOCOL =====================
 
-  /// Purges all trip expenses, exchanges, initial balances, and user records.
+  /// Purges all trip expenses, exchanges, borrows, initial balances, and user records.
   Future<void> deleteAllTripData() async {
     final batch = _firestore.batch();
 
@@ -196,13 +241,19 @@ class FirestoreService {
       batch.delete(doc.reference);
     }
 
-    // 3. Reset/delete initial balances
+    // 3. Delete all borrows
+    final borrowsSnap = await _borrowsCollection.get();
+    for (final doc in borrowsSnap.docs) {
+      batch.delete(doc.reference);
+    }
+
+    // 4. Reset/delete initial balances
     final balancesSnap = await _initialBalancesCollection.get();
     for (final doc in balancesSnap.docs) {
       batch.delete(doc.reference);
     }
 
-    // 4. Delete user profiles
+    // 5. Delete user profiles
     final usersSnap = await _usersCollection.get();
     for (final doc in usersSnap.docs) {
       batch.delete(doc.reference);

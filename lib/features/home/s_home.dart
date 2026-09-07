@@ -4,7 +4,13 @@ import '../../core/components/c_floating_pill_nav_bar.dart';
 import '../../core/services/f_auth.dart';
 import '../../core/services/f_firestore.dart';
 import '../settings/s_settings.dart';
+import 'components/c_add_action_sheet.dart';
+import 'components/c_add_exchange_dialog.dart';
+import 'components/c_add_expense_dialog.dart';
+import 'components/c_borrow_dialog.dart';
+import 's_home_tab.dart';
 import 'vm_home.dart';
+import 'vm_home_feed.dart';
 
 /// Screen (View) for Home scaffold with floating pill navigation bar.
 class HomeScreen extends StatefulWidget {
@@ -12,6 +18,7 @@ class HomeScreen extends StatefulWidget {
   final AuthService authService;
   final FirestoreService firestoreService;
   final HomeViewModel? viewModel;
+  final HomeFeedViewModel? feedViewModel;
 
   const HomeScreen({
     super.key,
@@ -19,6 +26,7 @@ class HomeScreen extends StatefulWidget {
     required this.authService,
     required this.firestoreService,
     this.viewModel,
+    this.feedViewModel,
   });
 
   @override
@@ -27,11 +35,23 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late final HomeViewModel _viewModel;
+  late final HomeFeedViewModel _homeFeedViewModel;
   bool _ownsViewModel = false;
+  bool _ownsFeedViewModel = false;
 
   @override
   void initState() {
     super.initState();
+    if (widget.feedViewModel != null) {
+      _homeFeedViewModel = widget.feedViewModel!;
+    } else {
+      _homeFeedViewModel = HomeFeedViewModel(
+        user: widget.user,
+        firestoreService: widget.firestoreService,
+      );
+      _ownsFeedViewModel = true;
+    }
+
     if (widget.viewModel != null) {
       _viewModel = widget.viewModel!;
     } else {
@@ -42,6 +62,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
+    if (_ownsFeedViewModel) {
+      _homeFeedViewModel.dispose();
+    }
     if (_ownsViewModel) {
       _viewModel.dispose();
     }
@@ -118,22 +141,75 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             },
-            child: selectedIndex == 2
-                ? SettingsScreen(
-                    key: const ValueKey<int>(2),
+            child: selectedIndex == 0
+                ? HomeTabScreen(
+                    key: const ValueKey<int>(0),
                     user: widget.user,
-                    authService: widget.authService,
-                    firestoreService: widget.firestoreService,
+                    viewModel: _homeFeedViewModel,
                   )
-                : SizedBox.expand(
-                    key: ValueKey<int>(selectedIndex),
-                  ),
+                : selectedIndex == 2
+                    ? SettingsScreen(
+                        key: const ValueKey<int>(2),
+                        user: widget.user,
+                        authService: widget.authService,
+                        firestoreService: widget.firestoreService,
+                      )
+                    : SizedBox.expand(
+                        key: ValueKey<int>(selectedIndex),
+                      ),
           ),
           bottomNavigationBar: FloatingPillNavBar(
             selectedIndex: selectedIndex,
             showAddButton: selectedIndex == 1,
             onAddPressed: () {
-              // Add action for My Tracker
+              showAddActionSheet(
+                context: context,
+                onAddExpense: () {
+                  final friendId = _homeFeedViewModel.friendProfile?.id ??
+                      _homeFeedViewModel.friendEmailDoc?.email;
+                  final friendName = _homeFeedViewModel.friendProfile?.name ??
+                      _homeFeedViewModel.friendEmailDoc?.email;
+
+                  showAddExpenseDialog(
+                    context: context,
+                    currentUserId: widget.user.uid,
+                    currentUserName:
+                        _homeFeedViewModel.myProfile?.name ?? 'You',
+                    friendUserId: friendId,
+                    friendUserName: friendName,
+                    myUsdBalance: _homeFeedViewModel.myUsdBalance,
+                    myEgpBalance: _homeFeedViewModel.myEgpBalance,
+                    friendUsdBalance: _homeFeedViewModel.friendUsdBalance,
+                    friendEgpBalance: _homeFeedViewModel.friendEgpBalance,
+                    onSave: _homeFeedViewModel.addExpense,
+                  );
+                },
+                onAddExchange: () {
+                  showAddExchangeDialog(
+                    context: context,
+                    currentUserId: widget.user.uid,
+                    currentUserName:
+                        _homeFeedViewModel.myProfile?.name ?? 'You',
+                    onSave: _homeFeedViewModel.addExchange,
+                  );
+                },
+                onBorrowCurrency: () {
+                  final friendId = _homeFeedViewModel.friendProfile?.id ??
+                      _homeFeedViewModel.friendEmailDoc?.email;
+                  final friendName = _homeFeedViewModel.friendProfile?.name ??
+                      _homeFeedViewModel.friendEmailDoc?.email;
+
+                  showBorrowDialog(
+                    context: context,
+                    currentUserId: widget.user.uid,
+                    currentUserName:
+                        _homeFeedViewModel.myProfile?.name ?? 'You',
+                    friendUserId: friendId,
+                    friendUserName: friendName,
+                    onSave: _homeFeedViewModel.addBorrow,
+                  );
+                },
+              );
             },
             onDestinationSelected: _viewModel.selectTab,
             items: const [

@@ -23,8 +23,6 @@ Future<void> showAddEmailDialog({
           return AppDialog(
             icon: Icons.person_add_rounded,
             title: 'Add Allowed Email',
-            subtitle: 'Authorize a Google Account',
-            subtitleColor: const Color(0xFF1A73E8),
             actionLabel: 'Add',
             isSubmitting: isSubmitting,
             onCancel: () => Navigator.of(dialogContext).pop(),

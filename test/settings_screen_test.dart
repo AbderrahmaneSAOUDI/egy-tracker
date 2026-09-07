@@ -2,6 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:egy_tracker/core/models/mod_allowed_email.dart';
+import 'package:egy_tracker/core/models/mod_borrow.dart';
+import 'package:egy_tracker/core/models/mod_exchange.dart';
+import 'package:egy_tracker/core/models/mod_expense.dart';
 import 'package:egy_tracker/core/models/mod_initial_balance.dart';
 import 'package:egy_tracker/core/models/mod_user_profile.dart';
 import 'package:egy_tracker/core/services/f_auth.dart';
@@ -63,6 +66,15 @@ class FakeFirestoreService extends FirestoreService {
     yield _balances;
     yield* _balancesController.stream;
   }
+
+  @override
+  Stream<List<Expense>> getExpensesStream() => Stream.value([]);
+
+  @override
+  Stream<List<Exchange>> getExchangesStream() => Stream.value([]);
+
+  @override
+  Stream<List<Borrow>> getBorrowsStream() => Stream.value([]);
 
   @override
   Future<void> setInitialBalances({

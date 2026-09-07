@@ -89,7 +89,6 @@ class AllowedEmailsCard extends StatelessWidget {
             return EmptyState(
               icon: Icons.mail_outline_rounded,
               title: 'No allowed emails yet',
-              subtitle: 'Tap "+ Add" to authorize your first travel partner.',
               iconColor: isDark
                   ? AppTheme.googleBlueDark
                   : AppTheme.googleBlue,

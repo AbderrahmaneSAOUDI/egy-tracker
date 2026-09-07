@@ -1,0 +1,198 @@
+import 'package:flutter/material.dart';
+import '../../../core/components/c_app_dialog.dart';
+import '../../../core/models/mod_borrow.dart';
+import '../../../core/theme/t_app_theme.dart';
+import '../../../core/utils/m_formatters.dart';
+
+/// Shows modal dialog for borrowing currency from the travel partner.
+///
+/// Both users are together in real life, so no remote confirmation is required.
+Future<void> showBorrowDialog({
+  required BuildContext context,
+  required String currentUserId,
+  required String currentUserName,
+  String? friendUserId,
+  String? friendUserName,
+  required Future<bool> Function(Borrow) onSave,
+}) {
+  final formKey = GlobalKey<FormState>();
+  final usdController = TextEditingController();
+  final egpController = TextEditingController();
+  DateTime selectedDate = DateTime.now();
+  bool isSubmitting = false;
+
+  final friendId = friendUserId ?? 'friend';
+  final friendName = friendUserName ?? 'Friend';
+
+  return showDialog<void>(
+    context: context,
+    builder: (dialogContext) {
+      return StatefulBuilder(
+        builder: (context, setDialogState) {
+          final theme = Theme.of(context);
+          final colorScheme = theme.colorScheme;
+          final isDark = theme.brightness == Brightness.dark;
+
+          final borrowColor =
+              isDark ? AppTheme.googleYellowDark : AppTheme.googleYellow;
+
+          return AppDialog(
+            icon: Icons.handshake_outlined,
+            iconColor: borrowColor,
+            title: 'Borrow Currency',
+            actionLabel: 'Save',
+            isSubmitting: isSubmitting,
+            onCancel: () => Navigator.of(dialogContext).pop(),
+            onAction: () async {
+              final usd = double.tryParse(usdController.text.trim()) ?? 0.0;
+              final egp = double.tryParse(egpController.text.trim()) ?? 0.0;
+
+              if (usd <= 0 && egp <= 0) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Please enter an amount for USD, EGP, or both.'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                return;
+              }
+
+              setDialogState(() => isSubmitting = true);
+
+              final borrow = Borrow(
+                id: '',
+                borrowerId: currentUserId,
+                lenderId: friendId,
+                usdAmount: usd,
+                egpAmount: egp,
+                date: selectedDate,
+                createdAt: DateTime.now(),
+              );
+
+              final success = await onSave(borrow);
+              if (dialogContext.mounted && success) {
+                Navigator.of(dialogContext).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Recorded borrow from $friendName: ${usd > 0 ? Formatters.formatUsd(usd) : ""}${usd > 0 && egp > 0 ? " and " : ""}${egp > 0 ? Formatters.formatEgp(egp) : ""}',
+                    ),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              } else if (dialogContext.mounted) {
+                setDialogState(() => isSubmitting = false);
+              }
+            },
+            content: Form(
+              key: formKey,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Lender indicator banner
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: borrowColor.withValues(alpha: isDark ? 0.15 : 0.10),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: borrowColor.withValues(alpha: isDark ? 0.30 : 0.20),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.person_rounded, size: 16, color: borrowColor),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              'Borrowing cash from $friendName',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: colorScheme.onSurface,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // USD Field
+                    TextFormField(
+                      controller: usdController,
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      decoration: InputDecoration(
+                        labelText: 'USD Amount',
+                        hintText: '0.00',
+                        prefixIcon: const Icon(Icons.attach_money_rounded),
+                        prefixIconColor: isDark ? AppTheme.usdColorDark : AppTheme.usdColorLight,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+
+                    // EGP Field
+                    TextFormField(
+                      controller: egpController,
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      decoration: const InputDecoration(
+                        labelText: 'EGP Amount',
+                        hintText: '0.00',
+                        suffixText: 'EGP',
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+
+                    // Date Picker Row
+                    InkWell(
+                      onTap: () async {
+                        final picked = await showDatePicker(
+                          context: context,
+                          initialDate: selectedDate,
+                          firstDate: DateTime(2020),
+                          lastDate: DateTime(2030),
+                        );
+                        if (picked != null) {
+                          setDialogState(() {
+                            selectedDate = DateTime(
+                              picked.year,
+                              picked.month,
+                              picked.day,
+                              selectedDate.hour,
+                              selectedDate.minute,
+                            );
+                          });
+                        }
+                      },
+                      borderRadius: BorderRadius.circular(12),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: colorScheme.outlineVariant),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(Icons.calendar_today_rounded,
+                                size: 18, color: colorScheme.onSurfaceVariant),
+                            const SizedBox(width: 10),
+                            Text(
+                              Formatters.formatDate(selectedDate),
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    },
+  );
+}

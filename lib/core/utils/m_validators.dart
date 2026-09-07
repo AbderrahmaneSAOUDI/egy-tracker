@@ -33,4 +33,27 @@ class Validators {
     }
     return null;
   }
+
+  /// Validates a strictly positive cash amount (> 0).
+  static String? validatePositiveAmount(String? value, String currencyLabel) {
+    if (value == null || value.trim().isEmpty) {
+      return '$currencyLabel amount is required';
+    }
+    final parsed = double.tryParse(value.trim());
+    if (parsed == null) {
+      return 'Enter a valid numeric amount';
+    }
+    if (parsed <= 0) {
+      return '$currencyLabel amount must be greater than zero';
+    }
+    return null;
+  }
+
+  /// Validates a non-empty required string.
+  static String? validateRequired(String? value, String fieldName) {
+    if (value == null || value.trim().isEmpty) {
+      return '$fieldName is required';
+    }
+    return null;
+  }
 }
