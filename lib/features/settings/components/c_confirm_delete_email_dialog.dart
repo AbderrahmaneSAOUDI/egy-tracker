@@ -12,7 +12,7 @@ Future<void> showConfirmDeleteEmailDialog({
 }) {
   bool isSubmitting = false;
 
-  return showDialog<void>(
+  return showAnimatedDialog<void>(
     context: context,
     builder: (dialogContext) {
       final theme = Theme.of(context);

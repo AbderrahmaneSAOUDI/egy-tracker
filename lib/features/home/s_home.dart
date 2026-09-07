@@ -190,6 +190,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     currentUserId: widget.user.uid,
                     currentUserName:
                         _homeFeedViewModel.myProfile?.name ?? 'You',
+                    myUsdBalance: _homeFeedViewModel.myUsdBalance,
+                    myEgpBalance: _homeFeedViewModel.myEgpBalance,
                     onSave: _homeFeedViewModel.addExchange,
                   );
                 },

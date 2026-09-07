@@ -10,28 +10,20 @@ Future<void> showAddExchangeDialog({
   required BuildContext context,
   required String currentUserId,
   required String currentUserName,
+  double myUsdBalance = 0.0,
+  double myEgpBalance = 0.0,
   required Future<bool> Function(Exchange) onSave,
 }) {
   final formKey = GlobalKey<FormState>();
   final fromAmountController = TextEditingController();
   final toAmountController = TextEditingController();
-  final rateController = TextEditingController();
 
   String fromCurrency = 'USD'; // Default USD -> EGP exchange
   String toCurrency = 'EGP';
   DateTime selectedDate = DateTime.now();
   bool isSubmitting = false;
 
-  void calculateRate() {
-    final from = double.tryParse(fromAmountController.text.trim()) ?? 0.0;
-    final to = double.tryParse(toAmountController.text.trim()) ?? 0.0;
-    if (from > 0 && to > 0) {
-      final rate = fromCurrency == 'USD' ? (to / from) : (from / to);
-      rateController.text = rate.toStringAsFixed(2);
-    }
-  }
-
-  return showDialog<void>(
+  return showAnimatedDialog<void>(
     context: context,
     builder: (dialogContext) {
       return StatefulBuilder(
@@ -39,6 +31,9 @@ Future<void> showAddExchangeDialog({
           final theme = Theme.of(context);
           final colorScheme = theme.colorScheme;
           final isDark = theme.brightness == Brightness.dark;
+
+          final availableOwned =
+              fromCurrency == 'USD' ? myUsdBalance : myEgpBalance;
 
           return AppDialog(
             icon: Icons.sync_alt_rounded,
@@ -54,11 +49,11 @@ Future<void> showAddExchangeDialog({
                   double.tryParse(fromAmountController.text.trim()) ?? 0.0;
               final toAmt =
                   double.tryParse(toAmountController.text.trim()) ?? 0.0;
-              final rate =
-                  double.tryParse(rateController.text.trim()) ??
-                      (fromCurrency == 'USD'
-                          ? (toAmt / fromAmt)
-                          : (fromAmt / toAmt));
+              final rate = fromAmt > 0
+                  ? (fromCurrency == 'USD'
+                      ? (toAmt / fromAmt)
+                      : (fromAmt / toAmt))
+                  : 1.0;
 
               setDialogState(() => isSubmitting = true);
 
@@ -107,7 +102,6 @@ Future<void> showAddExchangeDialog({
                               setDialogState(() {
                                 fromCurrency = 'USD';
                                 toCurrency = 'EGP';
-                                calculateRate();
                               });
                             },
                             isDark: isDark,
@@ -122,7 +116,6 @@ Future<void> showAddExchangeDialog({
                               setDialogState(() {
                                 fromCurrency = 'EGP';
                                 toCurrency = 'USD';
-                                calculateRate();
                               });
                             },
                             isDark: isDark,
@@ -132,7 +125,7 @@ Future<void> showAddExchangeDialog({
                     ),
                     const SizedBox(height: 14),
 
-                    // Amount Given
+                    // Amount Given (with owned money validation)
                     TextFormField(
                       controller: fromAmountController,
                       keyboardType: const TextInputType.numberWithOptions(
@@ -141,6 +134,12 @@ Future<void> showAddExchangeDialog({
                       decoration: InputDecoration(
                         labelText: 'Amount Given ($fromCurrency)',
                         hintText: '0.00',
+                        helperText:
+                            'Owned: ${Formatters.formatCurrency(availableOwned, fromCurrency)}',
+                        helperStyle: TextStyle(
+                          fontSize: 11,
+                          color: colorScheme.outline,
+                        ),
                         filled: true,
                         fillColor: isDark
                             ? Colors.white.withValues(alpha: 0.05)
@@ -149,9 +148,16 @@ Future<void> showAddExchangeDialog({
                           borderRadius: BorderRadius.circular(14),
                         ),
                       ),
-                      onChanged: (_) => calculateRate(),
-                      validator: (val) =>
-                          Validators.validatePositiveAmount(val, fromCurrency),
+                      validator: (val) {
+                        final err = Validators.validatePositiveAmount(
+                            val, fromCurrency);
+                        if (err != null) return err;
+                        final amt = double.tryParse(val!.trim()) ?? 0.0;
+                        if (amt > availableOwned) {
+                          return 'Exceeds owned money (${Formatters.formatCurrency(availableOwned, fromCurrency)})';
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 12),
 
@@ -172,83 +178,80 @@ Future<void> showAddExchangeDialog({
                           borderRadius: BorderRadius.circular(14),
                         ),
                       ),
-                      onChanged: (_) => calculateRate(),
                       validator: (val) =>
                           Validators.validatePositiveAmount(val, toCurrency),
                     ),
-                    const SizedBox(height: 12),
-
-                    // Actual Exchange Rate
-                    TextFormField(
-                      controller: rateController,
-                      keyboardType: const TextInputType.numberWithOptions(
-                          decimal: true),
-                      enabled: !isSubmitting,
-                      decoration: InputDecoration(
-                        labelText: 'Exchange Rate (1 USD = X EGP)',
-                        hintText: 'e.g. 49.00',
-                        filled: true,
-                        fillColor: isDark
-                            ? Colors.white.withValues(alpha: 0.05)
-                            : Colors.black.withValues(alpha: 0.03),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                      ),
-                      validator: (val) =>
-                          Validators.validateRequired(val, 'Exchange rate'),
-                    ),
                     const SizedBox(height: 14),
 
-                    // Date selector
-                    InkWell(
-                      onTap: () async {
-                        final picked = await showDatePicker(
-                          context: context,
-                          initialDate: selectedDate,
-                          firstDate: DateTime(2025),
-                          lastDate: DateTime(2030),
-                        );
-                        if (picked != null) {
-                          setDialogState(() {
-                            selectedDate = DateTime(
-                              picked.year,
-                              picked.month,
-                              picked.day,
-                              selectedDate.hour,
-                              selectedDate.minute,
-                            );
-                          });
-                        }
-                      },
-                      borderRadius: BorderRadius.circular(10),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: Row(
-                          children: [
-                            Icon(Icons.calendar_today_rounded,
-                                size: 16,
-                                color: colorScheme.onSurfaceVariant),
-                            const SizedBox(width: 8),
-                            Text(
-                              Formatters.formatDate(selectedDate),
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: colorScheme.onSurfaceVariant,
+                    // Date selector with Reset to now button
+                    Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () async {
+                              final picked = await showDatePicker(
+                                context: dialogContext,
+                                initialDate: selectedDate,
+                                firstDate: DateTime(2025),
+                                lastDate: DateTime(2030),
+                              );
+                              if (picked != null && dialogContext.mounted) {
+                                setDialogState(() {
+                                  selectedDate = DateTime(
+                                    picked.year,
+                                    picked.month,
+                                    picked.day,
+                                    selectedDate.hour,
+                                    selectedDate.minute,
+                                  );
+                                });
+                              }
+                            },
+                            borderRadius: BorderRadius.circular(10),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 4),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.calendar_today_rounded,
+                                      size: 16,
+                                      color: colorScheme.onSurfaceVariant),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    Formatters.formatDate(selectedDate),
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: colorScheme.onSurfaceVariant,
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  Text(
+                                    'Change',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: colorScheme.primary,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            const Spacer(),
-                            Text(
-                              'Change',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: colorScheme.primary,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
+                        const SizedBox(width: 4),
+                        IconButton(
+                          icon: const Icon(Icons.restore_rounded, size: 18),
+                          tooltip: 'Reset to now',
+                          onPressed: () {
+                            setDialogState(() {
+                              selectedDate = DateTime.now();
+                            });
+                          },
+                          visualDensity: VisualDensity.compact,
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(
+                              minWidth: 32, minHeight: 32),
+                        ),
+                      ],
                     ),
                   ],
                 ),

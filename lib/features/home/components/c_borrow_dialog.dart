@@ -24,7 +24,7 @@ Future<void> showBorrowDialog({
   final friendId = friendUserId ?? 'friend';
   final friendName = friendUserName ?? 'Friend';
 
-  return showDialog<void>(
+  return showAnimatedDialog<void>(
     context: context,
     builder: (dialogContext) {
       return StatefulBuilder(
@@ -137,54 +137,80 @@ Future<void> showBorrowDialog({
                     TextFormField(
                       controller: egpController,
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: 'EGP Amount',
                         hintText: '0.00',
+                        prefixIcon: const Icon(Icons.payments_outlined),
+                        prefixIconColor: isDark ? AppTheme.egpColorDark : AppTheme.egpColorLight,
                         suffixText: 'EGP',
                       ),
                     ),
                     const SizedBox(height: 14),
 
-                    // Date Picker Row
-                    InkWell(
-                      onTap: () async {
-                        final picked = await showDatePicker(
-                          context: context,
-                          initialDate: selectedDate,
-                          firstDate: DateTime(2020),
-                          lastDate: DateTime(2030),
-                        );
-                        if (picked != null) {
-                          setDialogState(() {
-                            selectedDate = DateTime(
-                              picked.year,
-                              picked.month,
-                              picked.day,
-                              selectedDate.hour,
-                              selectedDate.minute,
-                            );
-                          });
-                        }
-                      },
-                      borderRadius: BorderRadius.circular(12),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: colorScheme.outlineVariant),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(Icons.calendar_today_rounded,
-                                size: 18, color: colorScheme.onSurfaceVariant),
-                            const SizedBox(width: 10),
-                            Text(
-                              Formatters.formatDate(selectedDate),
-                              style: const TextStyle(fontSize: 14),
+                    // Date Picker Row with Reset to now button
+                    Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () async {
+                              final picked = await showDatePicker(
+                                context: dialogContext,
+                                initialDate: selectedDate,
+                                firstDate: DateTime(2020),
+                                lastDate: DateTime(2030),
+                              );
+                              if (picked != null && dialogContext.mounted) {
+                                final time = await showTimePicker(
+                                  context: dialogContext,
+                                  initialTime:
+                                      TimeOfDay.fromDateTime(selectedDate),
+                                );
+                                if (dialogContext.mounted) {
+                                  setDialogState(() {
+                                    selectedDate = DateTime(
+                                      picked.year,
+                                      picked.month,
+                                      picked.day,
+                                      time?.hour ?? selectedDate.hour,
+                                      time?.minute ?? selectedDate.minute,
+                                    );
+                                  });
+                                }
+                              }
+                            },
+                            borderRadius: BorderRadius.circular(12),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: colorScheme.outlineVariant),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.calendar_today_rounded,
+                                      size: 18, color: colorScheme.onSurfaceVariant),
+                                  const SizedBox(width: 10),
+                                  Text(
+                                    Formatters.formatDate(selectedDate),
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
+                          ),
                         ),
-                      ),
+                        const SizedBox(width: 6),
+                        IconButton(
+                          icon: const Icon(Icons.restore_rounded, size: 20),
+                          tooltip: 'Reset to now',
+                          onPressed: () {
+                            setDialogState(() {
+                              selectedDate = DateTime.now();
+                            });
+                          },
+                          visualDensity: VisualDensity.compact,
+                        ),
+                      ],
                     ),
                   ],
                 ),

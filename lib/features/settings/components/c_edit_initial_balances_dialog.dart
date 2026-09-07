@@ -32,7 +32,7 @@ Future<void> showEditInitialBalancesDialog({
   );
   bool isSubmitting = false;
 
-  return showDialog<void>(
+  return showAnimatedDialog<void>(
     context: context,
     builder: (dialogContext) {
       return StatefulBuilder(

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../../core/animations/a_dialog_transition.dart';
 import '../../core/components/c_empty_state.dart';
 import '../../core/components/c_icon_badge.dart';
 import '../../core/utils/m_auth_helpers.dart';
@@ -110,7 +111,7 @@ class HomeTabScreen extends StatelessWidget {
       name = 'this borrow record';
     }
 
-    showDialog<void>(
+    showAnimatedDialog<void>(
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
