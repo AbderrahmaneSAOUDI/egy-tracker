@@ -1,3 +1,4 @@
+import '../models/mod_borrow.dart';
 import '../models/mod_exchange.dart';
 import '../models/mod_expense.dart';
 import '../models/mod_initial_balance.dart';
@@ -13,12 +14,15 @@ class Calculations {
   ///                 + Exchanges In (as to_currency)
   ///                 - Exchanges Out (as from_currency)
   ///                 - Expenses Paid (where paid_by == user)
+  ///                 + Borrows In (where borrower_id == user)
+  ///                 - Borrows Out (where lender_id == user)
   static double calculateCashBalance({
     required String userId,
     required String currency,
     required InitialBalance? initialBalance,
     required List<Exchange> exchanges,
     required List<Expense> expenses,
+    List<Borrow> borrows = const [],
   }) {
     final normCurrency = currency.toUpperCase().trim();
     double balance = 0.0;
@@ -49,6 +53,23 @@ class Calculations {
       if (expense.currency.toUpperCase().trim() == normCurrency &&
           expense.paidBy == userId) {
         balance -= expense.amount;
+      }
+    }
+
+    // 4. Borrows: Physical cash transferred between users in real life
+    for (final borrow in borrows) {
+      if (normCurrency == 'USD') {
+        if (borrow.borrowerId == userId) {
+          balance += borrow.usdAmount;
+        } else if (borrow.lenderId == userId) {
+          balance -= borrow.usdAmount;
+        }
+      } else if (normCurrency == 'EGP') {
+        if (borrow.borrowerId == userId) {
+          balance += borrow.egpAmount;
+        } else if (borrow.lenderId == userId) {
+          balance -= borrow.egpAmount;
+        }
       }
     }
 

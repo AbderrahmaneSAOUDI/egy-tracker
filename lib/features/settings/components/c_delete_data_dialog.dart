@@ -22,8 +22,6 @@ Future<void> showDeleteAllDataDialog({
             iconColor: colorScheme.error,
             borderColor: colorScheme.error.withValues(alpha: isDark ? 0.4 : 0.3),
             title: 'Delete All Trip Data?',
-            subtitle: 'Irreversible trip reset',
-            subtitleColor: const Color(0xFFEA4335),
             actionLabel: 'Delete Everything',
             actionColor: colorScheme.error,
             actionForegroundColor: colorScheme.onError,

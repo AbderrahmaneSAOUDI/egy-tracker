@@ -26,8 +26,6 @@ Future<void> showConfirmDeleteEmailDialog({
             iconColor: colorScheme.error,
             borderColor: colorScheme.error.withValues(alpha: isDark ? 0.35 : 0.25),
             title: 'Remove Allowed Email?',
-            subtitle: 'Revoke whitelist access',
-            subtitleColor: colorScheme.error,
             actionLabel: 'Remove',
             actionColor: colorScheme.error,
             actionForegroundColor: colorScheme.onError,

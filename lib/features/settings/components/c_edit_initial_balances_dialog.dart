@@ -45,7 +45,6 @@ Future<void> showEditInitialBalancesDialog({
             icon: Icons.account_balance_wallet_rounded,
             iconColor: isDark ? AppTheme.usdColorDark : AppTheme.usdColorLight,
             title: 'Initial Balances',
-            subtitle: 'Starting cash for $userName',
             actionLabel: 'Save',
             isSubmitting: isSubmitting,
             onCancel: () => Navigator.of(dialogContext).pop(),
