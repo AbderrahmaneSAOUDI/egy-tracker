@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'c_icon_badge.dart';
 
 /// Reusable section card with standardized borders, background,
-/// and header (IconBadge + Title + Subtitle + optional trailing widget).
+/// and clean header (IconBadge + Title + optional trailing widget).
 class SectionCard extends StatelessWidget {
   final IconData icon;
   final Color? iconColor;
   final String title;
-  final String? subtitle;
   final Widget? trailing;
   final Color? borderColor;
   final Widget child;
@@ -17,7 +16,6 @@ class SectionCard extends StatelessWidget {
     required this.icon,
     this.iconColor,
     required this.title,
-    this.subtitle,
     this.trailing,
     this.borderColor,
     required this.child,
@@ -50,28 +48,13 @@ class SectionCard extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: -0.2,
-                      ),
-                    ),
-                    if (subtitle != null) ...[
-                      const SizedBox(height: 2),
-                      Text(
-                        subtitle!,
-                        style: const TextStyle(
-                          fontSize: 11,
-                          color: Color(0xFF80868B),
-                        ),
-                      ),
-                    ],
-                  ],
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: -0.2,
+                  ),
                 ),
               ),
               ?trailing,

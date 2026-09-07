@@ -4,16 +4,21 @@ import '../../../core/components/c_action_icon_button.dart';
 import '../../../core/components/c_badge.dart';
 import '../../../core/components/c_user_avatar.dart';
 import '../../../core/theme/t_app_theme.dart';
+import '../../../core/utils/m_auth_helpers.dart';
 
 /// User profile hero card displaying avatar, display name, email, and sign out button.
 class ProfileCard extends StatelessWidget {
   final User user;
   final VoidCallback onSignOut;
+  final String? photoUrl;
+  final String? displayName;
 
   const ProfileCard({
     super.key,
     required this.user,
     required this.onSignOut,
+    this.photoUrl,
+    this.displayName,
   });
 
   @override
@@ -21,6 +26,9 @@ class ProfileCard extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final isDark = theme.brightness == Brightness.dark;
+
+    final resolvedPhoto = resolveUserPhoto(user, photoUrl);
+    final resolvedName = resolveUserName(user, displayName);
 
     return Container(
       decoration: BoxDecoration(
@@ -45,8 +53,8 @@ class ProfileCard extends StatelessWidget {
               ),
             ),
             child: UserAvatar(
-              photoUrl: user.photoURL,
-              name: user.displayName,
+              photoUrl: resolvedPhoto,
+              name: resolvedName,
               email: user.email,
               radius: 26,
               backgroundColor: isDark
@@ -61,10 +69,9 @@ class ProfileCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (user.displayName != null &&
-                    user.displayName!.trim().isNotEmpty) ...[
+                if (resolvedName.isNotEmpty) ...[
                   Text(
-                    user.displayName!.trim(),
+                    resolvedName,
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,

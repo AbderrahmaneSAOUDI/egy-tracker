@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../core/animations/a_fade_slide_transition.dart';
+import '../../core/models/mod_user_profile.dart';
 import '../../core/services/f_auth.dart';
 import '../../core/services/f_firestore.dart';
 import 'components/c_allowed_emails_card.dart';
@@ -106,9 +107,27 @@ class _SettingsScreenState extends State<SettingsScreen>
         // ===================== SECTION 1: USER PROFILE HERO =====================
         FadeSlideTransition(
           animation: _profileAnim,
-          child: ProfileCard(
-            user: widget.user,
-            onSignOut: _viewModel.signOut,
+          child: StreamBuilder<List<UserProfile>>(
+            stream: _viewModel.usersStream,
+            builder: (context, snapshot) {
+              UserProfile? myProfile;
+              if (snapshot.hasData) {
+                final uid = widget.user.uid;
+                final email = widget.user.email?.toLowerCase().trim();
+                for (final p in snapshot.data!) {
+                  if (p.id == uid || (email != null && p.email == email)) {
+                    myProfile = p;
+                    break;
+                  }
+                }
+              }
+              return ProfileCard(
+                user: widget.user,
+                photoUrl: myProfile?.photoUrl,
+                displayName: myProfile?.name,
+                onSignOut: _viewModel.signOut,
+              );
+            },
           ),
         ),
         const SizedBox(height: 16),

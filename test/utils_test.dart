@@ -2,6 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:egy_tracker/core/models/mod_exchange.dart';
 import 'package:egy_tracker/core/models/mod_expense.dart';
 import 'package:egy_tracker/core/models/mod_initial_balance.dart';
+import 'package:egy_tracker/core/services/f_auth.dart';
+import 'package:egy_tracker/core/utils/m_auth_helpers.dart';
 import 'package:egy_tracker/core/utils/m_calculations.dart';
 import 'package:egy_tracker/core/utils/m_formatters.dart';
 import 'package:egy_tracker/core/utils/m_validators.dart';
@@ -107,6 +109,54 @@ void main() {
         userPercentage: 100.0,
       );
       expect(share100, equals(80.0));
+    });
+  });
+
+  group('Auth Helpers Unit Tests', () {
+    test('resolveUserPhoto returns photoURL when present', () {
+      final user = DevUser(
+        photoURL: 'https://lh3.googleusercontent.com/photo.jpg',
+      );
+      expect(
+        resolveUserPhoto(user),
+        equals('https://lh3.googleusercontent.com/photo.jpg'),
+      );
+    });
+
+    test('resolveUserPhoto uses fallbackUrl when user photoURL is null', () {
+      final user = DevUser(photoURL: null);
+      expect(
+        resolveUserPhoto(user, 'https://firestore.profile/photo.jpg'),
+        equals('https://firestore.profile/photo.jpg'),
+      );
+    });
+
+    test('resolveUserPhoto returns null when neither user nor fallback has photo', () {
+      final user = DevUser(photoURL: null);
+      expect(resolveUserPhoto(user), isNull);
+      expect(resolveUserPhoto(null), isNull);
+    });
+
+    test('resolveUserName returns displayName when present', () {
+      final user = DevUser(displayName: 'Test Traveler');
+      expect(resolveUserName(user), equals('Test Traveler'));
+    });
+
+    test('resolveUserName falls back to email prefix when displayName is null', () {
+      final user = DevUser(
+        displayName: null,
+        email: 'alice@example.com',
+      );
+      expect(resolveUserName(user), equals('alice'));
+    });
+
+    test('resolveUserName defaults to Traveler when everything is null', () {
+      final user = DevUser(
+        displayName: null,
+        email: null,
+      );
+      expect(resolveUserName(user), equals('Traveler'));
+      expect(resolveUserName(null), equals('Traveler'));
     });
   });
 }

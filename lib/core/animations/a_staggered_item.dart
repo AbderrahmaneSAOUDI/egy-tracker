@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 /// Automatically animates an item into view with a staggered fade and slide
@@ -27,6 +28,7 @@ class _StaggeredItemState extends State<StaggeredItem>
   late AnimationController _controller;
   late Animation<double> _fade;
   late Animation<Offset> _slide;
+  Timer? _timer;
 
   @override
   void initState() {
@@ -51,7 +53,7 @@ class _StaggeredItemState extends State<StaggeredItem>
     if (delay == Duration.zero) {
       _controller.forward();
     } else {
-      Future.delayed(delay, () {
+      _timer = Timer(delay, () {
         if (mounted) {
           _controller.forward();
         }
@@ -61,6 +63,7 @@ class _StaggeredItemState extends State<StaggeredItem>
 
   @override
   void dispose() {
+    _timer?.cancel();
     _controller.dispose();
     super.dispose();
   }

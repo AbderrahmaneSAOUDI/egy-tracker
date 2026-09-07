@@ -34,6 +34,18 @@ class DevUser implements User {
   });
 
   @override
+  List<UserInfo> get providerData => [];
+
+  @override
+  Future<void> updatePhotoURL(String? photoURL) async {}
+
+  @override
+  Future<void> updateDisplayName(String? displayName) async {}
+
+  @override
+  Future<void> reload() async {}
+
+  @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
@@ -100,6 +112,37 @@ class AuthService {
     return devUser;
   }
 
+  /// Internal helper to sync photo and display name on first login across Web and Mobile
+  Future<void> _syncProfileIfNeeded(User? user, {String? fallbackPhoto, String? fallbackName}) async {
+    if (user == null) return;
+    String? photo = user.photoURL ?? fallbackPhoto;
+    String? name = user.displayName ?? fallbackName;
+    if (photo == null || name == null) {
+      for (final p in user.providerData) {
+        photo ??= (p.photoURL?.isNotEmpty == true) ? p.photoURL : null;
+        name ??= (p.displayName?.isNotEmpty == true) ? p.displayName : null;
+      }
+    }
+    bool reload = false;
+    if (user.photoURL == null && photo != null && photo.isNotEmpty) {
+      try {
+        await user.updatePhotoURL(photo);
+        reload = true;
+      } catch (_) {}
+    }
+    if (user.displayName == null && name != null && name.isNotEmpty) {
+      try {
+        await user.updateDisplayName(name);
+        reload = true;
+      } catch (_) {}
+    }
+    if (reload) {
+      try {
+        await user.reload();
+      } catch (_) {}
+    }
+  }
+
   /// Restores existing session across app/web reopens
   Future<void> tryRestoreSession() async {
     try {
@@ -110,14 +153,12 @@ class AuthService {
           final attempt = GoogleSignIn.instance.attemptLightweightAuthentication();
           if (attempt != null) {
             final account = await attempt;
-            if (account != null) {
-              final googleAuth = account.authentication;
-              if (googleAuth.idToken != null) {
-                final credential = GoogleAuthProvider.credential(
-                  idToken: googleAuth.idToken,
-                );
-                await _firebaseAuth.signInWithCredential(credential);
-              }
+            if (account != null && account.authentication.idToken != null) {
+              final credential = GoogleAuthProvider.credential(
+                idToken: account.authentication.idToken,
+              );
+              final userCredential = await _firebaseAuth.signInWithCredential(credential);
+              await _syncProfileIfNeeded(userCredential.user, fallbackPhoto: account.photoUrl, fallbackName: account.displayName);
             }
           }
         }
@@ -133,19 +174,21 @@ class AuthService {
       if (kIsWeb) {
         await _firebaseAuth.setPersistence(Persistence.LOCAL);
         final GoogleAuthProvider authProvider = GoogleAuthProvider();
-        return await _firebaseAuth.signInWithPopup(authProvider);
+        final userCredential = await _firebaseAuth.signInWithPopup(authProvider);
+        await _syncProfileIfNeeded(userCredential.user);
+        return userCredential;
       } else {
-        final GoogleSignInAccount googleUser =
-            await GoogleSignIn.instance.authenticate();
-
-        final GoogleSignInAuthentication googleAuth =
-            googleUser.authentication;
-
+        final GoogleSignInAccount googleUser = await GoogleSignIn.instance.authenticate();
         final AuthCredential credential = GoogleAuthProvider.credential(
-          idToken: googleAuth.idToken,
+          idToken: googleUser.authentication.idToken,
         );
-
-        return await _firebaseAuth.signInWithCredential(credential);
+        final userCredential = await _firebaseAuth.signInWithCredential(credential);
+        await _syncProfileIfNeeded(
+          userCredential.user,
+          fallbackPhoto: googleUser.photoUrl,
+          fallbackName: googleUser.displayName,
+        );
+        return userCredential;
       }
     } catch (e) {
       debugPrint('Error during Google Sign-In: $e');

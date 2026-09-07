@@ -16,7 +16,6 @@ class ThemeSelectorCard extends StatelessWidget {
       icon: Icons.palette_rounded,
       iconColor: isDark ? AppTheme.googleBlueDark : AppTheme.googleBlue,
       title: 'Theme Mode',
-      subtitle: 'Select your preferred visual appearance',
       child: ValueListenableBuilder<ThemeMode>(
         valueListenable: AppTheme.themeModeNotifier,
         builder: (context, activeMode, _) {
