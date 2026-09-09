@@ -61,15 +61,6 @@ class SegmentedPillBar<T> extends StatelessWidget {
           color: isDark ? const Color(0xFF2A2E37) : const Color(0xFFE2E5EA),
           width: 1.1,
         ),
-        boxShadow: isDark
-            ? null
-            : [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.03),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
       ),
       padding: const EdgeInsets.all(4),
       child: Stack(
@@ -84,24 +75,12 @@ class SegmentedPillBar<T> extends StatelessWidget {
               heightFactor: 1.0,
               child: Container(
                 decoration: BoxDecoration(
-                  gradient: isDark
-                      ? const LinearGradient(
-                          colors: [Color(0xFF2563EB), Color(0xFF1D4ED8)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        )
-                      : null,
-                  color: isDark ? null : Colors.white,
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF2563EB), Color(0xFF1D4ED8)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                   borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: isDark
-                          ? const Color(0xFF2563EB).withValues(alpha: 0.35)
-                          : Colors.black.withValues(alpha: 0.08),
-                      blurRadius: isDark ? 8 : 6,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
                 ),
               ),
             ),
@@ -133,7 +112,7 @@ class SegmentedPillBar<T> extends StatelessWidget {
                               item.icon,
                               size: 16,
                               color: isSelected
-                                  ? (isDark ? Colors.white : theme.colorScheme.primary)
+                                  ? Colors.white
                                   : theme.colorScheme.onSurfaceVariant,
                             ),
                             const SizedBox(width: 5),
@@ -145,7 +124,7 @@ class SegmentedPillBar<T> extends StatelessWidget {
                               fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                               letterSpacing: -0.2,
                               color: isSelected
-                                  ? (isDark ? Colors.white : const Color(0xFF0F172A))
+                                  ? Colors.white
                                   : theme.colorScheme.onSurfaceVariant,
                             ),
                             child: Text(
@@ -163,9 +142,7 @@ class SegmentedPillBar<T> extends StatelessWidget {
                               ),
                               decoration: BoxDecoration(
                                 color: isSelected
-                                    ? (isDark
-                                        ? Colors.white.withValues(alpha: 0.22)
-                                        : theme.colorScheme.primary.withValues(alpha: 0.12))
+                                    ? Colors.white.withValues(alpha: 0.22)
                                     : (isDark
                                         ? const Color(0xFF262A33)
                                         : const Color(0xFFE2E5EA)),
@@ -177,7 +154,7 @@ class SegmentedPillBar<T> extends StatelessWidget {
                                   fontSize: 11,
                                   fontWeight: FontWeight.bold,
                                   color: isSelected
-                                      ? (isDark ? Colors.white : theme.colorScheme.primary)
+                                      ? Colors.white
                                       : theme.colorScheme.outline,
                                 ),
                               ),

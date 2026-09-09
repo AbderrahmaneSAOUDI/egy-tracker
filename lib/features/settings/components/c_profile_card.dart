@@ -32,23 +32,35 @@ class ProfileCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF202124) : const Color(0xFFFFFFFF),
-        borderRadius: BorderRadius.circular(20),
+        gradient: LinearGradient(
+          colors: isDark
+              ? const [
+                  Color(0xFF1B202A),
+                  Color(0xFF13161C),
+                ]
+              : const [
+                  Colors.white,
+                  Color(0xFFF8FAFC),
+                ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isDark ? const Color(0xFF3C4043) : const Color(0xFFDADCE0),
+          color: isDark ? const Color(0xFF2B3242) : const Color(0xFFE2E8F0),
           width: 1.2,
         ),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
+      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0),
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(2),
+            padding: const EdgeInsets.all(2.5),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
                 color: (isDark ? AppTheme.googleBlueDark : AppTheme.googleBlue)
-                    .withValues(alpha: 0.5),
+                    .withValues(alpha: 0.55),
                 width: 2,
               ),
             ),
@@ -56,15 +68,15 @@ class ProfileCard extends StatelessWidget {
               photoUrl: resolvedPhoto,
               name: resolvedName,
               email: user.email,
-              radius: 26,
+              radius: 22,
               backgroundColor: isDark
-                  ? const Color(0xFF303134)
-                  : const Color(0xFFF1F3F4),
+                  ? const Color(0xFF262B36)
+                  : const Color(0xFFF1F5F9),
               foregroundColor:
                   isDark ? AppTheme.googleBlueDark : AppTheme.googleBlue,
             ),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,9 +85,9 @@ class ProfileCard extends StatelessWidget {
                   Text(
                     resolvedName,
                     style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: 17,
                       fontWeight: FontWeight.bold,
-                      letterSpacing: -0.2,
+                      letterSpacing: -0.3,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -90,7 +102,7 @@ class ProfileCard extends StatelessWidget {
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 6),
                 StatusBadge(
                   label: 'Google Account',
                   icon: Icons.verified_user_rounded,

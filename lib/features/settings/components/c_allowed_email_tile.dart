@@ -33,64 +33,87 @@ class AllowedEmailTile extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
-        color: isDark
-            ? Colors.white.withValues(alpha: 0.03)
-            : const Color(0xFFF8F9FA),
-        borderRadius: BorderRadius.circular(14),
+        color: isDark ? const Color(0xFF13161C) : const Color(0xFFF8FAFC),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isCurrentUser
-              ? accentColor.withValues(alpha: 0.4)
-              : (isDark ? const Color(0xFF3C4043) : const Color(0xFFE8EAED)),
-          width: 1.0,
+          color: isDark
+              ? (isCurrentUser
+                  ? const Color(0xFF2E3545)
+                  : const Color(0xFF262A34))
+              : (isCurrentUser
+                  ? const Color(0xFFE2E8F0)
+                  : const Color(0xFFEDF0F5)),
+          width: 1.1,
         ),
       ),
       padding: const EdgeInsets.symmetric(
         horizontal: 14,
-        vertical: 10,
+        vertical: 12,
       ),
       child: Row(
         children: [
           Container(
-            width: 4,
-            height: 32,
+            padding: const EdgeInsets.all(1.5),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
-              color: accentColor,
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: accentColor.withValues(alpha: 0.5),
+                width: 1.5,
+              ),
+            ),
+            child: UserAvatar(
+              photoUrl: photoUrl,
+              name: displayName ?? allowedEmail.email,
+              email: allowedEmail.email,
+              radius: 17,
+              backgroundColor: isCurrentUser
+                  ? colorScheme.primaryContainer
+                  : colorScheme.surfaceContainerHighest,
+              foregroundColor: isCurrentUser
+                  ? colorScheme.onPrimaryContainer
+                  : colorScheme.onSurfaceVariant,
             ),
           ),
           const SizedBox(width: 12),
-          UserAvatar(
-            photoUrl: photoUrl,
-            name: displayName ?? allowedEmail.email,
-            email: allowedEmail.email,
-            radius: 17,
-            backgroundColor: isCurrentUser
-                ? colorScheme.primaryContainer
-                : colorScheme.surfaceContainerHighest,
-            foregroundColor: isCurrentUser
-                ? colorScheme.onPrimaryContainer
-                : colorScheme.onSurfaceVariant,
-          ),
-          const SizedBox(width: 12),
           Expanded(
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Flexible(
-                  child: Text(
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        displayName?.isNotEmpty == true
+                            ? displayName!
+                            : allowedEmail.email,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: -0.1,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    if (isCurrentUser) ...[
+                      const SizedBox(width: 6),
+                      StatusBadge(
+                        label: 'You',
+                        color: accentColor,
+                      ),
+                    ],
+                  ],
+                ),
+                if (displayName?.isNotEmpty == true &&
+                    displayName != allowedEmail.email) ...[
+                  const SizedBox(height: 2),
+                  Text(
                     allowedEmail.email,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: -0.1,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: colorScheme.outline,
                     ),
                     overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                if (isCurrentUser) ...[
-                  const SizedBox(width: 6),
-                  StatusBadge(
-                    label: 'You',
-                    color: accentColor,
                   ),
                 ],
               ],
@@ -99,8 +122,8 @@ class AllowedEmailTile extends StatelessWidget {
           IconButton(
             icon: Icon(
               Icons.delete_outline_rounded,
-              size: 19,
-              color: colorScheme.error.withValues(alpha: 0.75),
+              size: 20,
+              color: colorScheme.error.withValues(alpha: 0.8),
             ),
             tooltip: 'Remove',
             onPressed: onDelete,

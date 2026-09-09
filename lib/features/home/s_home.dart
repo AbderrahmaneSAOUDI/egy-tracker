@@ -149,6 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     myEgpBalance: _homeFeedViewModel.myEgpBalance,
                     friendUsdBalance: _homeFeedViewModel.friendUsdBalance,
                     friendEgpBalance: _homeFeedViewModel.friendEgpBalance,
+                    isPrimaryUser: _homeFeedViewModel.isPrimaryUser,
                     onSave: _homeFeedViewModel.addExpense,
                   );
                 },
@@ -176,6 +177,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         _homeFeedViewModel.myProfile?.name ?? 'You',
                     friendUserId: friendId,
                     friendUserName: friendName,
+                    friendUsdBalance: _homeFeedViewModel.friendUsdBalance,
+                    friendEgpBalance: _homeFeedViewModel.friendEgpBalance,
                     onSave: _homeFeedViewModel.addBorrow,
                   );
                 },

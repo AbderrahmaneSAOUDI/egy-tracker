@@ -67,26 +67,18 @@ class _LoginScreenState extends State<LoginScreen> {
                             ? null
                             : () => _viewModel.handleAutoLogin(),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 16),
 
                       // App Title
                       Text(
                         'egy_tracker',
-                        style: theme.textTheme.headlineSmall?.copyWith(
+                        style: theme.textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.bold,
+                          letterSpacing: -0.5,
                           color: theme.colorScheme.onSurface,
                         ),
                       ),
-                      const SizedBox(height: 6),
-
-                      // Clean, single-line subtitle
-                      Text(
-                        'Trip Expense Tracker',
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.outline,
-                        ),
-                      ),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 24),
 
                       // Error message banner
                       if (_viewModel.errorMessage != null) ...[
@@ -101,16 +93,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       GoogleSignInButton(
                         isSigningIn: _viewModel.isSigningIn,
                         onPressed: () => _viewModel.handleSignIn(),
-                      ),
-                      const SizedBox(height: 20),
-
-                      // Whitelist security note
-                      Text(
-                        'Private access for trip members',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.outline,
-                          fontSize: 12,
-                        ),
                       ),
                     ],
                   );

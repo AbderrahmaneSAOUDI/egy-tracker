@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 
 /// ViewModel managing tab navigation state in the Home scaffold.
 class HomeViewModel extends ChangeNotifier {
-  int _selectedIndex = 1;
-  int _slideDirection = 1;
+  int _selectedIndex = 0;
+  int _slideDirection = 0;
 
   static const List<String> titles = [
     'Home',

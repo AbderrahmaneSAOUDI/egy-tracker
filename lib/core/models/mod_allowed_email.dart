@@ -17,7 +17,8 @@ class AllowedEmail {
     };
   }
 
-  factory AllowedEmail.fromMap(Map<String, dynamic> map, String documentId) {
+  factory AllowedEmail.fromMap(Map<String, dynamic>? rawMap, String documentId) {
+    final map = rawMap ?? const <String, dynamic>{};
     return AllowedEmail(
       id: documentId,
       email: (map['email'] as String? ?? '').toLowerCase().trim(),

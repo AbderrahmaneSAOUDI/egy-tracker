@@ -23,7 +23,8 @@ class UserProfile {
     };
   }
 
-  factory UserProfile.fromMap(Map<String, dynamic> map, String documentId) {
+  factory UserProfile.fromMap(Map<String, dynamic>? rawMap, String documentId) {
+    final map = rawMap ?? const <String, dynamic>{};
     return UserProfile(
       id: documentId,
       name: map['name'] as String? ?? '',

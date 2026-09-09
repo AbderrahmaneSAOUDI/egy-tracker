@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'c_app_dialog.dart';
 import '../models/mod_borrow.dart';
 import '../theme/t_app_theme.dart';
@@ -13,6 +14,8 @@ Future<void> showBorrowDialog({
   required String currentUserName,
   String? friendUserId,
   String? friendUserName,
+  double friendUsdBalance = 0.0,
+  double friendEgpBalance = 0.0,
   Borrow? initialBorrow,
   required Future<bool> Function(Borrow) onSave,
 }) {
@@ -45,6 +48,24 @@ Future<void> showBorrowDialog({
           final borrowColor =
               isDark ? AppTheme.googleYellowDark : AppTheme.googleYellow;
 
+          final usd = double.tryParse(usdController.text.trim()) ?? 0.0;
+          final egp = double.tryParse(egpController.text.trim()) ?? 0.0;
+
+          final effectiveFriendUsd = friendUsdBalance +
+              (initialBorrow != null ? initialBorrow.usdAmount : 0.0);
+          final effectiveFriendEgp = friendEgpBalance +
+              (initialBorrow != null ? initialBorrow.egpAmount : 0.0);
+
+          final isOverUsd = friendUsdBalance > 0 && usd > effectiveFriendUsd;
+          final isOverEgp = friendEgpBalance > 0 && egp > effectiveFriendEgp;
+
+          final canSubmit = (usd > 0 || egp > 0) &&
+              usd >= 0 &&
+              egp >= 0 &&
+              !isOverUsd &&
+              !isOverEgp &&
+              !isSubmitting;
+
           return AppDialog(
             icon: Icons.handshake_outlined,
             iconColor: borrowColor,
@@ -52,17 +73,8 @@ Future<void> showBorrowDialog({
             actionLabel: 'Save',
             isSubmitting: isSubmitting,
             onCancel: () => Navigator.of(dialogContext).pop(),
-            onAction: () async {
-              final usd = double.tryParse(usdController.text.trim()) ?? 0.0;
-              final egp = double.tryParse(egpController.text.trim()) ?? 0.0;
-
+            onAction: canSubmit ? () async {
               if (usd <= 0 && egp <= 0) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Please enter an amount for USD, EGP, or both.'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
                 return;
               }
 
@@ -94,7 +106,7 @@ Future<void> showBorrowDialog({
               } else if (dialogContext.mounted) {
                 setDialogState(() => isSubmitting = false);
               }
-            },
+            } : null,
             content: Form(
               key: formKey,
               child: SingleChildScrollView(
@@ -135,9 +147,24 @@ Future<void> showBorrowDialog({
                     TextFormField(
                       controller: usdController,
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+                      ],
+                      enabled: !isSubmitting,
+                      onChanged: (_) => setDialogState(() {}),
                       decoration: InputDecoration(
                         labelText: 'USD Amount',
                         hintText: '0.00',
+                        helperText: isOverUsd
+                            ? 'Exceeds friend balance (${Formatters.formatUsd(effectiveFriendUsd)})'
+                            : (friendUsdBalance > 0
+                                ? 'Friend has: ${Formatters.formatUsd(effectiveFriendUsd)}'
+                                : null),
+                        helperStyle: TextStyle(
+                          fontSize: 11,
+                          color: isOverUsd ? colorScheme.error : colorScheme.outline,
+                          fontWeight: isOverUsd ? FontWeight.w600 : FontWeight.normal,
+                        ),
                         prefixIcon: const Icon(Icons.attach_money_rounded),
                         prefixIconColor: isDark ? AppTheme.usdColorDark : AppTheme.usdColorLight,
                       ),
@@ -148,9 +175,24 @@ Future<void> showBorrowDialog({
                     TextFormField(
                       controller: egpController,
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+                      ],
+                      enabled: !isSubmitting,
+                      onChanged: (_) => setDialogState(() {}),
                       decoration: InputDecoration(
                         labelText: 'EGP Amount',
                         hintText: '0.00',
+                        helperText: isOverEgp
+                            ? 'Exceeds friend balance (${Formatters.formatEgp(effectiveFriendEgp)})'
+                            : (friendEgpBalance > 0
+                                ? 'Friend has: ${Formatters.formatEgp(effectiveFriendEgp)}'
+                                : null),
+                        helperStyle: TextStyle(
+                          fontSize: 11,
+                          color: isOverEgp ? colorScheme.error : colorScheme.outline,
+                          fontWeight: isOverEgp ? FontWeight.w600 : FontWeight.normal,
+                        ),
                         prefixIcon: const Icon(Icons.payments_outlined),
                         prefixIconColor: isDark ? AppTheme.egpColorDark : AppTheme.egpColorLight,
                         suffixText: 'EGP',

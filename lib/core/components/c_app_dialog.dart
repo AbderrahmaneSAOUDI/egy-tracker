@@ -47,7 +47,7 @@ class AppDialog extends StatelessWidget {
 
     return AlertDialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(18),
         side: BorderSide(
           color: borderColor ??
               (isDark ? const Color(0xFF3C4043) : const Color(0xFFDADCE0)),
@@ -58,9 +58,9 @@ class AppDialog extends StatelessWidget {
           ? const Color(0xFF202124)
           : const Color(0xFFFFFFFF),
       surfaceTintColor: Colors.transparent,
-      titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
-      contentPadding: const EdgeInsets.fromLTRB(24, 16, 24, 12),
-      actionsPadding: const EdgeInsets.fromLTRB(24, 12, 24, 20),
+      titlePadding: const EdgeInsets.fromLTRB(20, 18, 20, 0),
+      contentPadding: const EdgeInsets.fromLTRB(20, 12, 20, 10),
+      actionsPadding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
       title: Row(
         children: [
           IconBadge(

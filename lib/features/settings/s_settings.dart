@@ -102,7 +102,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 120),
+      padding: const EdgeInsets.fromLTRB(12, 10, 12, 90),
       children: [
         // ===================== SECTION 1: USER PROFILE HERO =====================
         FadeSlideTransition(
@@ -130,14 +130,14 @@ class _SettingsScreenState extends State<SettingsScreen>
             },
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 10),
 
         // ===================== SECTION 2: THEME SELECTOR =====================
         FadeSlideTransition(
           animation: _themeAnim,
           child: const ThemeSelectorCard(),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 10),
 
         // ===================== SECTION 3: INITIAL BALANCES =====================
         FadeSlideTransition(
@@ -147,7 +147,7 @@ class _SettingsScreenState extends State<SettingsScreen>
             viewModel: _viewModel,
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 10),
 
         // ===================== SECTION 4: ALLOWED EMAILS WHITELIST =====================
         FadeSlideTransition(
@@ -157,7 +157,7 @@ class _SettingsScreenState extends State<SettingsScreen>
             viewModel: _viewModel,
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 10),
 
         // ===================== SECTION 5: DATA LIFECYCLE / RESET =====================
         FadeSlideTransition(

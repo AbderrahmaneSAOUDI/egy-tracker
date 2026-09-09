@@ -5,7 +5,6 @@ import '../../core/components/c_activity_tile.dart';
 import '../../core/components/c_add_expense_dialog.dart';
 import '../../core/components/c_delete_activity_dialog.dart';
 import '../../core/components/c_empty_state.dart';
-import '../../core/components/c_segmented_pill_bar.dart';
 import '../../core/components/c_traveler_balance_card.dart';
 import '../../core/models/mod_activity_item.dart';
 import '../../core/models/mod_expense.dart';
@@ -83,6 +82,7 @@ class _MyTrackerScreenState extends State<MyTrackerScreen> {
       friendUsdBalance: 0.0,
       friendEgpBalance: 0.0,
       initialExpense: expense,
+      isPrimaryUser: _viewModel.isPrimaryUser,
       onSave: (updated) => _viewModel.updateExpense(updated),
     );
   }
@@ -106,24 +106,11 @@ class _MyTrackerScreenState extends State<MyTrackerScreen> {
             ? _viewModel.friendProfile!.name
             : _viewModel.friendEmailDoc?.email;
 
-        final filter = _viewModel.filter;
-        final myExpenses = _viewModel.myExpenses;
-        final sharedExpenses = _viewModel.sharedExpenses;
         final allExpenses = _viewModel.allPersonalExpenses;
-
-        // Select the active list according to the active filter
-        final List<Expense> activeExpenses;
-        if (filter == MyTrackerFilter.myExpenses) {
-          activeExpenses = myExpenses;
-        } else if (filter == MyTrackerFilter.sharedExpenses) {
-          activeExpenses = sharedExpenses;
-        } else {
-          activeExpenses = allExpenses;
-        }
 
         return ListView(
           key: const ValueKey('my_tracker_list_view'),
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 120),
+          padding: const EdgeInsets.fromLTRB(12, 10, 12, 90),
           children: [
             // ===================== SECTION 1: PERSONAL CASH BALANCES =====================
             TravelerBalanceCard(
@@ -134,47 +121,17 @@ class _MyTrackerScreenState extends State<MyTrackerScreen> {
               usdAmount: _viewModel.myUsdBalance,
               egpAmount: _viewModel.myEgpBalance,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 10),
 
-            // ===================== SECTION 2: ANIMATED SEGMENTED FILTER =====================
-            SegmentedPillBar<MyTrackerFilter>(
-              selectedValue: filter,
-              onValueChanged: _viewModel.setFilter,
-              items: [
-                SegmentedPillItem(
-                  value: MyTrackerFilter.all,
-                  label: 'All',
-                  count: allExpenses.length,
-                ),
-                SegmentedPillItem(
-                  value: MyTrackerFilter.myExpenses,
-                  label: 'Mine',
-                  count: myExpenses.length,
-                ),
-                SegmentedPillItem(
-                  value: MyTrackerFilter.sharedExpenses,
-                  label: 'Shared',
-                  count: sharedExpenses.length,
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-
-            // ===================== SECTION 3: UNIFIED EXPENSE LIST =====================
-            if (activeExpenses.isEmpty)
-              EmptyState(
-                icon: filter == MyTrackerFilter.sharedExpenses
-                    ? Icons.group_outlined
-                    : Icons.receipt_long_outlined,
-                title: filter == MyTrackerFilter.sharedExpenses
-                    ? 'No shared expenses'
-                    : (filter == MyTrackerFilter.myExpenses
-                        ? 'No 100% personal expenses'
-                        : 'No personal expenses yet'),
+            // ===================== SECTION 2: UNIFIED EXPENSE LIST =====================
+            if (allExpenses.isEmpty)
+              const EmptyState(
+                icon: Icons.receipt_long_outlined,
+                title: 'No personal expenses yet',
                 subtitle: 'Expenses where you have a personal share will appear here.',
               )
             else
-              ...activeExpenses.asMap().entries.map((entry) {
+              ...allExpenses.asMap().entries.map((entry) {
                 final exp = entry.value;
                 final share = _viewModel.calculateUserShare(exp);
                 return StaggeredItem(
@@ -186,6 +143,7 @@ class _MyTrackerScreenState extends State<MyTrackerScreen> {
                     friendName: friendName,
                     personalShare: share,
                     isMyTrackerView: true,
+                    isPrimaryUser: _viewModel.isPrimaryUser,
                     onEdit: () => _openEditExpenseDialog(context, exp),
                     onDelete: () => _openDeleteExpenseDialog(context, exp),
                   ),

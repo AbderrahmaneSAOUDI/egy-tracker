@@ -66,7 +66,7 @@ void main() {
       devUser = DevUser(email: 'abderrahmane.saoudi.26@gmail.com');
     });
 
-    testWidgets('Renders FloatingPillNavBar with My Tracker active by default', (WidgetTester tester) async {
+    testWidgets('Renders FloatingPillNavBar with Home active by default', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
@@ -82,15 +82,15 @@ void main() {
       expect(find.byType(AppBar), findsNothing);
       expect(find.byType(FloatingPillNavBar), findsOneWidget);
 
-      // Default index 1 (My Tracker selected):
+      // Default index 0 (Home selected):
       expect(
-        find.descendant(of: find.byType(FloatingPillNavBar), matching: find.text('My Tracker')),
+        find.descendant(of: find.byType(FloatingPillNavBar), matching: find.text('Home')),
         findsOneWidget,
       );
 
-      // Inactive items ('Home', 'Settings') have their labels hidden
+      // Inactive items ('My Tracker', 'Settings') have their labels hidden
       expect(
-        find.descendant(of: find.byType(FloatingPillNavBar), matching: find.text('Home')),
+        find.descendant(of: find.byType(FloatingPillNavBar), matching: find.text('My Tracker')),
         findsNothing,
       );
       expect(
@@ -98,13 +98,13 @@ void main() {
         findsNothing,
       );
 
-      // Icons are all visible in the navigation bar
+      // Icons are all visible in the navigation bar (Home active, others inactive)
       expect(
-        find.descendant(of: find.byType(FloatingPillNavBar), matching: find.byIcon(Icons.home_outlined)),
+        find.descendant(of: find.byType(FloatingPillNavBar), matching: find.byIcon(Icons.home_rounded)),
         findsOneWidget,
       );
       expect(
-        find.descendant(of: find.byType(FloatingPillNavBar), matching: find.byIcon(Icons.person_rounded)),
+        find.descendant(of: find.byType(FloatingPillNavBar), matching: find.byIcon(Icons.person_outline_rounded)),
         findsOneWidget,
       );
       expect(
@@ -112,11 +112,11 @@ void main() {
         findsOneWidget,
       );
 
-      // Add button is visible on My Tracker
-      expect(find.byKey(const ValueKey('nav_add_button')), findsOneWidget);
+      // Add button is hidden on Home (dashboard only)
+      expect(find.byKey(const ValueKey('nav_add_button')), findsNothing);
 
       final navBar = tester.widget<FloatingPillNavBar>(find.byType(FloatingPillNavBar));
-      expect(navBar.selectedIndex, equals(1));
+      expect(navBar.selectedIndex, equals(0));
     });
 
     testWidgets('Switching destinations updates label visibility, selectedIndex, and active screen', (WidgetTester tester) async {
@@ -131,23 +131,9 @@ void main() {
         ),
       );
 
-      // Tap 'Home' nav item
-      final homeItem = find.byKey(const ValueKey('nav_item_home'));
-      await tester.tap(homeItem);
-      await tester.pumpAndSettle();
-
+      // Starts on Home (index 0) with Add button hidden (dashboard only)
       var navBar = tester.widget<FloatingPillNavBar>(find.byType(FloatingPillNavBar));
       expect(navBar.selectedIndex, equals(0));
-      expect(
-        find.descendant(of: find.byType(FloatingPillNavBar), matching: find.text('Home')),
-        findsOneWidget,
-      );
-      expect(
-        find.descendant(of: find.byType(FloatingPillNavBar), matching: find.text('My Tracker')),
-        findsNothing,
-      );
-
-      // Add button is hidden on Home
       expect(find.byKey(const ValueKey('nav_add_button')), findsNothing);
 
       // Tap 'Settings' nav item
@@ -162,7 +148,7 @@ void main() {
         findsOneWidget,
       );
       expect(
-        find.descendant(of: find.byType(FloatingPillNavBar), matching: find.text('My Tracker')),
+        find.descendant(of: find.byType(FloatingPillNavBar), matching: find.text('Home')),
         findsNothing,
       );
 
@@ -180,9 +166,32 @@ void main() {
         find.descendant(of: find.byType(FloatingPillNavBar), matching: find.text('My Tracker')),
         findsOneWidget,
       );
+      expect(
+        find.descendant(of: find.byType(FloatingPillNavBar), matching: find.text('Settings')),
+        findsNothing,
+      );
 
       // Add button is visible on My Tracker
       expect(find.byKey(const ValueKey('nav_add_button')), findsOneWidget);
+
+      // Tap 'Home' nav item
+      final homeItem = find.byKey(const ValueKey('nav_item_home'));
+      await tester.tap(homeItem);
+      await tester.pumpAndSettle();
+
+      navBar = tester.widget<FloatingPillNavBar>(find.byType(FloatingPillNavBar));
+      expect(navBar.selectedIndex, equals(0));
+      expect(
+        find.descendant(of: find.byType(FloatingPillNavBar), matching: find.text('Home')),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: find.byType(FloatingPillNavBar), matching: find.text('My Tracker')),
+        findsNothing,
+      );
+
+      // Add button is hidden on Home
+      expect(find.byKey(const ValueKey('nav_add_button')), findsNothing);
     });
   });
 }

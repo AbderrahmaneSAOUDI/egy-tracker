@@ -46,7 +46,7 @@ class HomeBalancesCard extends StatelessWidget {
           usdAmount: myUsd,
           egpAmount: myEgp,
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 8),
 
         // 2. Travel Partner Standalone Card
         if (friendEmail != null)

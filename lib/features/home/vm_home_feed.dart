@@ -11,6 +11,13 @@ import '../../core/services/f_firestore.dart';
 import '../../core/utils/m_calculations.dart';
 import '../../core/models/mod_activity_item.dart';
 
+/// Available filter tabs for Home activity feed.
+enum HomeFeedFilter {
+  all,
+  mine,
+  shared,
+}
+
 /// ViewModel managing data subscriptions, calculations, and mutations for the Home feed.
 class HomeFeedViewModel extends ChangeNotifier {
   final User user;
@@ -18,6 +25,7 @@ class HomeFeedViewModel extends ChangeNotifier {
 
   bool _isProcessing = false;
   String? _errorMessage;
+  HomeFeedFilter _filter = HomeFeedFilter.all;
 
   List<Expense> _expenses = [];
   List<Exchange> _exchanges = [];
@@ -97,6 +105,76 @@ class HomeFeedViewModel extends ChangeNotifier {
       return b.createdAt.compareTo(a.createdAt);
     });
     return list;
+  }
+
+  HomeFeedFilter get filter => _filter;
+
+  void setFilter(HomeFeedFilter newFilter) {
+    if (_filter == newFilter) return;
+    _filter = newFilter;
+    notifyListeners();
+  }
+
+  /// Split percentage for the logged in user on an expense.
+  double calculateUserPercentage(Expense expense) {
+    return Calculations.getUserPercentage(
+      expense: expense,
+      isPrimaryUser: isPrimaryUser,
+    );
+  }
+
+  /// All activities in descending chronological order.
+  List<ActivityItem> get allActivities => activities;
+
+  /// Activities where the user's personal share is 100% (or exclusive actor).
+  List<ActivityItem> get mineActivities {
+    return activities.where((item) {
+      if (item.isExpense) {
+        final pct = calculateUserPercentage(item.expense!);
+        return (pct - 100.0).abs() < 0.01;
+      } else if (item.isExchange) {
+        final myEmail = user.email?.toLowerCase().trim() ?? '';
+        final exUser = item.exchange!.userId.toLowerCase().trim();
+        return exUser == user.uid || exUser == myEmail;
+      } else if (item.isBorrow) {
+        return false;
+      }
+      return false;
+    }).toList();
+  }
+
+  /// Activities shared between travelers (expenses with 0% < share < 100%, and borrows).
+  List<ActivityItem> get sharedActivities {
+    return activities.where((item) {
+      if (item.isExpense) {
+        final pct = calculateUserPercentage(item.expense!);
+        return pct > 0.01 && pct < 99.99;
+      } else if (item.isExchange) {
+        return false;
+      } else if (item.isBorrow) {
+        return true;
+      }
+      return false;
+    }).toList();
+  }
+
+  /// Returns activities based on active [filter].
+  List<ActivityItem> get filteredActivities {
+    switch (_filter) {
+      case HomeFeedFilter.all:
+        return allActivities;
+      case HomeFeedFilter.mine:
+        return mineActivities;
+      case HomeFeedFilter.shared:
+        return sharedActivities;
+    }
+  }
+
+  bool get isPrimaryUser {
+    final myEmail = user.email?.toLowerCase().trim() ?? '';
+    if (myEmail == 'abderrahmane.saoudi.26@gmail.com') return true;
+    if (_allowedEmails.isEmpty) return true;
+    return myEmail == _allowedEmails.first.email.toLowerCase().trim();
   }
 
   AllowedEmail? get friendEmailDoc {

@@ -2,13 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../core/animations/a_staggered_item.dart';
 import '../../core/components/c_empty_state.dart';
-import '../../core/components/c_icon_badge.dart';
 import '../../core/utils/m_auth_helpers.dart';
 import '../../core/components/c_activity_tile.dart';
 import '../../core/components/c_add_exchange_dialog.dart';
 import '../../core/components/c_add_expense_dialog.dart';
 import '../../core/components/c_borrow_dialog.dart';
 import '../../core/components/c_delete_activity_dialog.dart';
+import '../../core/components/c_segmented_pill_bar.dart';
 import '../../core/models/mod_activity_item.dart';
 import 'components/c_home_balances_card.dart';
 import 'vm_home_feed.dart';
@@ -37,12 +37,12 @@ class HomeTabScreen extends StatelessWidget {
         final friendPhoto = viewModel.friendProfile?.photoUrl;
         final friendEmail = viewModel.friendEmailDoc?.email;
 
-        final activities = viewModel.activities;
+        final activities = viewModel.filteredActivities;
 
         return RefreshIndicator(
           onRefresh: viewModel.refresh,
           child: ListView(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 120),
+            padding: const EdgeInsets.fromLTRB(12, 10, 12, 90),
             children: [
               // ===================== SECTION 1: BALANCES CARD =====================
               HomeBalancesCard(
@@ -57,75 +57,44 @@ class HomeTabScreen extends StatelessWidget {
                 friendUsd: viewModel.friendUsdBalance,
                 friendEgp: viewModel.friendEgpBalance,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 10),
 
-              // ===================== SECTION 2: RECENT ACTIVITY HEADER =====================
-              Row(
-                children: [
-                  const IconBadge(
-                    icon: Icons.history_rounded,
-                    size: 32,
-                    iconSize: 18,
-                    borderRadius: 10,
+              // ===================== SECTION 2: ANIMATED SEGMENTED FILTER =====================
+              SegmentedPillBar<HomeFeedFilter>(
+                selectedValue: viewModel.filter,
+                onValueChanged: viewModel.setFilter,
+                items: [
+                  SegmentedPillItem(
+                    value: HomeFeedFilter.all,
+                    label: 'All',
+                    count: viewModel.allActivities.length,
                   ),
-                  const SizedBox(width: 10),
-                  const Text(
-                    'Recent Activity',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: -0.2,
-                    ),
+                  SegmentedPillItem(
+                    value: HomeFeedFilter.mine,
+                    label: 'Mine',
+                    count: viewModel.mineActivities.length,
                   ),
-                  if (activities.isNotEmpty) ...[
-                    const SizedBox(width: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        '${activities.length}',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                    ),
-                  ],
+                  SegmentedPillItem(
+                    value: HomeFeedFilter.shared,
+                    label: 'Shared',
+                    count: viewModel.sharedActivities.length,
+                  ),
                 ],
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
 
               // ===================== SECTION 3: ACTIVITY FEED OR EMPTY STATE =====================
               if (activities.isEmpty)
                 EmptyState(
-                  icon: Icons.receipt_long_outlined,
-                  title: 'No activity yet',
-                  action: FilledButton.tonalIcon(
-                    onPressed: () {
-                      final friendId = viewModel.friendProfile?.id ??
-                          viewModel.friendEmailDoc?.email;
-                      final friendUserName = viewModel.friendProfile?.name ??
-                          viewModel.friendEmailDoc?.email;
-                      showAddExpenseDialog(
-                        context: context,
-                        currentUserId: user.uid,
-                        currentUserName: viewModel.myProfile?.name ?? 'You',
-                        friendUserId: friendId,
-                        friendUserName: friendUserName,
-                        myUsdBalance: viewModel.myUsdBalance,
-                        myEgpBalance: viewModel.myEgpBalance,
-                        friendUsdBalance: viewModel.friendUsdBalance,
-                        friendEgpBalance: viewModel.friendEgpBalance,
-                        onSave: viewModel.addExpense,
-                      );
-                    },
-                    icon: const Icon(Icons.add_rounded, size: 18),
-                    label: const Text('Add Expense'),
-                  ),
+                  icon: viewModel.filter == HomeFeedFilter.shared
+                      ? Icons.group_outlined
+                      : Icons.receipt_long_outlined,
+                  title: viewModel.filter == HomeFeedFilter.shared
+                      ? 'No shared activities'
+                      : (viewModel.filter == HomeFeedFilter.mine
+                          ? 'No personal activities'
+                          : 'No activity yet'),
+                  subtitle: 'Activities will appear here once recorded.',
                 )
               else
                 ...activities.asMap().entries.map((entry) {
@@ -139,6 +108,7 @@ class HomeTabScreen extends StatelessWidget {
                       item: item,
                       currentUserId: user.uid,
                       friendName: friendName,
+                      isPrimaryUser: viewModel.isPrimaryUser,
                       onEdit: () => _editItem(context, item),
                       onDelete: () => _confirmDelete(context, item),
                     ),
@@ -167,6 +137,7 @@ class HomeTabScreen extends StatelessWidget {
         friendUsdBalance: viewModel.friendUsdBalance,
         friendEgpBalance: viewModel.friendEgpBalance,
         initialExpense: item.expense,
+        isPrimaryUser: viewModel.isPrimaryUser,
         onSave: viewModel.updateExpense,
       );
     } else if (item.isExchange) {
@@ -186,6 +157,8 @@ class HomeTabScreen extends StatelessWidget {
         currentUserName: viewModel.myProfile?.name ?? 'You',
         friendUserId: friendId,
         friendUserName: friendUserName,
+        friendUsdBalance: viewModel.friendUsdBalance,
+        friendEgpBalance: viewModel.friendEgpBalance,
         initialBorrow: item.borrow,
         onSave: viewModel.updateBorrow,
       );

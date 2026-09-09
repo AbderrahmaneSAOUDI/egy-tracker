@@ -20,7 +20,8 @@ class InitialBalance {
     };
   }
 
-  factory InitialBalance.fromMap(Map<String, dynamic> map, String documentId) {
+  factory InitialBalance.fromMap(Map<String, dynamic>? rawMap, String documentId) {
+    final map = rawMap ?? const <String, dynamic>{};
     return InitialBalance(
       userId: map['user_id'] as String? ?? documentId,
       usdAmount: (map['usd_amount'] as num?)?.toDouble() ?? 0.0,

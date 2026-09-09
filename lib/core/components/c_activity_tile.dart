@@ -16,6 +16,7 @@ class ActivityTile extends StatefulWidget {
   final String? friendName;
   final double? personalShare;
   final bool isMyTrackerView;
+  final bool isPrimaryUser;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
 
@@ -26,6 +27,7 @@ class ActivityTile extends StatefulWidget {
     this.friendName,
     this.personalShare,
     this.isMyTrackerView = false,
+    this.isPrimaryUser = true,
     this.onEdit,
     this.onDelete,
   });
@@ -70,6 +72,7 @@ class _ActivityTileState extends State<ActivityTile>
   String? get friendName => widget.friendName;
   double? get personalShare => widget.personalShare;
   bool get isMyTrackerView => widget.isMyTrackerView;
+  bool get isPrimaryUser => widget.isPrimaryUser;
   VoidCallback? get onEdit => widget.onEdit;
   VoidCallback? get onDelete => widget.onDelete;
 
@@ -88,7 +91,7 @@ class _ActivityTileState extends State<ActivityTile>
     }
 
     final slidingTile = SlideActionCard(
-      onTap: onEdit,
+      onTap: null,
       startAction: onEdit != null
           ? SlideActionItem(
               icon: Icons.edit_outlined,
@@ -99,11 +102,6 @@ class _ActivityTileState extends State<ActivityTile>
                     : const [Color(0xFF2563EB), Color(0xFF60A5FA)],
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
-              ),
-              shadow: BoxShadow(
-                color: const Color(0xFF2563EB).withValues(alpha: 0.25),
-                blurRadius: 10,
-                offset: const Offset(0, 3),
               ),
               onTrigger: onEdit!,
             )
@@ -118,11 +116,6 @@ class _ActivityTileState extends State<ActivityTile>
                     : const [Color(0xFFDC2626), Color(0xFFF87171)],
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
-              ),
-              shadow: BoxShadow(
-                color: const Color(0xFFDC2626).withValues(alpha: 0.25),
-                blurRadius: 10,
-                offset: const Offset(0, 3),
               ),
               onTrigger: onDelete!,
             )
@@ -149,38 +142,32 @@ class _ActivityTileState extends State<ActivityTile>
     final isPaidByMe = expense.paidBy == currentUserId;
     final payerLabel = isPaidByMe ? 'Paid by You' : 'Paid by ${friendName ?? "Friend"}';
 
+    final myPct = isPrimaryUser ? expense.mePercentage : expense.friendPercentage;
+    final friendPct = isPrimaryUser ? expense.friendPercentage : expense.mePercentage;
+
     String splitLabel;
-    if (expense.mePercentage == 100.0) {
+    if (myPct == 100.0) {
       splitLabel = '100% You';
-    } else if (expense.friendPercentage == 100.0) {
+    } else if (friendPct == 100.0) {
       splitLabel = '100% ${friendName ?? "Friend"}';
     } else if (expense.splitType == 'fifty_fifty' ||
         (expense.mePercentage == 50.0 && expense.friendPercentage == 50.0)) {
       splitLabel = '50/50';
     } else {
-      splitLabel = '${expense.mePercentage.toInt()}% / ${expense.friendPercentage.toInt()}%';
+      splitLabel = '${myPct.toInt()}% / ${friendPct.toInt()}%';
     }
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: 6),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1B1D22) : Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: isDark ? const Color(0xFF2A2E37) : const Color(0xFFE5E7EB),
           width: 1.1,
         ),
-        boxShadow: isDark
-            ? null
-            : [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.04),
-                  blurRadius: 10,
-                  offset: const Offset(0, 3),
-                ),
-              ],
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       child: Row(
         children: [
           // Creative squircle badge with subtle currency aura
@@ -206,6 +193,7 @@ class _ActivityTileState extends State<ActivityTile>
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   expense.title,
@@ -292,25 +280,16 @@ class _ActivityTileState extends State<ActivityTile>
         Formatters.formatCurrency(exchange.toAmount, exchange.toCurrency);
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: 6),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1B1D22) : Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: exchangeColor.withValues(alpha: isDark ? 0.35 : 0.22),
           width: 1.1,
         ),
-        boxShadow: isDark
-            ? null
-            : [
-                BoxShadow(
-                  color: exchangeColor.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 3),
-                ),
-              ],
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       child: Row(
         children: [
           // Squircle exchange icon
@@ -336,44 +315,25 @@ class _ActivityTileState extends State<ActivityTile>
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: exchangeColor.withValues(alpha: isDark ? 0.20 : 0.12),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        'Exchange',
-                        style: TextStyle(
-                          fontSize: 10.5,
-                          fontWeight: FontWeight.bold,
-                          color: exchangeColor,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-                    Expanded(
-                      child: Text(
-                        '$fromFormatted → $toFormatted',
-                        style: const TextStyle(
-                          fontSize: 13.5,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
+                Text(
+                  '$fromFormatted → $toFormatted',
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: -0.2,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 3),
                 Text(
                   '$userLabel · Rate: ${exchange.exchangeRate.toStringAsFixed(2)}',
                   style: TextStyle(
                     fontSize: 12,
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
+                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 3),
                 Text(
@@ -384,6 +344,23 @@ class _ActivityTileState extends State<ActivityTile>
                   ),
                 ),
               ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          // Badge
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+            decoration: BoxDecoration(
+              color: exchangeColor.withValues(alpha: isDark ? 0.20 : 0.12),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Text(
+              'Exchange',
+              style: TextStyle(
+                fontSize: 10.5,
+                fontWeight: FontWeight.bold,
+                color: exchangeColor,
+              ),
             ),
           ),
         ],
@@ -409,25 +386,16 @@ class _ActivityTileState extends State<ActivityTile>
     final amountsText = amounts.join(' · ');
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: 6),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1B1D22) : Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: borrowColor.withValues(alpha: isDark ? 0.35 : 0.22),
           width: 1.1,
         ),
-        boxShadow: isDark
-            ? null
-            : [
-                BoxShadow(
-                  color: borrowColor.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 3),
-                ),
-              ],
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       child: Row(
         children: [
           // Squircle borrow icon
@@ -453,47 +421,28 @@ class _ActivityTileState extends State<ActivityTile>
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: borrowColor.withValues(alpha: isDark ? 0.20 : 0.12),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        isBorrower ? 'Borrowed' : 'Lent',
-                        style: TextStyle(
-                          fontSize: 10.5,
-                          fontWeight: FontWeight.bold,
-                          color: borrowColor,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-                    Expanded(
-                      child: Text(
-                        actionTitle,
-                        style: const TextStyle(
-                          fontSize: 13.5,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
+                Text(
+                  actionTitle,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: -0.2,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 3),
                 Text(
                   amountsText,
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: isBorrower
                         ? (isDark ? AppTheme.googleGreenDark : AppTheme.googleGreen)
                         : (isDark ? AppTheme.googleRedDark : AppTheme.googleRed),
                   ),
+                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 3),
                 Text(
@@ -504,6 +453,23 @@ class _ActivityTileState extends State<ActivityTile>
                   ),
                 ),
               ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          // Badge
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+            decoration: BoxDecoration(
+              color: borrowColor.withValues(alpha: isDark ? 0.20 : 0.12),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Text(
+              isBorrower ? 'Borrowed' : 'Lent',
+              style: TextStyle(
+                fontSize: 10.5,
+                fontWeight: FontWeight.bold,
+                color: borrowColor,
+              ),
             ),
           ),
         ],
