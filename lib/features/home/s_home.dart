@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import '../../core/components/c_floating_pill_nav_bar.dart';
 import '../../core/services/f_auth.dart';
 import '../../core/services/f_firestore.dart';
+import '../my_tracker/s_my_tracker.dart';
 import '../settings/s_settings.dart';
-import 'components/c_add_action_sheet.dart';
-import 'components/c_add_exchange_dialog.dart';
-import 'components/c_add_expense_dialog.dart';
-import 'components/c_borrow_dialog.dart';
+import '../../core/components/c_add_action_sheet.dart';
+import '../../core/components/c_add_exchange_dialog.dart';
+import '../../core/components/c_add_expense_dialog.dart';
+import '../../core/components/c_borrow_dialog.dart';
 import 's_home_tab.dart';
 import 'vm_home.dart';
 import 'vm_home_feed.dart';
@@ -110,16 +111,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     user: widget.user,
                     viewModel: _homeFeedViewModel,
                   )
-                  : selectedIndex == 2
-                      ? SettingsScreen(
-                          key: const ValueKey<int>(2),
-                          user: widget.user,
-                          authService: widget.authService,
-                          firestoreService: widget.firestoreService,
-                        )
-                      : SizedBox.expand(
-                          key: ValueKey<int>(selectedIndex),
-                        ),
+                : selectedIndex == 1
+                    ? MyTrackerScreen(
+                        key: const ValueKey<int>(1),
+                        user: widget.user,
+                        firestoreService: widget.firestoreService,
+                        feedViewModel: _homeFeedViewModel,
+                      )
+                    : SettingsScreen(
+                        key: const ValueKey<int>(2),
+                        user: widget.user,
+                        authService: widget.authService,
+                        firestoreService: widget.firestoreService,
+                      ),
             ),
           ),
           bottomNavigationBar: FloatingPillNavBar(

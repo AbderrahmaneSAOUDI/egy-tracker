@@ -1,16 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../core/animations/a_dialog_transition.dart';
 import '../../core/animations/a_staggered_item.dart';
 import '../../core/components/c_empty_state.dart';
 import '../../core/components/c_icon_badge.dart';
 import '../../core/utils/m_auth_helpers.dart';
-import 'components/c_activity_tile.dart';
-import 'components/c_add_exchange_dialog.dart';
-import 'components/c_add_expense_dialog.dart';
-import 'components/c_borrow_dialog.dart';
+import '../../core/components/c_activity_tile.dart';
+import '../../core/components/c_add_exchange_dialog.dart';
+import '../../core/components/c_add_expense_dialog.dart';
+import '../../core/components/c_borrow_dialog.dart';
+import '../../core/components/c_delete_activity_dialog.dart';
+import '../../core/models/mod_activity_item.dart';
 import 'components/c_home_balances_card.dart';
-import 'models/mod_activity_item.dart';
 import 'vm_home_feed.dart';
 
 /// Screen (View) for the Home tab displaying current balances and recent activity feed.
@@ -193,48 +193,17 @@ class HomeTabScreen extends StatelessWidget {
   }
 
   void _confirmDelete(BuildContext context, ActivityItem item) {
-    String title;
-    String name;
-    if (item.isExpense) {
-      title = 'Delete Expense';
-      name = item.expense!.title;
-    } else if (item.isExchange) {
-      title = 'Delete Exchange';
-      name = 'this exchange';
-    } else {
-      title = 'Delete Borrow Record';
-      name = 'this borrow record';
-    }
-
-    showAnimatedDialog<void>(
+    showDeleteActivityDialog(
       context: context,
-      builder: (dialogContext) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text('Are you sure you want to delete "$name"? Cash balances will be updated.'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(),
-              child: const Text('Cancel'),
-            ),
-            FilledButton(
-              onPressed: () async {
-                Navigator.of(dialogContext).pop();
-                if (item.isExpense) {
-                  await viewModel.deleteExpense(item.id);
-                } else if (item.isExchange) {
-                  await viewModel.deleteExchange(item.id);
-                } else {
-                  await viewModel.deleteBorrow(item.id);
-                }
-              },
-              style: FilledButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.error,
-              ),
-              child: const Text('Delete'),
-            ),
-          ],
-        );
+      item: item,
+      onDelete: () async {
+        if (item.isExpense) {
+          await viewModel.deleteExpense(item.id);
+        } else if (item.isExchange) {
+          await viewModel.deleteExchange(item.id);
+        } else {
+          await viewModel.deleteBorrow(item.id);
+        }
       },
     );
   }

@@ -9,6 +9,9 @@ import 'package:egy_tracker/core/theme/t_app_theme.dart';
 import 'package:egy_tracker/features/home/components/c_add_exchange_dialog.dart';
 import 'package:egy_tracker/features/home/components/c_add_expense_dialog.dart';
 import 'package:egy_tracker/features/home/components/c_borrow_dialog.dart';
+import 'package:egy_tracker/core/components/c_confirmation_dialog.dart';
+import 'package:egy_tracker/features/home/components/c_delete_activity_dialog.dart';
+import 'package:egy_tracker/features/home/models/mod_activity_item.dart';
 
 void main() {
   group('Animated Dialog & SectionCard Animation Tests', () {
@@ -449,6 +452,135 @@ void main() {
       expect(updatedBorrow, isNotNull);
       expect(updatedBorrow!.id, 'bor_existing');
       expect(updatedBorrow!.usdAmount, 80.0);
+    });
+  });
+
+  group('ConfirmationDialog Component Tests', () {
+    testWidgets('showConfirmationDialog renders title, message, and buttons, and cancels', (tester) async {
+      bool? result;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () async {
+                  result = await showConfirmationDialog(
+                    context: context,
+                    title: 'Delete Item?',
+                    message: 'This item will be permanently removed.',
+                    confirmLabel: 'Delete Now',
+                    cancelLabel: 'Nevermind',
+                  );
+                },
+                child: const Text('Confirm Action'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Confirm Action'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Delete Item?'), findsOneWidget);
+      expect(find.text('This item will be permanently removed.'), findsOneWidget);
+      expect(find.text('Delete Now'), findsOneWidget);
+      expect(find.text('Nevermind'), findsOneWidget);
+
+      // Tap Cancel
+      await tester.tap(find.text('Nevermind'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Delete Item?'), findsNothing);
+      expect(result, isFalse);
+    });
+
+    testWidgets('showConfirmationDialog confirms and invokes onConfirm', (tester) async {
+      bool confirmInvoked = false;
+      bool? result;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () async {
+                  result = await showConfirmationDialog(
+                    context: context,
+                    title: 'Confirm Operation',
+                    message: 'Are you sure?',
+                    onConfirm: () async {
+                      confirmInvoked = true;
+                      return true;
+                    },
+                  );
+                },
+                child: const Text('Open Confirm'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Open Confirm'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Confirm'));
+      await tester.pumpAndSettle();
+
+      expect(confirmInvoked, isTrue);
+      expect(result, isTrue);
+    });
+
+    testWidgets('showDeleteActivityDialog correctly adapts for Expense, Exchange, and Borrow', (tester) async {
+      final exp = Expense(
+        id: 'exp_1',
+        title: 'Dinner at Nile',
+        amount: 250,
+        currency: 'EGP',
+        paidBy: 'u1',
+        splitType: 'fifty_fifty',
+        mePercentage: 50,
+        friendPercentage: 50,
+        date: DateTime.now(),
+        createdAt: DateTime.now(),
+      );
+
+      bool deleted = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () => showDeleteActivityDialog(
+                  context: context,
+                  item: ActivityItem.expense(exp),
+                  onDelete: () async => deleted = true,
+                ),
+                child: const Text('Delete Exp'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Delete Exp'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Delete Expense'), findsOneWidget);
+      expect(find.text('Are you sure you want to delete "Dinner at Nile"? Cash balances will be updated.'), findsOneWidget);
+      expect(find.text('Delete'), findsOneWidget);
+      expect(find.text('Cancel'), findsOneWidget);
+
+      await tester.tap(find.text('Delete'));
+      await tester.pumpAndSettle();
+
+      expect(deleted, isTrue);
     });
   });
 }

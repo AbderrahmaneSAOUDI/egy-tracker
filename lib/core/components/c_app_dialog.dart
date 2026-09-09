@@ -14,6 +14,7 @@ class AppDialog extends StatelessWidget {
   final Color? borderColor;
   final Widget content;
   final String actionLabel;
+  final String cancelLabel;
   final Color? actionColor;
   final Color? actionForegroundColor;
   final bool isSubmitting;
@@ -30,6 +31,7 @@ class AppDialog extends StatelessWidget {
     this.borderColor,
     required this.content,
     required this.actionLabel,
+    this.cancelLabel = 'Cancel',
     this.actionColor,
     this.actionForegroundColor,
     this.isSubmitting = false,
@@ -120,9 +122,9 @@ class AppDialog extends StatelessWidget {
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 13),
                 ),
-                child: const Text(
-                  'Cancel',
-                  style: TextStyle(
+                child: Text(
+                  cancelLabel,
+                  style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                   ),

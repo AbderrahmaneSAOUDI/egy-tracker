@@ -110,6 +110,80 @@ void main() {
       );
       expect(share100, equals(80.0));
     });
+
+    test('MVP Scenarios A through D User Percentage & Share calculations', () {
+      // Scenario A — Personal expense: Taxi $15, Paid by Me, Split 100%
+      final expA = Expense(
+        id: 'a',
+        title: 'Taxi',
+        amount: 15.0,
+        currency: 'USD',
+        paidBy: 'user_me',
+        splitType: 'default_100',
+        mePercentage: 100.0,
+        friendPercentage: 0.0,
+        date: DateTime.now(),
+        createdAt: DateTime.now(),
+      );
+      expect(Calculations.getUserPercentage(expense: expA, isPrimaryUser: true), equals(100.0));
+      expect(Calculations.calculateUserExpenseShare(expense: expA, isPrimaryUser: true), equals(15.0));
+      expect(Calculations.getUserPercentage(expense: expA, isPrimaryUser: false), equals(0.0));
+      expect(Calculations.calculateUserExpenseShare(expense: expA, isPrimaryUser: false), equals(0.0));
+
+      // Scenario B — Shared expense: Dinner 1,000 EGP, Paid by Me, Split 50/50
+      final expB = Expense(
+        id: 'b',
+        title: 'Dinner',
+        amount: 1000.0,
+        currency: 'EGP',
+        paidBy: 'user_me',
+        splitType: 'fifty_fifty',
+        mePercentage: 50.0,
+        friendPercentage: 50.0,
+        date: DateTime.now(),
+        createdAt: DateTime.now(),
+      );
+      expect(Calculations.getUserPercentage(expense: expB, isPrimaryUser: true), equals(50.0));
+      expect(Calculations.calculateUserExpenseShare(expense: expB, isPrimaryUser: true), equals(500.0));
+      expect(Calculations.getUserPercentage(expense: expB, isPrimaryUser: false), equals(50.0));
+      expect(Calculations.calculateUserExpenseShare(expense: expB, isPrimaryUser: false), equals(500.0));
+
+      // Scenario C — Friend pays for me: Taxi $20, Paid by Friend, Split 100% Me
+      final expC = Expense(
+        id: 'c',
+        title: 'Taxi',
+        amount: 20.0,
+        currency: 'USD',
+        paidBy: 'user_friend',
+        splitType: 'custom',
+        mePercentage: 100.0,
+        friendPercentage: 0.0,
+        date: DateTime.now(),
+        createdAt: DateTime.now(),
+      );
+      expect(Calculations.getUserPercentage(expense: expC, isPrimaryUser: true), equals(100.0));
+      expect(Calculations.calculateUserExpenseShare(expense: expC, isPrimaryUser: true), equals(20.0));
+      expect(Calculations.getUserPercentage(expense: expC, isPrimaryUser: false), equals(0.0));
+      expect(Calculations.calculateUserExpenseShare(expense: expC, isPrimaryUser: false), equals(0.0));
+
+      // Scenario D — Custom split: Dinner 2,000 EGP, Paid by Friend, Split Me 70%, Friend 30%
+      final expD = Expense(
+        id: 'd',
+        title: 'Dinner',
+        amount: 2000.0,
+        currency: 'EGP',
+        paidBy: 'user_friend',
+        splitType: 'custom',
+        mePercentage: 70.0,
+        friendPercentage: 30.0,
+        date: DateTime.now(),
+        createdAt: DateTime.now(),
+      );
+      expect(Calculations.getUserPercentage(expense: expD, isPrimaryUser: true), equals(70.0));
+      expect(Calculations.calculateUserExpenseShare(expense: expD, isPrimaryUser: true), equals(1400.0));
+      expect(Calculations.getUserPercentage(expense: expD, isPrimaryUser: false), equals(30.0));
+      expect(Calculations.calculateUserExpenseShare(expense: expD, isPrimaryUser: false), equals(600.0));
+    });
   });
 
   group('Auth Helpers Unit Tests', () {

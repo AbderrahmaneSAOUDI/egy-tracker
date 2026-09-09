@@ -98,10 +98,19 @@ void main() {
         findsNothing,
       );
 
-      // Icons are all visible
-      expect(find.byIcon(Icons.home_outlined), findsOneWidget);
-      expect(find.byIcon(Icons.person_rounded), findsOneWidget);
-      expect(find.byIcon(Icons.settings_outlined), findsOneWidget);
+      // Icons are all visible in the navigation bar
+      expect(
+        find.descendant(of: find.byType(FloatingPillNavBar), matching: find.byIcon(Icons.home_outlined)),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: find.byType(FloatingPillNavBar), matching: find.byIcon(Icons.person_rounded)),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: find.byType(FloatingPillNavBar), matching: find.byIcon(Icons.settings_outlined)),
+        findsOneWidget,
+      );
 
       // Add button is visible on My Tracker
       expect(find.byKey(const ValueKey('nav_add_button')), findsOneWidget);
