@@ -78,8 +78,8 @@ void main() {
         ),
       );
 
-      // Verify AppBar and FloatingPillNavBar exist
-      expect(find.byType(AppBar), findsOneWidget);
+      // Verify AppBar is removed and FloatingPillNavBar exists
+      expect(find.byType(AppBar), findsNothing);
       expect(find.byType(FloatingPillNavBar), findsOneWidget);
 
       // Default index 1 (My Tracker selected):
@@ -110,7 +110,7 @@ void main() {
       expect(navBar.selectedIndex, equals(1));
     });
 
-    testWidgets('Switching destinations updates label visibility, selectedIndex, and AppBar title', (WidgetTester tester) async {
+    testWidgets('Switching destinations updates label visibility, selectedIndex, and active screen', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
@@ -129,10 +129,6 @@ void main() {
 
       var navBar = tester.widget<FloatingPillNavBar>(find.byType(FloatingPillNavBar));
       expect(navBar.selectedIndex, equals(0));
-      expect(
-        find.descendant(of: find.byType(AppBar), matching: find.text('Home')),
-        findsOneWidget,
-      );
       expect(
         find.descendant(of: find.byType(FloatingPillNavBar), matching: find.text('Home')),
         findsOneWidget,
@@ -153,10 +149,6 @@ void main() {
       navBar = tester.widget<FloatingPillNavBar>(find.byType(FloatingPillNavBar));
       expect(navBar.selectedIndex, equals(2));
       expect(
-        find.descendant(of: find.byType(AppBar), matching: find.text('Settings')),
-        findsOneWidget,
-      );
-      expect(
         find.descendant(of: find.byType(FloatingPillNavBar), matching: find.text('Settings')),
         findsOneWidget,
       );
@@ -175,10 +167,6 @@ void main() {
 
       navBar = tester.widget<FloatingPillNavBar>(find.byType(FloatingPillNavBar));
       expect(navBar.selectedIndex, equals(1));
-      expect(
-        find.descendant(of: find.byType(AppBar), matching: find.text('My Tracker')),
-        findsOneWidget,
-      );
       expect(
         find.descendant(of: find.byType(FloatingPillNavBar), matching: find.text('My Tracker')),
         findsOneWidget,

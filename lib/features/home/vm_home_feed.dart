@@ -287,4 +287,18 @@ class HomeFeedViewModel extends ChangeNotifier {
       return false;
     }
   }
+
+  /// Updates an existing expense in Firestore.
+  Future<bool> updateExpense(Expense expense) => addExpense(expense);
+
+  /// Updates an existing exchange in Firestore.
+  Future<bool> updateExchange(Exchange exchange) => addExchange(exchange);
+
+  /// Updates an existing borrow record in Firestore.
+  Future<bool> updateBorrow(Borrow borrow) => addBorrow(borrow);
+
+  /// Forces a notification refresh for pull-to-refresh.
+  Future<void> refresh() async {
+    notifyListeners();
+  }
 }

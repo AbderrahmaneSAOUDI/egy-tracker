@@ -17,18 +17,33 @@ Future<void> showAddExpenseDialog({
   double myEgpBalance = 0.0,
   double friendUsdBalance = 0.0,
   double friendEgpBalance = 0.0,
+  Expense? initialExpense,
   required Future<bool> Function(Expense) onSave,
 }) {
   final formKey = GlobalKey<FormState>();
-  final titleController = TextEditingController();
-  final amountController = TextEditingController();
+  final titleController = TextEditingController(text: initialExpense?.title ?? '');
+  final amountController = TextEditingController(
+    text: initialExpense != null ? initialExpense.amount.toStringAsFixed(2) : '',
+  );
 
-  String selectedCurrency = 'EGP'; // Default to EGP for Egypt trip
-  String paidByMode = 'you'; // 'you', 'both', 'friend'
-  String sharedSplitType = 'fifty_fifty'; // 'fifty_fifty' or 'custom'
-  double customMePercentage = 50.0;
-  double customFriendPercentage = 50.0;
-  DateTime selectedDate = DateTime.now();
+  String selectedCurrency = initialExpense?.currency ?? 'EGP'; // Default to EGP for Egypt trip
+  String paidByMode;
+  if (initialExpense != null) {
+    if (initialExpense.splitType == 'fifty_fifty' || initialExpense.splitType == 'custom') {
+      paidByMode = 'both';
+    } else if (initialExpense.paidBy == (friendUserId ?? 'friend')) {
+      paidByMode = 'friend';
+    } else {
+      paidByMode = 'you';
+    }
+  } else {
+    paidByMode = 'you'; // 'you', 'both', 'friend'
+  }
+
+  String sharedSplitType = initialExpense?.splitType == 'custom' ? 'custom' : 'fifty_fifty';
+  double customMePercentage = initialExpense?.mePercentage ?? 50.0;
+  double customFriendPercentage = initialExpense?.friendPercentage ?? 50.0;
+  DateTime selectedDate = initialExpense?.date ?? DateTime.now();
   bool isSubmitting = false;
 
   final friendId = friendUserId ?? 'friend';
@@ -62,7 +77,7 @@ Future<void> showAddExpenseDialog({
           return AppDialog(
             icon: Icons.receipt_long_rounded,
             iconColor: isDark ? AppTheme.googleRedDark : AppTheme.googleRed,
-            title: 'Add Expense',
+            title: initialExpense != null ? 'Edit Expense' : 'Add Expense',
             actionLabel: 'Save',
             isSubmitting: isSubmitting,
             onCancel: () => Navigator.of(dialogContext).pop(),
@@ -108,7 +123,7 @@ Future<void> showAddExpenseDialog({
               setDialogState(() => isSubmitting = true);
 
               final expense = Expense(
-                id: '',
+                id: initialExpense?.id ?? '',
                 title: titleController.text.trim(),
                 amount: amount,
                 currency: selectedCurrency,
@@ -117,7 +132,7 @@ Future<void> showAddExpenseDialog({
                 mePercentage: mePct,
                 friendPercentage: friendPct,
                 date: selectedDate,
-                createdAt: DateTime.now(),
+                createdAt: initialExpense?.createdAt ?? DateTime.now(),
               );
 
               final success = await onSave(expense);
@@ -125,7 +140,9 @@ Future<void> showAddExpenseDialog({
                 Navigator.of(dialogContext).pop();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('Added expense: ${expense.title}'),
+                    content: Text(initialExpense != null
+                        ? 'Updated expense: ${expense.title}'
+                        : 'Added expense: ${expense.title}'),
                     behavior: SnackBarBehavior.floating,
                   ),
                 );

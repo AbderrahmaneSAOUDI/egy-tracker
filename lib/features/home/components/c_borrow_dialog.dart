@@ -13,12 +13,21 @@ Future<void> showBorrowDialog({
   required String currentUserName,
   String? friendUserId,
   String? friendUserName,
+  Borrow? initialBorrow,
   required Future<bool> Function(Borrow) onSave,
 }) {
   final formKey = GlobalKey<FormState>();
-  final usdController = TextEditingController();
-  final egpController = TextEditingController();
-  DateTime selectedDate = DateTime.now();
+  final usdController = TextEditingController(
+    text: initialBorrow != null && initialBorrow.usdAmount > 0
+        ? initialBorrow.usdAmount.toStringAsFixed(2)
+        : '',
+  );
+  final egpController = TextEditingController(
+    text: initialBorrow != null && initialBorrow.egpAmount > 0
+        ? initialBorrow.egpAmount.toStringAsFixed(2)
+        : '',
+  );
+  DateTime selectedDate = initialBorrow?.date ?? DateTime.now();
   bool isSubmitting = false;
 
   final friendId = friendUserId ?? 'friend';
@@ -39,7 +48,7 @@ Future<void> showBorrowDialog({
           return AppDialog(
             icon: Icons.handshake_outlined,
             iconColor: borrowColor,
-            title: 'Borrow Currency',
+            title: initialBorrow != null ? 'Edit Borrow Record' : 'Borrow Currency',
             actionLabel: 'Save',
             isSubmitting: isSubmitting,
             onCancel: () => Navigator.of(dialogContext).pop(),
@@ -60,13 +69,13 @@ Future<void> showBorrowDialog({
               setDialogState(() => isSubmitting = true);
 
               final borrow = Borrow(
-                id: '',
+                id: initialBorrow?.id ?? '',
                 borrowerId: currentUserId,
                 lenderId: friendId,
                 usdAmount: usd,
                 egpAmount: egp,
                 date: selectedDate,
-                createdAt: DateTime.now(),
+                createdAt: initialBorrow?.createdAt ?? DateTime.now(),
               );
 
               final success = await onSave(borrow);
@@ -75,7 +84,9 @@ Future<void> showBorrowDialog({
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      'Recorded borrow from $friendName: ${usd > 0 ? Formatters.formatUsd(usd) : ""}${usd > 0 && egp > 0 ? " and " : ""}${egp > 0 ? Formatters.formatEgp(egp) : ""}',
+                      initialBorrow != null
+                          ? 'Updated borrow from $friendName: ${usd > 0 ? Formatters.formatUsd(usd) : ""}${usd > 0 && egp > 0 ? " and " : ""}${egp > 0 ? Formatters.formatEgp(egp) : ""}'
+                          : 'Recorded borrow from $friendName: ${usd > 0 ? Formatters.formatUsd(usd) : ""}${usd > 0 && egp > 0 ? " and " : ""}${egp > 0 ? Formatters.formatEgp(egp) : ""}',
                     ),
                     behavior: SnackBarBehavior.floating,
                   ),

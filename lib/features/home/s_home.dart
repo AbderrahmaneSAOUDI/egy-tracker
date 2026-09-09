@@ -73,9 +73,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
     return ListenableBuilder(
       listenable: _viewModel,
       builder: (context, _) {
@@ -84,79 +81,46 @@ class _HomeScreenState extends State<HomeScreen> {
 
         return Scaffold(
           extendBody: true,
-          appBar: AppBar(
-            title: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 260),
+          body: SafeArea(
+            bottom: false,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 320),
               switchInCurve: Curves.easeOutCubic,
               switchOutCurve: Curves.easeInCubic,
               transitionBuilder: (child, animation) {
+                final isIncoming = (child.key as ValueKey<int>?)?.value == selectedIndex;
+                final beginOffset = isIncoming
+                    ? Offset(slideDirection * 0.08, 0)
+                    : Offset(-slideDirection * 0.08, 0);
+
                 return FadeTransition(
                   opacity: animation,
                   child: SlideTransition(
                     position: Tween<Offset>(
-                      begin: Offset(0, slideDirection * 0.15),
+                      begin: beginOffset,
                       end: Offset.zero,
                     ).animate(animation),
                     child: child,
                   ),
                 );
               },
-              child: Text(
-                _viewModel.currentTitle,
-                key: ValueKey<String>(_viewModel.currentTitle),
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: -0.3,
-                ),
-              ),
-            ),
-            bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(1),
-              child: Divider(
-                height: 1,
-                color: isDark
-                    ? Colors.white.withValues(alpha: 0.06)
-                    : Colors.black.withValues(alpha: 0.06),
-              ),
-            ),
-          ),
-          body: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 320),
-            switchInCurve: Curves.easeOutCubic,
-            switchOutCurve: Curves.easeInCubic,
-            transitionBuilder: (child, animation) {
-              final isIncoming = (child.key as ValueKey<int>?)?.value == selectedIndex;
-              final beginOffset = isIncoming
-                  ? Offset(slideDirection * 0.08, 0)
-                  : Offset(-slideDirection * 0.08, 0);
-
-              return FadeTransition(
-                opacity: animation,
-                child: SlideTransition(
-                  position: Tween<Offset>(
-                    begin: beginOffset,
-                    end: Offset.zero,
-                  ).animate(animation),
-                  child: child,
-                ),
-              );
-            },
             child: selectedIndex == 0
                 ? HomeTabScreen(
                     key: const ValueKey<int>(0),
                     user: widget.user,
                     viewModel: _homeFeedViewModel,
                   )
-                : selectedIndex == 2
-                    ? SettingsScreen(
-                        key: const ValueKey<int>(2),
-                        user: widget.user,
-                        authService: widget.authService,
-                        firestoreService: widget.firestoreService,
-                      )
-                    : SizedBox.expand(
-                        key: ValueKey<int>(selectedIndex),
-                      ),
+                  : selectedIndex == 2
+                      ? SettingsScreen(
+                          key: const ValueKey<int>(2),
+                          user: widget.user,
+                          authService: widget.authService,
+                          firestoreService: widget.firestoreService,
+                        )
+                      : SizedBox.expand(
+                          key: ValueKey<int>(selectedIndex),
+                        ),
+            ),
           ),
           bottomNavigationBar: FloatingPillNavBar(
             selectedIndex: selectedIndex,
