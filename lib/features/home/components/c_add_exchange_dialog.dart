@@ -12,15 +12,20 @@ Future<void> showAddExchangeDialog({
   required String currentUserName,
   double myUsdBalance = 0.0,
   double myEgpBalance = 0.0,
+  Exchange? initialExchange,
   required Future<bool> Function(Exchange) onSave,
 }) {
   final formKey = GlobalKey<FormState>();
-  final fromAmountController = TextEditingController();
-  final toAmountController = TextEditingController();
+  final fromAmountController = TextEditingController(
+    text: initialExchange != null ? initialExchange.fromAmount.toStringAsFixed(2) : '',
+  );
+  final toAmountController = TextEditingController(
+    text: initialExchange != null ? initialExchange.toAmount.toStringAsFixed(2) : '',
+  );
 
-  String fromCurrency = 'USD'; // Default USD -> EGP exchange
-  String toCurrency = 'EGP';
-  DateTime selectedDate = DateTime.now();
+  String fromCurrency = initialExchange?.fromCurrency ?? 'USD'; // Default USD -> EGP exchange
+  String toCurrency = initialExchange?.toCurrency ?? 'EGP';
+  DateTime selectedDate = initialExchange?.date ?? DateTime.now();
   bool isSubmitting = false;
 
   return showAnimatedDialog<void>(
@@ -38,7 +43,7 @@ Future<void> showAddExchangeDialog({
           return AppDialog(
             icon: Icons.sync_alt_rounded,
             iconColor: isDark ? AppTheme.googleBlueDark : AppTheme.googleBlue,
-            title: 'Add Exchange',
+            title: initialExchange != null ? 'Edit Exchange' : 'Add Exchange',
             actionLabel: 'Save',
             isSubmitting: isSubmitting,
             onCancel: () => Navigator.of(dialogContext).pop(),
@@ -58,7 +63,7 @@ Future<void> showAddExchangeDialog({
               setDialogState(() => isSubmitting = true);
 
               final exchange = Exchange(
-                id: '',
+                id: initialExchange?.id ?? '',
                 userId: currentUserId,
                 fromCurrency: fromCurrency,
                 fromAmount: fromAmt,
@@ -66,7 +71,7 @@ Future<void> showAddExchangeDialog({
                 toAmount: toAmt,
                 exchangeRate: rate,
                 date: selectedDate,
-                createdAt: DateTime.now(),
+                createdAt: initialExchange?.createdAt ?? DateTime.now(),
               );
 
               final success = await onSave(exchange);
@@ -75,7 +80,9 @@ Future<void> showAddExchangeDialog({
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      'Recorded exchange: ${Formatters.formatCurrency(fromAmt, fromCurrency)} → ${Formatters.formatCurrency(toAmt, toCurrency)}',
+                      initialExchange != null
+                          ? 'Updated exchange: ${Formatters.formatCurrency(fromAmt, fromCurrency)} → ${Formatters.formatCurrency(toAmt, toCurrency)}'
+                          : 'Recorded exchange: ${Formatters.formatCurrency(fromAmt, fromCurrency)} → ${Formatters.formatCurrency(toAmt, toCurrency)}',
                     ),
                     behavior: SnackBarBehavior.floating,
                   ),

@@ -266,5 +266,189 @@ void main() {
       expect(savedBorrow!.usdAmount, 20.0);
       expect(savedBorrow!.egpAmount, 500.0);
     });
+
+    testWidgets('showAddExpenseDialog with initialExpense renders Edit Expense and pre-fills fields',
+        (tester) async {
+      Expense? updatedExpense;
+      final existingExpense = Expense(
+        id: 'exp_existing',
+        title: 'Falafel Lunch',
+        amount: 150.0,
+        currency: 'EGP',
+        paidBy: 'me_id',
+        splitType: 'default_100',
+        mePercentage: 100.0,
+        friendPercentage: 0.0,
+        date: DateTime(2026, 9, 1),
+        createdAt: DateTime(2026, 9, 1),
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () {
+                  showAddExpenseDialog(
+                    context: context,
+                    currentUserId: 'me_id',
+                    currentUserName: 'Me',
+                    friendUserId: 'friend_id',
+                    friendUserName: 'Friend',
+                    initialExpense: existingExpense,
+                    onSave: (exp) async {
+                      updatedExpense = exp;
+                      return true;
+                    },
+                  );
+                },
+                child: const Text('Edit Expense'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Edit Expense'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Edit Expense'), findsWidgets);
+      expect(find.text('Falafel Lunch'), findsOneWidget);
+      expect(find.text('150.00'), findsOneWidget);
+
+      // Modify title and save
+      await tester.enterText(find.text('Falafel Lunch'), 'Koshary Feast');
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Save'));
+      await tester.pumpAndSettle();
+
+      expect(updatedExpense, isNotNull);
+      expect(updatedExpense!.id, 'exp_existing');
+      expect(updatedExpense!.title, 'Koshary Feast');
+      expect(updatedExpense!.amount, 150.0);
+    });
+
+    testWidgets('showAddExchangeDialog with initialExchange renders Edit Exchange and pre-fills fields',
+        (tester) async {
+      Exchange? updatedExchange;
+      final existingExchange = Exchange(
+        id: 'exc_existing',
+        userId: 'me_id',
+        fromCurrency: 'USD',
+        fromAmount: 100.0,
+        toCurrency: 'EGP',
+        toAmount: 4900.0,
+        exchangeRate: 49.0,
+        date: DateTime(2026, 9, 2),
+        createdAt: DateTime(2026, 9, 2),
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () {
+                  showAddExchangeDialog(
+                    context: context,
+                    currentUserId: 'me_id',
+                    currentUserName: 'Me',
+                    myUsdBalance: 500,
+                    myEgpBalance: 10000,
+                    initialExchange: existingExchange,
+                    onSave: (exc) async {
+                      updatedExchange = exc;
+                      return true;
+                    },
+                  );
+                },
+                child: const Text('Edit Exchange'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Edit Exchange'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Edit Exchange'), findsWidgets);
+      expect(find.text('100.00'), findsOneWidget);
+      expect(find.text('4900.00'), findsOneWidget);
+
+      // Modify toAmount and save
+      await tester.enterText(find.text('4900.00'), '5000.00');
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Save'));
+      await tester.pumpAndSettle();
+
+      expect(updatedExchange, isNotNull);
+      expect(updatedExchange!.id, 'exc_existing');
+      expect(updatedExchange!.fromAmount, 100.0);
+      expect(updatedExchange!.toAmount, 5000.0);
+      expect(updatedExchange!.exchangeRate, 50.0);
+    });
+
+    testWidgets('showBorrowDialog with initialBorrow renders Edit Borrow Record and pre-fills fields',
+        (tester) async {
+      Borrow? updatedBorrow;
+      final existingBorrow = Borrow(
+        id: 'bor_existing',
+        borrowerId: 'me_id',
+        lenderId: 'friend_id',
+        usdAmount: 40.0,
+        egpAmount: 0.0,
+        date: DateTime(2026, 9, 3),
+        createdAt: DateTime(2026, 9, 3),
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () {
+                  showBorrowDialog(
+                    context: context,
+                    currentUserId: 'me_id',
+                    currentUserName: 'Me',
+                    friendUserId: 'friend_id',
+                    friendUserName: 'Friend',
+                    initialBorrow: existingBorrow,
+                    onSave: (bor) async {
+                      updatedBorrow = bor;
+                      return true;
+                    },
+                  );
+                },
+                child: const Text('Edit Borrow'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Edit Borrow'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Edit Borrow Record'), findsWidgets);
+      expect(find.text('40.00'), findsOneWidget);
+
+      // Update USD amount
+      await tester.enterText(find.text('40.00'), '80.00');
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Save'));
+      await tester.pumpAndSettle();
+
+      expect(updatedBorrow, isNotNull);
+      expect(updatedBorrow!.id, 'bor_existing');
+      expect(updatedBorrow!.usdAmount, 80.0);
+    });
   });
 }

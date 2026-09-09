@@ -9,6 +9,7 @@ class ActivityTile extends StatefulWidget {
   final ActivityItem item;
   final String currentUserId;
   final String? friendName;
+  final VoidCallback? onEdit;
   final VoidCallback? onDelete;
 
   const ActivityTile({
@@ -16,6 +17,7 @@ class ActivityTile extends StatefulWidget {
     required this.item,
     required this.currentUserId,
     this.friendName,
+    this.onEdit,
     this.onDelete,
   });
 
@@ -57,6 +59,7 @@ class _ActivityTileState extends State<ActivityTile>
   ActivityItem get item => widget.item;
   String get currentUserId => widget.currentUserId;
   String? get friendName => widget.friendName;
+  VoidCallback? get onEdit => widget.onEdit;
   VoidCallback? get onDelete => widget.onDelete;
 
   @override
@@ -93,99 +96,126 @@ class _ActivityTileState extends State<ActivityTile>
     final payerLabel = isPaidByMe ? 'Paid by You' : 'Paid by ${friendName ?? "Friend"}';
 
     String splitLabel;
-    if (expense.splitType == 'fifty_fifty') {
+    if (expense.mePercentage == 100.0) {
+      splitLabel = '100% You';
+    } else if (expense.friendPercentage == 100.0) {
+      splitLabel = '100% ${friendName ?? "Friend"}';
+    } else if (expense.splitType == 'fifty_fifty' ||
+        (expense.mePercentage == 50.0 && expense.friendPercentage == 50.0)) {
       splitLabel = '50/50';
-    } else if (expense.splitType == 'default_100') {
-      splitLabel = isPaidByMe ? '100% You' : '100% ${friendName ?? "Friend"}';
     } else {
       splitLabel = '${expense.mePercentage.toInt()}% / ${expense.friendPercentage.toInt()}%';
     }
 
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
+      child: Material(
         color: isDark ? const Color(0xFF202124) : const Color(0xFFFFFFFF),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isDark ? const Color(0xFF3C4043) : const Color(0xFFDADCE0),
-        ),
-      ),
-      child: Row(
-        children: [
-          // Icon
-          Container(
-            width: 40,
-            height: 40,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: onEdit,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
             decoration: BoxDecoration(
-              color: currencyColor.withValues(alpha: isDark ? 0.15 : 0.10),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.receipt_long_rounded,
-              color: currencyColor,
-              size: 20,
-            ),
-          ),
-          const SizedBox(width: 12),
-          // Details
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  expense.title,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  '$payerLabel · $splitLabel',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  Formatters.formatDate(expense.date),
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 8),
-          // Amount & delete
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                Formatters.formatCurrency(expense.amount, expense.currency),
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: currencyColor,
-                ),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: isDark ? const Color(0xFF3C4043) : const Color(0xFFDADCE0),
               ),
-              if (onDelete != null) ...[
-                const SizedBox(height: 4),
-                ActionIconButton(
-                  icon: Icons.delete_outline_rounded,
-                  color: Theme.of(context).colorScheme.outline,
-                  iconSize: 18,
-                  onTap: onDelete,
+            ),
+            child: Row(
+              children: [
+                // Icon
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: currencyColor.withValues(alpha: isDark ? 0.15 : 0.10),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.receipt_long_rounded,
+                    color: currencyColor,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                // Details
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        expense.title,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        '$payerLabel · $splitLabel',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        Formatters.formatDate(expense.date),
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: Theme.of(context).colorScheme.outline,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                // Amount & actions
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      Formatters.formatCurrency(expense.amount, expense.currency),
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: currencyColor,
+                      ),
+                    ),
+                    if (onEdit != null || onDelete != null) ...[
+                      const SizedBox(height: 4),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (onEdit != null) ...[
+                            ActionIconButton(
+                              icon: Icons.edit_outlined,
+                              color: Theme.of(context).colorScheme.outline,
+                              iconSize: 18,
+                              onTap: onEdit,
+                            ),
+                            if (onDelete != null) const SizedBox(width: 4),
+                          ],
+                          if (onDelete != null)
+                            ActionIconButton(
+                              icon: Icons.delete_outline_rounded,
+                              color: Theme.of(context).colorScheme.outline,
+                              iconSize: 18,
+                              onTap: onDelete,
+                            ),
+                        ],
+                      ),
+                    ],
+                  ],
                 ),
               ],
-            ],
+            ),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -203,95 +233,119 @@ class _ActivityTileState extends State<ActivityTile>
 
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
+      child: Material(
         color: isDark ? const Color(0xFF202124) : const Color(0xFFFFFFFF),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: exchangeColor.withValues(alpha: isDark ? 0.35 : 0.25),
-        ),
-      ),
-      child: Row(
-        children: [
-          // Icon
-          Container(
-            width: 40,
-            height: 40,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: onEdit,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
             decoration: BoxDecoration(
-              color: exchangeColor.withValues(alpha: isDark ? 0.15 : 0.10),
-              shape: BoxShape.circle,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: exchangeColor.withValues(alpha: isDark ? 0.35 : 0.25),
+              ),
             ),
-            child: Icon(
-              Icons.sync_alt_rounded,
-              color: exchangeColor,
-              size: 20,
-            ),
-          ),
-          const SizedBox(width: 12),
-          // Details
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: exchangeColor.withValues(alpha: isDark ? 0.20 : 0.12),
-                        borderRadius: BorderRadius.circular(4),
+                // Icon
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: exchangeColor.withValues(alpha: isDark ? 0.15 : 0.10),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.sync_alt_rounded,
+                    color: exchangeColor,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                // Details
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: exchangeColor.withValues(alpha: isDark ? 0.20 : 0.12),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Text(
+                              'Exchange',
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: exchangeColor,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: Text(
+                              '$fromFormatted → $toFormatted',
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
                       ),
-                      child: Text(
-                        'Exchange',
+                      const SizedBox(height: 4),
+                      Text(
+                        '$userLabel · Rate: ${exchange.exchangeRate.toStringAsFixed(2)}',
                         style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          color: exchangeColor,
+                          fontSize: 12,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 6),
-                    Expanded(
-                      child: Text(
-                        '$fromFormatted → $toFormatted',
-                        style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
+                      const SizedBox(height: 2),
+                      Text(
+                        Formatters.formatDate(exchange.date),
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: Theme.of(context).colorScheme.outline,
                         ),
-                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '$userLabel · Rate: ${exchange.exchangeRate.toStringAsFixed(2)}',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ],
                   ),
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  Formatters.formatDate(exchange.date),
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: Theme.of(context).colorScheme.outline,
+                if (onEdit != null || onDelete != null) ...[
+                  const SizedBox(width: 8),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (onEdit != null) ...[
+                        ActionIconButton(
+                          icon: Icons.edit_outlined,
+                          color: Theme.of(context).colorScheme.outline,
+                          iconSize: 18,
+                          onTap: onEdit,
+                        ),
+                        if (onDelete != null) const SizedBox(width: 4),
+                      ],
+                      if (onDelete != null)
+                        ActionIconButton(
+                          icon: Icons.delete_outline_rounded,
+                          color: Theme.of(context).colorScheme.outline,
+                          iconSize: 18,
+                          onTap: onDelete,
+                        ),
+                    ],
                   ),
-                ),
+                ],
               ],
             ),
           ),
-          if (onDelete != null) ...[
-            const SizedBox(width: 8),
-            ActionIconButton(
-              icon: Icons.delete_outline_rounded,
-              color: Theme.of(context).colorScheme.outline,
-              iconSize: 18,
-              onTap: onDelete,
-            ),
-          ],
-        ],
+        ),
       ),
     );
   }
@@ -315,98 +369,122 @@ class _ActivityTileState extends State<ActivityTile>
 
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
+      child: Material(
         color: isDark ? const Color(0xFF202124) : const Color(0xFFFFFFFF),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: borrowColor.withValues(alpha: isDark ? 0.35 : 0.25),
-        ),
-      ),
-      child: Row(
-        children: [
-          // Icon
-          Container(
-            width: 40,
-            height: 40,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: onEdit,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
             decoration: BoxDecoration(
-              color: borrowColor.withValues(alpha: isDark ? 0.15 : 0.10),
-              shape: BoxShape.circle,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: borrowColor.withValues(alpha: isDark ? 0.35 : 0.25),
+              ),
             ),
-            child: Icon(
-              Icons.handshake_outlined,
-              color: borrowColor,
-              size: 20,
-            ),
-          ),
-          const SizedBox(width: 12),
-          // Details
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: borrowColor.withValues(alpha: isDark ? 0.20 : 0.12),
-                        borderRadius: BorderRadius.circular(4),
+                // Icon
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: borrowColor.withValues(alpha: isDark ? 0.15 : 0.10),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.handshake_outlined,
+                    color: borrowColor,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                // Details
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: borrowColor.withValues(alpha: isDark ? 0.20 : 0.12),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Text(
+                              isBorrower ? 'Borrowed' : 'Lent',
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: borrowColor,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: Text(
+                              actionTitle,
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
                       ),
-                      child: Text(
-                        isBorrower ? 'Borrowed' : 'Lent',
+                      const SizedBox(height: 4),
+                      Text(
+                        amountsText,
                         style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          color: borrowColor,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-                    Expanded(
-                      child: Text(
-                        actionTitle,
-                        style: const TextStyle(
                           fontSize: 13,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
+                          color: isBorrower
+                              ? (isDark ? AppTheme.googleGreenDark : AppTheme.googleGreen)
+                              : (isDark ? AppTheme.googleRedDark : AppTheme.googleRed),
                         ),
-                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  amountsText,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: isBorrower
-                        ? (isDark ? AppTheme.googleGreenDark : AppTheme.googleGreen)
-                        : (isDark ? AppTheme.googleRedDark : AppTheme.googleRed),
+                      const SizedBox(height: 2),
+                      Text(
+                        Formatters.formatDate(borrow.date),
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: Theme.of(context).colorScheme.outline,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  Formatters.formatDate(borrow.date),
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: Theme.of(context).colorScheme.outline,
+                if (onEdit != null || onDelete != null) ...[
+                  const SizedBox(width: 8),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (onEdit != null) ...[
+                        ActionIconButton(
+                          icon: Icons.edit_outlined,
+                          color: Theme.of(context).colorScheme.outline,
+                          iconSize: 18,
+                          onTap: onEdit,
+                        ),
+                        if (onDelete != null) const SizedBox(width: 4),
+                      ],
+                      if (onDelete != null)
+                        ActionIconButton(
+                          icon: Icons.delete_outline_rounded,
+                          color: Theme.of(context).colorScheme.outline,
+                          iconSize: 18,
+                          onTap: onDelete,
+                        ),
+                    ],
                   ),
-                ),
+                ],
               ],
             ),
           ),
-          if (onDelete != null) ...[
-            const SizedBox(width: 8),
-            ActionIconButton(
-              icon: Icons.delete_outline_rounded,
-              color: Theme.of(context).colorScheme.outline,
-              iconSize: 18,
-              onTap: onDelete,
-            ),
-          ],
-        ],
+        ),
       ),
     );
   }

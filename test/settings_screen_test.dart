@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:egy_tracker/core/components/c_floating_pill_nav_bar.dart';
 import 'package:egy_tracker/core/models/mod_allowed_email.dart';
 import 'package:egy_tracker/core/models/mod_borrow.dart';
 import 'package:egy_tracker/core/models/mod_exchange.dart';
@@ -325,7 +326,7 @@ void main() {
 
       // Ensure we are on Settings tab
       expect(find.text('Theme Mode'), findsOneWidget);
-      expect(find.text('Settings'), findsNWidgets(2)); // AppBar + Nav item
+      expect(find.text('Settings'), findsOneWidget); // Nav item
 
       // Now toggle theme to Dark from within the Settings card
       await tester.tap(find.text('Dark'));
@@ -336,8 +337,7 @@ void main() {
 
       // CRITICAL ASSERTION: We must still be on the Settings screen, NOT kicked back to Home!
       expect(find.text('Theme Mode'), findsOneWidget);
-      expect(find.descendant(of: find.byType(AppBar), matching: find.text('Settings')), findsOneWidget);
-      expect(find.descendant(of: find.byType(AppBar), matching: find.text('Home')), findsNothing);
+      expect(find.descendant(of: find.byType(FloatingPillNavBar), matching: find.text('Settings')), findsOneWidget);
 
       // Toggle to Light
       await tester.tap(find.text('Light'));
@@ -346,7 +346,7 @@ void main() {
 
       // Still on Settings
       expect(find.text('Theme Mode'), findsOneWidget);
-      expect(find.descendant(of: find.byType(AppBar), matching: find.text('Settings')), findsOneWidget);
+      expect(find.descendant(of: find.byType(FloatingPillNavBar), matching: find.text('Settings')), findsOneWidget);
     });
 
     testWidgets('Renders Initial Balances card with You and Friend sections', (tester) async {

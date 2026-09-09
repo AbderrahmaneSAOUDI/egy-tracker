@@ -423,5 +423,105 @@ void main() {
       expect(find.text('Borrowed from Friend'), findsOneWidget);
       expect(find.text('\$50.00 · 1,000.00 EGP'), findsOneWidget);
     });
+
+    testWidgets('Scenario C — Renders "Paid by Friend · 100% You" when friend pays for me', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: Scaffold(
+            body: HomeTabScreen(
+              user: devUser,
+              viewModel: vm,
+            ),
+          ),
+        ),
+      );
+
+      final now = DateTime.now();
+      firestore.emailsController.add([
+        AllowedEmail(id: '1', email: 'saoudi@example.com', createdAt: now),
+        AllowedEmail(id: '2', email: 'friend@example.com', createdAt: now),
+      ]);
+      firestore.usersController.add([
+        UserProfile(id: myId, email: 'saoudi@example.com', name: 'Saoudi', createdAt: now),
+        UserProfile(id: 'user_friend', email: 'friend@example.com', name: 'Friend', createdAt: now),
+      ]);
+      firestore.balancesController.add([]);
+      firestore.expensesController.add([
+        Expense(
+          id: 'exp_taxi',
+          title: 'Taxi to Airport',
+          amount: 20.0,
+          currency: 'USD',
+          paidBy: 'user_friend',
+          splitType: 'default_100',
+          mePercentage: 100.0,
+          friendPercentage: 0.0,
+          date: now,
+          createdAt: now,
+        ),
+      ]);
+      firestore.exchangesController.add([]);
+      firestore.borrowsController.add([]);
+
+      await tester.pump();
+
+      expect(find.text('Taxi to Airport'), findsOneWidget);
+      expect(find.text('Paid by Friend · 100% You'), findsOneWidget);
+      // Activity count badge
+      expect(find.text('1'), findsOneWidget);
+      // Edit button is present
+      expect(find.byIcon(Icons.edit_outlined), findsOneWidget);
+      // Delete button is present
+      expect(find.byIcon(Icons.delete_outline_rounded), findsOneWidget);
+    });
+
+    testWidgets('Tapping edit button on activity tile opens edit dialog', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: Scaffold(
+            body: HomeTabScreen(
+              user: devUser,
+              viewModel: vm,
+            ),
+          ),
+        ),
+      );
+
+      final now = DateTime.now();
+      firestore.emailsController.add([
+        AllowedEmail(id: '1', email: 'saoudi@example.com', createdAt: now),
+      ]);
+      firestore.balancesController.add([]);
+      firestore.expensesController.add([
+        Expense(
+          id: 'exp_lunch',
+          title: 'Shawarma Lunch',
+          amount: 200.0,
+          currency: 'EGP',
+          paidBy: myId,
+          splitType: 'fifty_fifty',
+          mePercentage: 50.0,
+          friendPercentage: 50.0,
+          date: now,
+          createdAt: now,
+        ),
+      ]);
+      firestore.exchangesController.add([]);
+      firestore.borrowsController.add([]);
+
+      await tester.pump();
+
+      // Tap edit button
+      final editBtn = find.byIcon(Icons.edit_outlined);
+      expect(editBtn, findsOneWidget);
+      await tester.tap(editBtn);
+      await tester.pumpAndSettle();
+
+      // Edit Expense dialog should open with title pre-filled
+      expect(find.text('Edit Expense'), findsWidgets);
+      expect(find.text('Shawarma Lunch'), findsWidgets);
+    });
   });
 }
