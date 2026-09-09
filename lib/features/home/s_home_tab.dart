@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../core/animations/a_dialog_transition.dart';
+import '../../core/animations/a_staggered_item.dart';
 import '../../core/components/c_empty_state.dart';
 import '../../core/components/c_icon_badge.dart';
 import '../../core/utils/m_auth_helpers.dart';
@@ -127,14 +128,20 @@ class HomeTabScreen extends StatelessWidget {
                   ),
                 )
               else
-                ...activities.map((item) {
-                  return ActivityTile(
-                    key: ValueKey('activity_${item.id}'),
-                    item: item,
-                    currentUserId: user.uid,
-                    friendName: friendName,
-                    onEdit: () => _editItem(context, item),
-                    onDelete: () => _confirmDelete(context, item),
+                ...activities.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final item = entry.value;
+                  return StaggeredItem(
+                    key: ValueKey('staggered_${item.id}'),
+                    index: index,
+                    child: ActivityTile(
+                      key: ValueKey('activity_${item.id}'),
+                      item: item,
+                      currentUserId: user.uid,
+                      friendName: friendName,
+                      onEdit: () => _editItem(context, item),
+                      onDelete: () => _confirmDelete(context, item),
+                    ),
                   );
                 }),
             ],
