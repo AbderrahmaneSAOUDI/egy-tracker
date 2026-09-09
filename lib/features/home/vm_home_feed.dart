@@ -9,7 +9,7 @@ import '../../core/models/mod_initial_balance.dart';
 import '../../core/models/mod_user_profile.dart';
 import '../../core/services/f_firestore.dart';
 import '../../core/utils/m_calculations.dart';
-import 'models/mod_activity_item.dart';
+import '../../core/models/mod_activity_item.dart';
 
 /// ViewModel managing data subscriptions, calculations, and mutations for the Home feed.
 class HomeFeedViewModel extends ChangeNotifier {
@@ -79,6 +79,7 @@ class HomeFeedViewModel extends ChangeNotifier {
 
   List<Expense> get expenses => _expenses;
   List<Exchange> get exchanges => _exchanges;
+  List<Borrow> get borrows => _borrows;
   List<InitialBalance> get balances => _balances;
   List<UserProfile> get users => _users;
   List<AllowedEmail> get allowedEmails => _allowedEmails;

@@ -86,4 +86,26 @@ class Calculations {
   }) {
     return amount * (userPercentage / 100.0);
   }
+
+  /// Returns the personal percentage for the given user on an [expense].
+  ///
+  /// For 'fifty_fifty', returns 50.0.
+  /// For other split types, returns [expense.mePercentage] if [isPrimaryUser] is true,
+  /// or [expense.friendPercentage] if [isPrimaryUser] is false.
+  static double getUserPercentage({
+    required Expense expense,
+    required bool isPrimaryUser,
+  }) {
+    if (expense.splitType == 'fifty_fifty') return 50.0;
+    return isPrimaryUser ? expense.mePercentage : expense.friendPercentage;
+  }
+
+  /// Calculates the exact personal consumption share for the given user on an [expense].
+  static double calculateUserExpenseShare({
+    required Expense expense,
+    required bool isPrimaryUser,
+  }) {
+    final pct = getUserPercentage(expense: expense, isPrimaryUser: isPrimaryUser);
+    return calculatePersonalShare(amount: expense.amount, userPercentage: pct);
+  }
 }
