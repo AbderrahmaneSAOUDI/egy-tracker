@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
-import '../../../core/components/c_action_icon_button.dart';
+import '../../../core/components/c_slide_action_card.dart';
 import '../../../core/theme/t_app_theme.dart';
 import '../../../core/utils/m_formatters.dart';
 import '../models/mod_activity_item.dart';
 
-/// Clean activity list item displaying either an Expense or a Currency Exchange.
+/// Clean activity list item displaying an Expense, Currency Exchange, or Borrow record.
+///
+/// Employs the reusable [SlideActionCard] to provide growing action cards beside
+/// the main item:
+/// - Slide Right (start-to-end) -> Update Card on the left.
+/// - Slide Left (end-to-start) -> Remove Card on the right.
 class ActivityTile extends StatefulWidget {
   final ActivityItem item;
   final String currentUserId;
@@ -27,19 +32,19 @@ class ActivityTile extends StatefulWidget {
 
 class _ActivityTileState extends State<ActivityTile>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
+  late final AnimationController _entranceController;
   late final Animation<double> _fade;
   late final Animation<Offset> _slide;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
+    _entranceController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 220),
+      duration: const Duration(milliseconds: 240),
     );
     final curve = CurvedAnimation(
-      parent: _controller,
+      parent: _entranceController,
       curve: Curves.easeOutCubic,
     );
     _fade = curve;
@@ -47,12 +52,12 @@ class _ActivityTileState extends State<ActivityTile>
       begin: const Offset(0, 0.05),
       end: Offset.zero,
     ).animate(curve);
-    _controller.forward();
+    _entranceController.forward();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _entranceController.dispose();
     super.dispose();
   }
 
@@ -67,20 +72,63 @@ class _ActivityTileState extends State<ActivityTile>
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    Widget content;
+    Widget cardFace;
     if (widget.item.isExpense) {
-      content = _buildExpenseTile(context, isDark);
+      cardFace = _buildExpenseTile(context, isDark);
     } else if (widget.item.isExchange) {
-      content = _buildExchangeTile(context, isDark);
+      cardFace = _buildExchangeTile(context, isDark);
     } else {
-      content = _buildBorrowTile(context, isDark);
+      cardFace = _buildBorrowTile(context, isDark);
     }
+
+    final slidingTile = SlideActionCard(
+      onTap: onEdit,
+      startAction: onEdit != null
+          ? SlideActionItem(
+              icon: Icons.edit_outlined,
+              label: 'Update',
+              gradient: LinearGradient(
+                colors: isDark
+                    ? const [Color(0xFF1E3A8A), Color(0xFF2563EB)]
+                    : const [Color(0xFF2563EB), Color(0xFF60A5FA)],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+              shadow: BoxShadow(
+                color: const Color(0xFF2563EB).withValues(alpha: 0.25),
+                blurRadius: 10,
+                offset: const Offset(0, 3),
+              ),
+              onTrigger: onEdit!,
+            )
+          : null,
+      endAction: onDelete != null
+          ? SlideActionItem(
+              icon: Icons.delete_outline_rounded,
+              label: 'Remove',
+              gradient: LinearGradient(
+                colors: isDark
+                    ? const [Color(0xFF7F1D1D), Color(0xFFDC2626)]
+                    : const [Color(0xFFDC2626), Color(0xFFF87171)],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+              shadow: BoxShadow(
+                color: const Color(0xFFDC2626).withValues(alpha: 0.25),
+                blurRadius: 10,
+                offset: const Offset(0, 3),
+              ),
+              onTrigger: onDelete!,
+            )
+          : null,
+      child: cardFace,
+    );
 
     return SlideTransition(
       position: _slide,
       child: FadeTransition(
         opacity: _fade,
-        child: content,
+        child: slidingTile,
       ),
     );
   }
@@ -108,114 +156,92 @@ class _ActivityTileState extends State<ActivityTile>
     }
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      child: Material(
-        color: isDark ? const Color(0xFF202124) : const Color(0xFFFFFFFF),
-        borderRadius: BorderRadius.circular(16),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(16),
-          onTap: onEdit,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      margin: const EdgeInsets.only(bottom: 10),
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1B1D22) : Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: isDark ? const Color(0xFF2A2E37) : const Color(0xFFE5E7EB),
+          width: 1.1,
+        ),
+        boxShadow: isDark
+            ? null
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 10,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+      child: Row(
+        children: [
+          // Creative squircle badge with subtle currency aura
+          Container(
+            width: 44,
+            height: 44,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
+              color: currencyColor.withValues(alpha: isDark ? 0.16 : 0.10),
+              borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: isDark ? const Color(0xFF3C4043) : const Color(0xFFDADCE0),
+                color: currencyColor.withValues(alpha: isDark ? 0.25 : 0.18),
+                width: 1,
               ),
             ),
-            child: Row(
+            child: Icon(
+              Icons.receipt_long_rounded,
+              color: currencyColor,
+              size: 22,
+            ),
+          ),
+          const SizedBox(width: 13),
+          // Details
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Icon
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: currencyColor.withValues(alpha: isDark ? 0.15 : 0.10),
-                    shape: BoxShape.circle,
+                Text(
+                  expense.title,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: -0.2,
                   ),
-                  child: Icon(
-                    Icons.receipt_long_rounded,
-                    color: currencyColor,
-                    size: 20,
-                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(width: 12),
-                // Details
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        expense.title,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 3),
-                      Text(
-                        '$payerLabel · $splitLabel',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        Formatters.formatDate(expense.date),
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: Theme.of(context).colorScheme.outline,
-                        ),
-                      ),
-                    ],
+                const SizedBox(height: 3),
+                Text(
+                  '$payerLabel · $splitLabel',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
+                  overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(width: 8),
-                // Amount & actions
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      Formatters.formatCurrency(expense.amount, expense.currency),
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: currencyColor,
-                      ),
-                    ),
-                    if (onEdit != null || onDelete != null) ...[
-                      const SizedBox(height: 4),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (onEdit != null) ...[
-                            ActionIconButton(
-                              icon: Icons.edit_outlined,
-                              color: Theme.of(context).colorScheme.outline,
-                              iconSize: 18,
-                              onTap: onEdit,
-                            ),
-                            if (onDelete != null) const SizedBox(width: 4),
-                          ],
-                          if (onDelete != null)
-                            ActionIconButton(
-                              icon: Icons.delete_outline_rounded,
-                              color: Theme.of(context).colorScheme.outline,
-                              iconSize: 18,
-                              onTap: onDelete,
-                            ),
-                        ],
-                      ),
-                    ],
-                  ],
+                const SizedBox(height: 3),
+                Text(
+                  Formatters.formatDate(expense.date),
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Theme.of(context).colorScheme.outline,
+                  ),
                 ),
               ],
             ),
           ),
-        ),
+          const SizedBox(width: 10),
+          // Amount
+          Text(
+            Formatters.formatCurrency(expense.amount, expense.currency),
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              letterSpacing: -0.3,
+              color: currencyColor,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -232,120 +258,101 @@ class _ActivityTileState extends State<ActivityTile>
         Formatters.formatCurrency(exchange.toAmount, exchange.toCurrency);
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      child: Material(
-        color: isDark ? const Color(0xFF202124) : const Color(0xFFFFFFFF),
-        borderRadius: BorderRadius.circular(16),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(16),
-          onTap: onEdit,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      margin: const EdgeInsets.only(bottom: 10),
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1B1D22) : Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: exchangeColor.withValues(alpha: isDark ? 0.35 : 0.22),
+          width: 1.1,
+        ),
+        boxShadow: isDark
+            ? null
+            : [
+                BoxShadow(
+                  color: exchangeColor.withValues(alpha: 0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+      child: Row(
+        children: [
+          // Squircle exchange icon
+          Container(
+            width: 44,
+            height: 44,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
+              color: exchangeColor.withValues(alpha: isDark ? 0.16 : 0.10),
+              borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: exchangeColor.withValues(alpha: isDark ? 0.35 : 0.25),
+                color: exchangeColor.withValues(alpha: isDark ? 0.30 : 0.20),
+                width: 1,
               ),
             ),
-            child: Row(
+            child: Icon(
+              Icons.sync_alt_rounded,
+              color: exchangeColor,
+              size: 22,
+            ),
+          ),
+          const SizedBox(width: 13),
+          // Details
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Icon
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: exchangeColor.withValues(alpha: isDark ? 0.15 : 0.10),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.sync_alt_rounded,
-                    color: exchangeColor,
-                    size: 20,
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: exchangeColor.withValues(alpha: isDark ? 0.20 : 0.12),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        'Exchange',
+                        style: TextStyle(
+                          fontSize: 10.5,
+                          fontWeight: FontWeight.bold,
+                          color: exchangeColor,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        '$fromFormatted → $toFormatted',
+                        style: const TextStyle(
+                          fontSize: 13.5,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '$userLabel · Rate: ${exchange.exchangeRate.toStringAsFixed(2)}',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                 ),
-                const SizedBox(width: 12),
-                // Details
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                            decoration: BoxDecoration(
-                              color: exchangeColor.withValues(alpha: isDark ? 0.20 : 0.12),
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: Text(
-                              'Exchange',
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: exchangeColor,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 6),
-                          Expanded(
-                            child: Text(
-                              '$fromFormatted → $toFormatted',
-                              style: const TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        '$userLabel · Rate: ${exchange.exchangeRate.toStringAsFixed(2)}',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        Formatters.formatDate(exchange.date),
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: Theme.of(context).colorScheme.outline,
-                        ),
-                      ),
-                    ],
+                const SizedBox(height: 3),
+                Text(
+                  Formatters.formatDate(exchange.date),
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Theme.of(context).colorScheme.outline,
                   ),
                 ),
-                if (onEdit != null || onDelete != null) ...[
-                  const SizedBox(width: 8),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (onEdit != null) ...[
-                        ActionIconButton(
-                          icon: Icons.edit_outlined,
-                          color: Theme.of(context).colorScheme.outline,
-                          iconSize: 18,
-                          onTap: onEdit,
-                        ),
-                        if (onDelete != null) const SizedBox(width: 4),
-                      ],
-                      if (onDelete != null)
-                        ActionIconButton(
-                          icon: Icons.delete_outline_rounded,
-                          color: Theme.of(context).colorScheme.outline,
-                          iconSize: 18,
-                          onTap: onDelete,
-                        ),
-                    ],
-                  ),
-                ],
               ],
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -368,123 +375,104 @@ class _ActivityTileState extends State<ActivityTile>
     final amountsText = amounts.join(' · ');
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      child: Material(
-        color: isDark ? const Color(0xFF202124) : const Color(0xFFFFFFFF),
-        borderRadius: BorderRadius.circular(16),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(16),
-          onTap: onEdit,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      margin: const EdgeInsets.only(bottom: 10),
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1B1D22) : Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: borrowColor.withValues(alpha: isDark ? 0.35 : 0.22),
+          width: 1.1,
+        ),
+        boxShadow: isDark
+            ? null
+            : [
+                BoxShadow(
+                  color: borrowColor.withValues(alpha: 0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+      child: Row(
+        children: [
+          // Squircle borrow icon
+          Container(
+            width: 44,
+            height: 44,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
+              color: borrowColor.withValues(alpha: isDark ? 0.16 : 0.10),
+              borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: borrowColor.withValues(alpha: isDark ? 0.35 : 0.25),
+                color: borrowColor.withValues(alpha: isDark ? 0.30 : 0.20),
+                width: 1,
               ),
             ),
-            child: Row(
+            child: Icon(
+              Icons.handshake_rounded,
+              color: borrowColor,
+              size: 22,
+            ),
+          ),
+          const SizedBox(width: 13),
+          // Details
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Icon
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: borrowColor.withValues(alpha: isDark ? 0.15 : 0.10),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.handshake_outlined,
-                    color: borrowColor,
-                    size: 20,
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: borrowColor.withValues(alpha: isDark ? 0.20 : 0.12),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        isBorrower ? 'Borrowed' : 'Lent',
+                        style: TextStyle(
+                          fontSize: 10.5,
+                          fontWeight: FontWeight.bold,
+                          color: borrowColor,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        actionTitle,
+                        style: const TextStyle(
+                          fontSize: 13.5,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  amountsText,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: isBorrower
+                        ? (isDark ? AppTheme.googleGreenDark : AppTheme.googleGreen)
+                        : (isDark ? AppTheme.googleRedDark : AppTheme.googleRed),
                   ),
                 ),
-                const SizedBox(width: 12),
-                // Details
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                            decoration: BoxDecoration(
-                              color: borrowColor.withValues(alpha: isDark ? 0.20 : 0.12),
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: Text(
-                              isBorrower ? 'Borrowed' : 'Lent',
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: borrowColor,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 6),
-                          Expanded(
-                            child: Text(
-                              actionTitle,
-                              style: const TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        amountsText,
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: isBorrower
-                              ? (isDark ? AppTheme.googleGreenDark : AppTheme.googleGreen)
-                              : (isDark ? AppTheme.googleRedDark : AppTheme.googleRed),
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        Formatters.formatDate(borrow.date),
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: Theme.of(context).colorScheme.outline,
-                        ),
-                      ),
-                    ],
+                const SizedBox(height: 3),
+                Text(
+                  Formatters.formatDate(borrow.date),
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Theme.of(context).colorScheme.outline,
                   ),
                 ),
-                if (onEdit != null || onDelete != null) ...[
-                  const SizedBox(width: 8),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (onEdit != null) ...[
-                        ActionIconButton(
-                          icon: Icons.edit_outlined,
-                          color: Theme.of(context).colorScheme.outline,
-                          iconSize: 18,
-                          onTap: onEdit,
-                        ),
-                        if (onDelete != null) const SizedBox(width: 4),
-                      ],
-                      if (onDelete != null)
-                        ActionIconButton(
-                          icon: Icons.delete_outline_rounded,
-                          color: Theme.of(context).colorScheme.outline,
-                          iconSize: 18,
-                          onTap: onDelete,
-                        ),
-                    ],
-                  ),
-                ],
               ],
             ),
           ),
-        ),
+        ],
       ),
     );
   }

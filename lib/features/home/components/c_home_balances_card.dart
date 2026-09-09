@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
-import '../../../core/components/c_section_card.dart';
+import '../../../core/animations/a_animated_amount.dart';
+import '../../../core/components/c_icon_badge.dart';
 import '../../../core/components/c_user_avatar.dart';
 import '../../../core/theme/t_app_theme.dart';
 import '../../../core/utils/m_formatters.dart';
 
-/// Card showing current independent USD and EGP balances grouped by user first.
-/// Invariant: Zero combined totals and strict currency separation.
+/// Modern Fintech Hero Card showing current independent USD and EGP cash balances.
+///
+/// Features:
+/// - Distinct, elevated surfaces for both travelers.
+/// - Dynamic rolling number animations via [AnimatedAmount].
+/// - Invariant: Zero combined totals and strict currency separation.
 class HomeBalancesCard extends StatelessWidget {
   final String myName;
   final String? myPhotoUrl;
@@ -41,79 +46,152 @@ class HomeBalancesCard extends StatelessWidget {
     final usdColor = isDark ? AppTheme.usdColorDark : AppTheme.usdColorLight;
     final egpColor = isDark ? AppTheme.egpColorDark : AppTheme.egpColorLight;
 
-    return SectionCard(
-      icon: Icons.account_balance_wallet_rounded,
-      title: 'Current Balances',
+    return Container(
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1B1D22) : Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: isDark ? const Color(0xFF2A2E37) : const Color(0xFFE5E7EB),
+          width: 1.2,
+        ),
+        boxShadow: isDark
+            ? null
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 16,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+      ),
+      padding: const EdgeInsets.all(18),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 1. Current User ("You") Block
-          _buildUserBlock(
+          // Header: Icon badge + Title + Live indicator
+          Row(
+            children: [
+              const IconBadge(
+                icon: Icons.account_balance_wallet_rounded,
+                size: 34,
+                iconSize: 19,
+                borderRadius: 12,
+              ),
+              const SizedBox(width: 12),
+              const Expanded(
+                child: Text(
+                  'Current Balances',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: -0.2,
+                  ),
+                ),
+              ),
+              // Subtle pulse live dot
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: (isDark ? AppTheme.googleGreenDark : AppTheme.googleGreen)
+                      .withValues(alpha: 0.14),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 6,
+                      height: 6,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: isDark ? AppTheme.googleGreenDark : AppTheme.googleGreen,
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    Text(
+                      'Live',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                        color: isDark ? AppTheme.googleGreenDark : AppTheme.googleGreen,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+
+          // 1. Current User ("You") Hero Block
+          _buildUserCard(
             context: context,
             name: myName,
             photoUrl: myPhotoUrl,
             email: myEmail,
             isCurrentUser: true,
-            usdAmount: Formatters.formatUsd(myUsd),
-            egpAmount: Formatters.formatEgp(myEgp),
+            usdAmount: myUsd,
+            egpAmount: myEgp,
             usdColor: usdColor,
             egpColor: egpColor,
             isDark: isDark,
           ),
           const SizedBox(height: 12),
 
-          // 2. Friend Block
+          // 2. Travel Partner Block
           if (friendEmail != null)
-            _buildUserBlock(
+            _buildUserCard(
               context: context,
               name: friendName ?? 'Friend',
               photoUrl: friendPhotoUrl,
               email: friendEmail!,
               isCurrentUser: false,
-              usdAmount: Formatters.formatUsd(friendUsd),
-              egpAmount: Formatters.formatEgp(friendEgp),
+              usdAmount: friendUsd,
+              egpAmount: friendEgp,
               usdColor: usdColor,
               egpColor: egpColor,
               isDark: isDark,
             )
           else
-            _buildEmptyFriendBlock(context, isDark),
+            _buildEmptyFriendCard(context, isDark),
         ],
       ),
     );
   }
 
-  Widget _buildUserBlock({
+  Widget _buildUserCard({
     required BuildContext context,
     required String name,
     required String? photoUrl,
     required String email,
     required bool isCurrentUser,
-    required String usdAmount,
-    required String egpAmount,
+    required double usdAmount,
+    required double egpAmount,
     required Color usdColor,
     required Color egpColor,
     required bool isDark,
   }) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E1F22) : const Color(0xFFF8F9FA),
-        borderRadius: BorderRadius.circular(16),
+        color: isDark ? const Color(0xFF22252C) : const Color(0xFFF9FAFB),
+        borderRadius: BorderRadius.circular(18),
         border: Border.all(
-          color: isDark ? const Color(0xFF3C4043) : const Color(0xFFDADCE0),
+          color: isDark ? const Color(0xFF323642) : const Color(0xFFEEF0F2),
+          width: 1,
         ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // User Header: Avatar + Name + You Badge
+          // User Avatar + Name + Tag
           Row(
             children: [
               UserAvatar(
                 photoUrl: photoUrl,
                 name: name,
                 email: email,
-                radius: 13,
+                radius: 14,
                 backgroundColor: isCurrentUser
                     ? (isDark ? AppTheme.googleBlueDark : AppTheme.googleBlue)
                         .withValues(alpha: 0.15)
@@ -122,44 +200,43 @@ class HomeBalancesCard extends StatelessWidget {
                     ? (isDark ? AppTheme.googleBlueDark : AppTheme.googleBlue)
                     : Theme.of(context).colorScheme.onSurface,
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 9),
               Expanded(
                 child: Text(
                   name,
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
+                    letterSpacing: -0.2,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              if (isCurrentUser)
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: (isDark
-                            ? AppTheme.googleBlueDark
-                            : AppTheme.googleBlue)
-                        .withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Text(
-                    'You',
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      color: isDark
-                          ? AppTheme.googleBlueDark
-                          : AppTheme.googleBlue,
-                    ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
+                decoration: BoxDecoration(
+                  color: isCurrentUser
+                      ? (isDark ? AppTheme.googleBlueDark : AppTheme.googleBlue)
+                          .withValues(alpha: 0.15)
+                      : (isDark ? const Color(0xFF2F333E) : const Color(0xFFE5E7EB)),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  isCurrentUser ? 'You' : 'Partner',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: isCurrentUser
+                        ? (isDark ? AppTheme.googleBlueDark : AppTheme.googleBlue)
+                        : Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                 ),
+              ),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
 
-          // Currencies Inside: USD and EGP
+          // Currencies Side-by-Side with Animated Digits
           Row(
             children: [
               // USD Balance Pill
@@ -169,9 +246,10 @@ class HomeBalancesCard extends StatelessWidget {
                   amount: usdAmount,
                   color: usdColor,
                   isDark: isDark,
+                  isUsd: true,
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 10),
 
               // EGP Balance Pill
               Expanded(
@@ -180,6 +258,7 @@ class HomeBalancesCard extends StatelessWidget {
                   amount: egpAmount,
                   color: egpColor,
                   isDark: isDark,
+                  isUsd: false,
                 ),
               ),
             ],
@@ -191,17 +270,19 @@ class HomeBalancesCard extends StatelessWidget {
 
   Widget _buildCurrencyPill({
     required String label,
-    required String amount,
+    required double amount,
     required Color color,
     required bool isDark,
+    required bool isUsd,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
         color: color.withValues(alpha: isDark ? 0.12 : 0.08),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: color.withValues(alpha: isDark ? 0.30 : 0.20),
+          color: color.withValues(alpha: isDark ? 0.28 : 0.18),
+          width: 1,
         ),
       ),
       child: Column(
@@ -213,42 +294,62 @@ class HomeBalancesCard extends StatelessWidget {
               fontSize: 11,
               fontWeight: FontWeight.bold,
               color: color,
-              letterSpacing: 0.4,
+              letterSpacing: 0.5,
             ),
           ),
-          const SizedBox(height: 2),
-          Text(
-            amount,
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-              color: color,
+          const SizedBox(height: 4),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            transitionBuilder: (child, animation) => FadeTransition(
+              opacity: animation,
+              child: SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0, 0.2),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              ),
             ),
-            overflow: TextOverflow.ellipsis,
+            child: Text(
+              isUsd
+                  ? Formatters.formatUsd(amount)
+                  : Formatters.formatEgp(amount),
+              key: ValueKey('${label}_$amount'),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: color,
+                letterSpacing: -0.3,
+              ),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildEmptyFriendBlock(BuildContext context, bool isDark) {
+  Widget _buildEmptyFriendCard(BuildContext context, bool isDark) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E1F22) : const Color(0xFFF8F9FA),
-        borderRadius: BorderRadius.circular(16),
+        color: isDark ? const Color(0xFF22252C) : const Color(0xFFF9FAFB),
+        borderRadius: BorderRadius.circular(18),
         border: Border.all(
-          color: isDark ? const Color(0xFF3C4043) : const Color(0xFFDADCE0),
+          color: isDark ? const Color(0xFF323642) : const Color(0xFFEEF0F2),
+          width: 1,
         ),
       ),
       child: Row(
         children: [
-          Icon(Icons.person_outline_rounded,
-              size: 20, color: Theme.of(context).colorScheme.outline),
-          const SizedBox(width: 8),
+          Icon(
+            Icons.person_add_alt_1_outlined,
+            size: 20,
+            color: Theme.of(context).colorScheme.outline,
+          ),
+          const SizedBox(width: 10),
           Expanded(
             child: Text(
-              'No travel partner added yet',
+              'No travel partner added yet in Settings',
               style: TextStyle(
                 fontSize: 12,
                 color: Theme.of(context).colorScheme.outline,

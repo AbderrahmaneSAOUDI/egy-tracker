@@ -10,6 +10,7 @@ import 'package:egy_tracker/core/models/mod_user_profile.dart';
 import 'package:egy_tracker/core/services/f_auth.dart';
 import 'package:egy_tracker/core/services/f_firestore.dart';
 import 'package:egy_tracker/core/theme/t_app_theme.dart';
+import 'package:egy_tracker/features/home/components/c_activity_tile.dart';
 import 'package:egy_tracker/features/home/models/mod_activity_item.dart';
 import 'package:egy_tracker/features/home/s_home_tab.dart';
 import 'package:egy_tracker/features/home/vm_home_feed.dart';
@@ -470,13 +471,11 @@ void main() {
       expect(find.text('Paid by Friend · 100% You'), findsOneWidget);
       // Activity count badge
       expect(find.text('1'), findsOneWidget);
-      // Edit button is present
-      expect(find.byIcon(Icons.edit_outlined), findsOneWidget);
-      // Delete button is present
-      expect(find.byIcon(Icons.delete_outline_rounded), findsOneWidget);
+      // ActivityTile gesture item is present
+      expect(find.byType(ActivityTile), findsOneWidget);
     });
 
-    testWidgets('Tapping edit button on activity tile opens edit dialog', (tester) async {
+    testWidgets('Sliding right on activity tile triggers update and opens edit dialog', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
@@ -513,15 +512,106 @@ void main() {
 
       await tester.pump();
 
-      // Tap edit button
-      final editBtn = find.byIcon(Icons.edit_outlined);
-      expect(editBtn, findsOneWidget);
-      await tester.tap(editBtn);
+      // Slide right (start to end) past threshold -> triggers update
+      await tester.fling(find.text('Shawarma Lunch'), const Offset(500, 0), 1000);
       await tester.pumpAndSettle();
 
       // Edit Expense dialog should open with title pre-filled
       expect(find.text('Edit Expense'), findsWidgets);
       expect(find.text('Shawarma Lunch'), findsWidgets);
+    });
+
+    testWidgets('Sliding left on activity tile triggers remove and opens confirmation dialog', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: Scaffold(
+            body: HomeTabScreen(
+              user: devUser,
+              viewModel: vm,
+            ),
+          ),
+        ),
+      );
+
+      final now = DateTime.now();
+      firestore.emailsController.add([
+        AllowedEmail(id: '1', email: 'saoudi@example.com', createdAt: now),
+      ]);
+      firestore.balancesController.add([]);
+      firestore.expensesController.add([
+        Expense(
+          id: 'exp_dinner',
+          title: 'Koshary Dinner',
+          amount: 120.0,
+          currency: 'EGP',
+          paidBy: myId,
+          splitType: 'fifty_fifty',
+          mePercentage: 50.0,
+          friendPercentage: 50.0,
+          date: now,
+          createdAt: now,
+        ),
+      ]);
+      firestore.exchangesController.add([]);
+      firestore.borrowsController.add([]);
+
+      await tester.pump();
+
+      // Slide left (end to start) past threshold -> triggers remove confirmation
+      await tester.fling(find.text('Koshary Dinner'), const Offset(-500, 0), 1000);
+      await tester.pumpAndSettle();
+
+      // Delete confirmation dialog should open
+      expect(find.text('Delete Expense'), findsWidgets);
+      expect(find.text('Delete'), findsWidgets);
+      expect(find.text('Cancel'), findsWidgets);
+    });
+
+    testWidgets('Tapping activity tile directly opens edit dialog', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: Scaffold(
+            body: HomeTabScreen(
+              user: devUser,
+              viewModel: vm,
+            ),
+          ),
+        ),
+      );
+
+      final now = DateTime.now();
+      firestore.emailsController.add([
+        AllowedEmail(id: '1', email: 'saoudi@example.com', createdAt: now),
+      ]);
+      firestore.balancesController.add([]);
+      firestore.expensesController.add([
+        Expense(
+          id: 'exp_tea',
+          title: 'Mint Tea',
+          amount: 40.0,
+          currency: 'EGP',
+          paidBy: myId,
+          splitType: 'fifty_fifty',
+          mePercentage: 50.0,
+          friendPercentage: 50.0,
+          date: now,
+          createdAt: now,
+        ),
+      ]);
+      firestore.exchangesController.add([]);
+      firestore.borrowsController.add([]);
+
+      await tester.pump();
+
+      // Tap the tile
+      await tester.tap(find.text('Mint Tea'));
+      await tester.pumpAndSettle();
+
+      // Edit Expense dialog should open
+      expect(find.text('Edit Expense'), findsWidgets);
+      expect(find.text('Mint Tea'), findsWidgets);
     });
   });
 }
