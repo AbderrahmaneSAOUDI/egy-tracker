@@ -35,7 +35,8 @@ class Exchange {
     };
   }
 
-  factory Exchange.fromMap(Map<String, dynamic> map, String documentId) {
+  factory Exchange.fromMap(Map<String, dynamic>? rawMap, String documentId) {
+    final map = rawMap ?? const <String, dynamic>{};
     return Exchange(
       id: documentId,
       userId: map['user_id'] as String? ?? '',

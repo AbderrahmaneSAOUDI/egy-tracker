@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'c_app_dialog.dart';
 import '../models/mod_expense.dart';
 import '../theme/t_app_theme.dart';
@@ -18,6 +19,7 @@ Future<void> showAddExpenseDialog({
   double friendUsdBalance = 0.0,
   double friendEgpBalance = 0.0,
   Expense? initialExpense,
+  bool isPrimaryUser = true,
   required Future<bool> Function(Expense) onSave,
 }) {
   final formKey = GlobalKey<FormState>();
@@ -28,6 +30,13 @@ Future<void> showAddExpenseDialog({
 
   String selectedCurrency = initialExpense?.currency ?? 'EGP'; // Default to EGP for Egypt trip
   String paidByMode;
+  final initialMyPct = initialExpense != null
+      ? (isPrimaryUser ? initialExpense.mePercentage : initialExpense.friendPercentage)
+      : 50.0;
+  final initialFriendPct = initialExpense != null
+      ? (isPrimaryUser ? initialExpense.friendPercentage : initialExpense.mePercentage)
+      : 50.0;
+
   if (initialExpense != null) {
     if (initialExpense.splitType == 'fifty_fifty' || initialExpense.splitType == 'custom') {
       paidByMode = 'both';
@@ -41,8 +50,8 @@ Future<void> showAddExpenseDialog({
   }
 
   String sharedSplitType = initialExpense?.splitType == 'custom' ? 'custom' : 'fifty_fifty';
-  double customMePercentage = initialExpense?.mePercentage ?? 50.0;
-  double customFriendPercentage = initialExpense?.friendPercentage ?? 50.0;
+  double customMePercentage = initialExpense != null ? initialMyPct : 50.0;
+  double customFriendPercentage = initialExpense != null ? initialFriendPct : 50.0;
   DateTime selectedDate = initialExpense?.date ?? DateTime.now();
   bool isSubmitting = false;
 
@@ -71,8 +80,24 @@ Future<void> showAddExpenseDialog({
               ? (selectedCurrency == 'USD' ? myUsdBalance : myEgpBalance)
               : (selectedCurrency == 'USD' ? friendUsdBalance : friendEgpBalance);
 
+          final effectiveAvailable = availableCash +
+              (initialExpense != null &&
+                      initialExpense.paidBy == actualPayerId &&
+                      initialExpense.currency == selectedCurrency
+                  ? initialExpense.amount
+                  : 0.0);
+
           final enteredAmount = double.tryParse(amountController.text.trim()) ?? 0.0;
-          final isOverBudget = enteredAmount > 0 && availableCash < enteredAmount;
+          final isOverBudget = enteredAmount > 0 && enteredAmount > effectiveAvailable;
+          final hasTitle = titleController.text.trim().isNotEmpty;
+          final isCustomSplitValid = paidByMode != 'both' ||
+              sharedSplitType != 'custom' ||
+              ((customMePercentage + customFriendPercentage - 100.0).abs() <= 0.01);
+          final canSubmit = hasTitle &&
+              enteredAmount > 0 &&
+              !isOverBudget &&
+              isCustomSplitValid &&
+              !isSubmitting;
 
           return AppDialog(
             icon: Icons.receipt_long_rounded,
@@ -81,7 +106,7 @@ Future<void> showAddExpenseDialog({
             actionLabel: 'Save',
             isSubmitting: isSubmitting,
             onCancel: () => Navigator.of(dialogContext).pop(),
-            onAction: () async {
+            onAction: canSubmit ? () async {
               if (!formKey.currentState!.validate()) return;
 
               final amount = double.tryParse(amountController.text.trim()) ?? 0.0;
@@ -91,12 +116,12 @@ Future<void> showAddExpenseDialog({
               String finalSplitType;
 
               if (paidByMode == 'you') {
-                mePct = 100.0;
-                friendPct = 0.0;
+                mePct = isPrimaryUser ? 100.0 : 0.0;
+                friendPct = isPrimaryUser ? 0.0 : 100.0;
                 finalSplitType = 'default_100';
               } else if (paidByMode == 'friend') {
-                mePct = 0.0;
-                friendPct = 100.0;
+                mePct = isPrimaryUser ? 0.0 : 100.0;
+                friendPct = isPrimaryUser ? 100.0 : 0.0;
                 finalSplitType = 'default_100';
               } else {
                 // Both
@@ -105,10 +130,10 @@ Future<void> showAddExpenseDialog({
                   friendPct = 50.0;
                   finalSplitType = 'fifty_fifty';
                 } else {
-                  mePct = customMePercentage;
-                  friendPct = customFriendPercentage;
+                  mePct = isPrimaryUser ? customMePercentage : customFriendPercentage;
+                  friendPct = isPrimaryUser ? customFriendPercentage : customMePercentage;
                   finalSplitType = 'custom';
-                  if ((mePct + friendPct - 100.0).abs() > 0.01) {
+                  if ((customMePercentage + customFriendPercentage - 100.0).abs() > 0.01) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Split percentages must sum to exactly 100%'),
@@ -149,7 +174,7 @@ Future<void> showAddExpenseDialog({
               } else if (dialogContext.mounted) {
                 setDialogState(() => isSubmitting = false);
               }
-            },
+            } : null,
             content: Form(
               key: formKey,
               child: SizedBox(
@@ -164,6 +189,8 @@ Future<void> showAddExpenseDialog({
                       TextFormField(
                         controller: titleController,
                         textCapitalization: TextCapitalization.sentences,
+                        enabled: !isSubmitting,
+                        onChanged: (_) => setDialogState(() {}),
                         decoration: const InputDecoration(
                           labelText: 'Title',
                           hintText: 'e.g. Taxi, Dinner, Museum',
@@ -185,6 +212,9 @@ Future<void> showAddExpenseDialog({
                               controller: amountController,
                               keyboardType: const TextInputType.numberWithOptions(
                                   decimal: true),
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+                              ],
                               enabled: !isSubmitting,
                               onChanged: (_) => setDialogState(() {}),
                               decoration: InputDecoration(
@@ -275,7 +305,7 @@ Future<void> showAddExpenseDialog({
                               const SizedBox(width: 6),
                               Expanded(
                                 child: Text(
-                                  'Amount exceeds available cash (${Formatters.formatCurrency(availableCash, selectedCurrency)}). You may need to exchange or borrow currency.',
+                                  'Amount exceeds available cash (${Formatters.formatCurrency(effectiveAvailable, selectedCurrency)}). You may need to exchange or borrow currency.',
                                   style: TextStyle(
                                     fontSize: 11,
                                     color: isDark

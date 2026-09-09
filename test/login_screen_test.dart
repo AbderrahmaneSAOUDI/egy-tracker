@@ -58,17 +58,15 @@ void main() {
     testWidgets('Renders simplified login screen elements', (WidgetTester tester) async {
       await tester.pumpWidget(buildTestWidget());
 
-      // Title & Subtitle
+      // App Title
       expect(find.text('egy_tracker'), findsOneWidget);
-      expect(find.text('Trip Expense Tracker'), findsOneWidget);
 
       // Google Sign-In button
       expect(find.text('Sign in with Google'), findsOneWidget);
 
-      // Private access note
-      expect(find.text('Private access for trip members'), findsOneWidget);
-
-      // Cluttered badges must NOT be present
+      // Subtitles, notes, and cluttered badges must NOT be present
+      expect(find.text('Trip Expense Tracker'), findsNothing);
+      expect(find.text('Private access for trip members'), findsNothing);
       expect(find.text('USD (\$)'), findsNothing);
       expect(find.text('EGP (ج.م)'), findsNothing);
     });

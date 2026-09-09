@@ -371,18 +371,15 @@ void main() {
       expect(find.text('\$150.00'), findsOneWidget);
       expect(find.text('3,500.00 EGP'), findsOneWidget);
 
-      // Verify SegmentedPillBar is rendered
-      expect(find.byType(SegmentedPillBar<MyTrackerFilter>), findsOneWidget);
-      expect(find.text('All'), findsOneWidget);
-      expect(find.text('Mine'), findsOneWidget);
-      expect(find.text('Shared'), findsOneWidget);
+      // Verify SegmentedPillBar is NOT on My Tracker (moved to Home page)
+      expect(find.byType(SegmentedPillBar<MyTrackerFilter>), findsNothing);
 
       // Verify Empty state for unified list
       expect(find.byType(EmptyState), findsOneWidget);
       expect(find.text('No personal expenses yet'), findsOneWidget);
     });
 
-    testWidgets('Renders personal expenses and shared expenses with exact shares and enables filtering', (tester) async {
+    testWidgets('Renders all personal and shared expenses directly without filter tabs', (tester) async {
       tester.view.physicalSize = const Size(1200, 1800);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
@@ -434,7 +431,7 @@ void main() {
       expect(find.text('\$25.00'), findsOneWidget); // 100% of $25
       expect(find.text('300.00 EGP'), findsOneWidget); // 50% of 600 EGP
 
-      // Activity tiles should render
+      // Both personal and shared activity tiles should render directly
       expect(find.byType(ActivityTile), findsNWidgets(2));
       expect(find.text('Taxi to Pyramids'), findsOneWidget);
       expect(find.text('Dinner Koshary'), findsOneWidget);
@@ -443,23 +440,8 @@ void main() {
       expect(find.text('My share: 100%'), findsOneWidget);
       expect(find.text('Total: 600.00 EGP'), findsOneWidget);
 
-      // Filter: tap "Mine" segment
-      await tester.tap(find.text('Mine'));
-      await tester.pumpAndSettle();
-
-      // Only 1 tile now
-      expect(find.byType(ActivityTile), findsOneWidget);
-      expect(find.text('Taxi to Pyramids'), findsOneWidget);
-      expect(find.text('Dinner Koshary'), findsNothing);
-
-      // Filter: tap "Shared" segment
-      await tester.tap(find.text('Shared'));
-      await tester.pumpAndSettle();
-
-      // Only shared tile now
-      expect(find.byType(ActivityTile), findsOneWidget);
-      expect(find.text('Dinner Koshary'), findsOneWidget);
-      expect(find.text('Taxi to Pyramids'), findsNothing);
+      // No segmented filter bar in My Tracker
+      expect(find.byType(SegmentedPillBar<MyTrackerFilter>), findsNothing);
     });
   });
 }

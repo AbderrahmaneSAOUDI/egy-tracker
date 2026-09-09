@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'c_app_dialog.dart';
 import '../models/mod_exchange.dart';
 import '../theme/t_app_theme.dart';
@@ -39,6 +40,18 @@ Future<void> showAddExchangeDialog({
 
           final availableOwned =
               fromCurrency == 'USD' ? myUsdBalance : myEgpBalance;
+          final effectiveAvailable = availableOwned +
+              (initialExchange != null && initialExchange.fromCurrency == fromCurrency
+                  ? initialExchange.fromAmount
+                  : 0.0);
+
+          final currentFromAmt =
+              double.tryParse(fromAmountController.text.trim()) ?? 0.0;
+          final currentToAmt =
+              double.tryParse(toAmountController.text.trim()) ?? 0.0;
+          final isOverBudget = currentFromAmt > effectiveAvailable;
+          final canSubmit =
+              currentFromAmt > 0 && currentToAmt > 0 && !isOverBudget && !isSubmitting;
 
           return AppDialog(
             icon: Icons.sync_alt_rounded,
@@ -47,7 +60,7 @@ Future<void> showAddExchangeDialog({
             actionLabel: 'Save',
             isSubmitting: isSubmitting,
             onCancel: () => Navigator.of(dialogContext).pop(),
-            onAction: () async {
+            onAction: canSubmit ? () async {
               if (!formKey.currentState!.validate()) return;
 
               final fromAmt =
@@ -90,7 +103,7 @@ Future<void> showAddExchangeDialog({
               } else if (dialogContext.mounted) {
                 setDialogState(() => isSubmitting = false);
               }
-            },
+            } : null,
             content: Form(
               key: formKey,
               child: SingleChildScrollView(
@@ -137,15 +150,21 @@ Future<void> showAddExchangeDialog({
                       controller: fromAmountController,
                       keyboardType: const TextInputType.numberWithOptions(
                           decimal: true),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+                      ],
                       enabled: !isSubmitting,
+                      onChanged: (_) => setDialogState(() {}),
                       decoration: InputDecoration(
                         labelText: 'Amount Given ($fromCurrency)',
                         hintText: '0.00',
-                        helperText:
-                            'Owned: ${Formatters.formatCurrency(availableOwned, fromCurrency)}',
+                        helperText: isOverBudget
+                            ? 'Exceeds owned money (${Formatters.formatCurrency(effectiveAvailable, fromCurrency)})'
+                            : 'Owned: ${Formatters.formatCurrency(effectiveAvailable, fromCurrency)}',
                         helperStyle: TextStyle(
                           fontSize: 11,
-                          color: colorScheme.outline,
+                          color: isOverBudget ? colorScheme.error : colorScheme.outline,
+                          fontWeight: isOverBudget ? FontWeight.w600 : FontWeight.normal,
                         ),
                         filled: true,
                         fillColor: isDark
@@ -160,8 +179,8 @@ Future<void> showAddExchangeDialog({
                             val, fromCurrency);
                         if (err != null) return err;
                         final amt = double.tryParse(val!.trim()) ?? 0.0;
-                        if (amt > availableOwned) {
-                          return 'Exceeds owned money (${Formatters.formatCurrency(availableOwned, fromCurrency)})';
+                        if (amt > effectiveAvailable) {
+                          return 'Exceeds owned money (${Formatters.formatCurrency(effectiveAvailable, fromCurrency)})';
                         }
                         return null;
                       },
@@ -173,7 +192,11 @@ Future<void> showAddExchangeDialog({
                       controller: toAmountController,
                       keyboardType: const TextInputType.numberWithOptions(
                           decimal: true),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+                      ],
                       enabled: !isSubmitting,
+                      onChanged: (_) => setDialogState(() {}),
                       decoration: InputDecoration(
                         labelText: 'Amount Received ($toCurrency)',
                         hintText: '0.00',

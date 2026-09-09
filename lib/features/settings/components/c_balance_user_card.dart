@@ -38,34 +38,48 @@ class BalanceUserCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: isDark ? Colors.white.withValues(alpha: 0.03) : const Color(0xFFF8F9FA),
-        borderRadius: BorderRadius.circular(14),
+        color: isDark ? const Color(0xFF13161C) : const Color(0xFFF8FAFC),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isCurrentUser
-              ? (isDark ? AppTheme.usdColorDark : AppTheme.usdColorLight)
-                  .withValues(alpha: 0.4)
-              : (isDark
-                  ? const Color(0xFF3C4043)
-                  : const Color(0xFFE8EAED)),
-          width: 1.0,
+          color: isDark
+              ? (isCurrentUser
+                  ? const Color(0xFF2E3545)
+                  : const Color(0xFF262A34))
+              : (isCurrentUser
+                  ? const Color(0xFFE2E8F0)
+                  : const Color(0xFFEDF0F5)),
+          width: 1.1,
         ),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      padding: const EdgeInsets.all(14),
       child: Column(
         children: [
           Row(
             children: [
-              UserAvatar(
-                photoUrl: photoUrl,
-                name: name,
-                email: email,
-                radius: 16,
-                backgroundColor: isCurrentUser
-                    ? colorScheme.primaryContainer
-                    : colorScheme.surfaceContainerHighest,
-                foregroundColor: isCurrentUser
-                    ? colorScheme.onPrimaryContainer
-                    : colorScheme.onSurfaceVariant,
+              Container(
+                padding: const EdgeInsets.all(1.5),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: (isCurrentUser
+                            ? (isDark ? AppTheme.usdColorDark : AppTheme.usdColorLight)
+                            : (isDark ? const Color(0xFFA78BFA) : const Color(0xFF7C3AED)))
+                        .withValues(alpha: 0.5),
+                    width: 1.5,
+                  ),
+                ),
+                child: UserAvatar(
+                  photoUrl: photoUrl,
+                  name: name,
+                  email: email,
+                  radius: 17,
+                  backgroundColor: isCurrentUser
+                      ? colorScheme.primaryContainer
+                      : colorScheme.surfaceContainerHighest,
+                  foregroundColor: isCurrentUser
+                      ? colorScheme.onPrimaryContainer
+                      : colorScheme.onSurfaceVariant,
+                ),
               ),
               const SizedBox(width: 10),
               Expanded(
@@ -85,17 +99,20 @@ class BalanceUserCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        if (isCurrentUser) ...[
-                          const SizedBox(width: 6),
-                          StatusBadge(
-                            label: 'You',
-                            color: isDark
-                                ? AppTheme.usdColorDark
-                                : AppTheme.usdColorLight,
-                          ),
-                        ],
+                        const SizedBox(width: 6),
+                        StatusBadge(
+                          label: isCurrentUser ? 'You' : 'Friend',
+                          color: isCurrentUser
+                              ? (isDark
+                                  ? AppTheme.usdColorDark
+                                  : AppTheme.usdColorLight)
+                              : (isDark
+                                  ? const Color(0xFFA78BFA)
+                                  : const Color(0xFF7C3AED)),
+                        ),
                       ],
                     ),
+                    const SizedBox(height: 2),
                     Text(
                       email,
                       style: TextStyle(
@@ -113,14 +130,21 @@ class BalanceUserCard extends StatelessWidget {
                   'edit_balance_${isCurrentUser ? "you" : "friend"}',
                 ),
                 onPressed: onEdit,
-                icon: const Icon(Icons.edit_outlined, size: 14),
+                icon: const Icon(Icons.edit_outlined, size: 13),
                 label: const Text('Edit'),
                 style: TextButton.styleFrom(
                   visualDensity: VisualDensity.compact,
                   foregroundColor:
                       isDark ? AppTheme.googleBlueDark : AppTheme.googleBlue,
+                  backgroundColor: (isDark
+                          ? AppTheme.googleBlueDark
+                          : AppTheme.googleBlue)
+                      .withValues(alpha: isDark ? 0.14 : 0.08),
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   textStyle: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
@@ -129,7 +153,7 @@ class BalanceUserCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           Row(
             children: [
               Expanded(

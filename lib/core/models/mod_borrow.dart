@@ -32,7 +32,8 @@ class Borrow {
     };
   }
 
-  factory Borrow.fromMap(Map<String, dynamic> map, String documentId) {
+  factory Borrow.fromMap(Map<String, dynamic>? rawMap, String documentId) {
+    final map = rawMap ?? const <String, dynamic>{};
     return Borrow(
       id: documentId,
       borrowerId: map['borrower_id'] as String? ?? '',

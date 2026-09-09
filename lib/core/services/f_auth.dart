@@ -54,6 +54,23 @@ class AuthService {
   User? _devUser;
   final StreamController<User?> _authController = StreamController<User?>.broadcast();
 
+  static const String serverClientId =
+      '27615434041-rpa8j2d54r5pkpmoctpu3oe48s5jfads.apps.googleusercontent.com';
+
+  bool _googleSignInInitialized = false;
+
+  Future<void> _ensureGoogleSignInInitialized() async {
+    if (kIsWeb || _googleSignInInitialized) return;
+    try {
+      await GoogleSignIn.instance.initialize(
+        serverClientId: serverClientId,
+      );
+      _googleSignInInitialized = true;
+    } catch (e) {
+      debugPrint('GoogleSignIn initialize caught error: $e');
+    }
+  }
+
   AuthService({this.auth, bool initializeGoogleSignIn = true}) {
     try {
       _firebaseAuth.authStateChanges().listen((user) {
@@ -64,11 +81,7 @@ class AuthService {
     } catch (_) {}
 
     if (!kIsWeb && initializeGoogleSignIn) {
-      try {
-        GoogleSignIn.instance.initialize().catchError((e) {
-          debugPrint('GoogleSignIn initialize caught error: $e');
-        });
-      } catch (_) {}
+      _ensureGoogleSignInInitialized();
     }
   }
 
@@ -150,6 +163,7 @@ class AuthService {
         await _firebaseAuth.setPersistence(Persistence.LOCAL);
       } else {
         if (_firebaseAuth.currentUser == null) {
+          await _ensureGoogleSignInInitialized();
           final attempt = GoogleSignIn.instance.attemptLightweightAuthentication();
           if (attempt != null) {
             final account = await attempt;
@@ -178,6 +192,7 @@ class AuthService {
         await _syncProfileIfNeeded(userCredential.user);
         return userCredential;
       } else {
+        await _ensureGoogleSignInInitialized();
         final GoogleSignInAccount googleUser = await GoogleSignIn.instance.authenticate();
         final AuthCredential credential = GoogleAuthProvider.credential(
           idToken: googleUser.authentication.idToken,

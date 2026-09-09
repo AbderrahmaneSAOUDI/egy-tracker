@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:egy_tracker/core/components/c_segmented_pill_bar.dart';
 import 'package:egy_tracker/core/models/mod_allowed_email.dart';
 import 'package:egy_tracker/core/models/mod_borrow.dart';
 import 'package:egy_tracker/core/models/mod_exchange.dart';
@@ -469,8 +470,9 @@ void main() {
 
       expect(find.text('Taxi to Airport'), findsOneWidget);
       expect(find.text('Paid by Friend · 100% You'), findsOneWidget);
-      // Activity count badge
-      expect(find.text('1'), findsOneWidget);
+      // Activity count badge in filter tabs
+      expect(find.text('1'), findsWidgets);
+      expect(find.byType(SegmentedPillBar<HomeFeedFilter>), findsOneWidget);
       // ActivityTile gesture item is present
       expect(find.byType(ActivityTile), findsOneWidget);
     });
@@ -568,7 +570,7 @@ void main() {
       expect(find.text('Cancel'), findsWidgets);
     });
 
-    testWidgets('Tapping activity tile directly opens edit dialog', (tester) async {
+    testWidgets('Tapping activity tile does nothing; editing requires sliding right', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
@@ -609,9 +611,74 @@ void main() {
       await tester.tap(find.text('Mint Tea'));
       await tester.pumpAndSettle();
 
-      // Edit Expense dialog should open
-      expect(find.text('Edit Expense'), findsWidgets);
-      expect(find.text('Mint Tea'), findsWidgets);
+      // Edit Expense dialog should NOT open (click does nothing)
+      expect(find.text('Edit Expense'), findsNothing);
+    });
+
+    testWidgets('Renders Exchange and Borrow activity tiles without layout overflow', (tester) async {
+      tester.view.physicalSize = const Size(800, 2500);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: Scaffold(
+            body: HomeTabScreen(
+              user: devUser,
+              viewModel: vm,
+            ),
+          ),
+        ),
+      );
+
+      final now = DateTime.now();
+      firestore.emailsController.add([
+        AllowedEmail(id: '1', email: 'me@test.com', createdAt: now),
+        AllowedEmail(id: '2', email: 'friend@test.com', createdAt: now),
+      ]);
+      firestore.usersController.add([
+        UserProfile(id: myId, email: 'me@test.com', name: 'Saoudi', createdAt: now),
+        UserProfile(id: 'user_friend', email: 'friend@test.com', name: 'Friend', createdAt: now),
+      ]);
+      firestore.balancesController.add([]);
+      firestore.expensesController.add([]);
+      firestore.exchangesController.add([
+        Exchange(
+          id: 'exc_test',
+          userId: myId,
+          fromCurrency: 'USD',
+          fromAmount: 100.0,
+          toCurrency: 'EGP',
+          toAmount: 4900.0,
+          exchangeRate: 49.0,
+          date: now,
+          createdAt: now,
+        ),
+      ]);
+      firestore.borrowsController.add([
+        Borrow(
+          id: 'bor_test',
+          borrowerId: myId,
+          lenderId: 'user_friend',
+          usdAmount: 30.0,
+          egpAmount: 500.0,
+          date: now,
+          createdAt: now,
+        ),
+      ]);
+
+      await tester.pumpAndSettle();
+
+      // Both items are rendered cleanly
+      expect(find.text('Exchange'), findsOneWidget);
+      expect(find.text('\$100.00 → 4,900.00 EGP'), findsOneWidget);
+      expect(find.text('By You · Rate: 49.00'), findsOneWidget);
+      expect(find.text('Borrowed'), findsOneWidget);
+      expect(find.text('Borrowed from Saoudi'), findsOneWidget);
+      expect(find.text('\$30.00 · 500.00 EGP'), findsOneWidget);
+      expect(tester.takeException(), isNull);
     });
   });
 }

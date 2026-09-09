@@ -46,9 +46,21 @@ class FirestoreService {
   // ===================== ALLOWED EMAILS =====================
 
   Stream<List<AllowedEmail>> getAllowedEmailsStream() {
-    return _allowedEmailsCollection.snapshots().map((snapshot) => snapshot.docs
-        .map((doc) => AllowedEmail.fromMap(doc.data(), doc.id))
-        .toList());
+    return _allowedEmailsCollection.snapshots().map((snapshot) {
+      final list = snapshot.docs
+          .map((doc) => AllowedEmail.fromMap(doc.data(), doc.id))
+          .toList();
+      list.sort((a, b) {
+        final aIsPrimary =
+            a.email.toLowerCase().trim() == 'abderrahmane.saoudi.26@gmail.com';
+        final bIsPrimary =
+            b.email.toLowerCase().trim() == 'abderrahmane.saoudi.26@gmail.com';
+        if (aIsPrimary && !bIsPrimary) return -1;
+        if (!aIsPrimary && bIsPrimary) return 1;
+        return a.createdAt.compareTo(b.createdAt);
+      });
+      return list;
+    });
   }
 
   Future<bool> isEmailAllowed(String email) async {

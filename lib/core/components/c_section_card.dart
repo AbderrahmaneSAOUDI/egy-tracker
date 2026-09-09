@@ -7,6 +7,7 @@ class SectionCard extends StatefulWidget {
   final IconData icon;
   final Color? iconColor;
   final String title;
+  final String? subtitle;
   final Widget? trailing;
   final Color? borderColor;
   final Widget child;
@@ -16,6 +17,7 @@ class SectionCard extends StatefulWidget {
     required this.icon,
     this.iconColor,
     required this.title,
+    this.subtitle,
     this.trailing,
     this.borderColor,
     required this.child,
@@ -67,19 +69,22 @@ class _SectionCardState extends State<SectionCard>
         opacity: _fade,
         child: Container(
           decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF202124) : const Color(0xFFFFFFFF),
-            borderRadius: BorderRadius.circular(20),
+            color: isDark ? const Color(0xFF17191E) : Colors.white,
+            borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color: widget.borderColor ??
-                  (isDark ? const Color(0xFF3C4043) : const Color(0xFFDADCE0)),
-              width: 1.2,
+                  (isDark ? const Color(0xFF2A2E37) : const Color(0xFFE5E7EB)),
+              width: 1.1,
             ),
           ),
-          padding: const EdgeInsets.all(18),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                crossAxisAlignment: widget.subtitle != null
+                    ? CrossAxisAlignment.start
+                    : CrossAxisAlignment.center,
                 children: [
                   IconBadge(
                     icon: widget.icon,
@@ -87,19 +92,35 @@ class _SectionCardState extends State<SectionCard>
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: Text(
-                      widget.title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: -0.2,
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.title,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: -0.2,
+                          ),
+                        ),
+                        if (widget.subtitle != null) ...[
+                          const SizedBox(height: 2),
+                          Text(
+                            widget.subtitle!,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: theme.colorScheme.onSurfaceVariant,
+                              letterSpacing: -0.1,
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
                   ),
-                  ?widget.trailing,
+                  if (widget.trailing != null) widget.trailing!,
                 ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 10),
               widget.child,
             ],
           ),

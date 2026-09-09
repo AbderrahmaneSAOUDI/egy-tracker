@@ -157,8 +157,9 @@ class MyTrackerViewModel extends ChangeNotifier {
 
   /// True if the current logged-in user is the primary traveler (first allowed email).
   bool get isPrimaryUser {
-    if (allowedEmails.isEmpty) return true;
     final myEmail = user.email?.toLowerCase().trim() ?? '';
+    if (myEmail == 'abderrahmane.saoudi.26@gmail.com') return true;
+    if (allowedEmails.isEmpty) return true;
     return myEmail == allowedEmails.first.email.toLowerCase().trim();
   }
 

@@ -38,7 +38,8 @@ class Expense {
     };
   }
 
-  factory Expense.fromMap(Map<String, dynamic> map, String documentId) {
+  factory Expense.fromMap(Map<String, dynamic>? rawMap, String documentId) {
+    final map = rawMap ?? const <String, dynamic>{};
     return Expense(
       id: documentId,
       title: map['title'] as String? ?? '',

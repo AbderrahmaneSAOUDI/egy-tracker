@@ -60,7 +60,7 @@ class TravelerBalanceCard extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isDark
               ? (isCurrentUser
@@ -71,23 +71,8 @@ class TravelerBalanceCard extends StatelessWidget {
                   : const Color(0xFFEDE9FE)),
           width: 1.2,
         ),
-        boxShadow: isDark
-            ? [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.35),
-                  blurRadius: 18,
-                  offset: const Offset(0, 6),
-                ),
-              ]
-            : [
-                BoxShadow(
-                  color: const Color(0xFF0F172A).withValues(alpha: 0.06),
-                  blurRadius: 16,
-                  offset: const Offset(0, 4),
-                ),
-              ],
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       child: Column(
         children: [
           // Traveler Identity Bar
@@ -155,7 +140,7 @@ class TravelerBalanceCard extends StatelessWidget {
           // Soft Divider
           Container(
             height: 1,
-            margin: const EdgeInsets.symmetric(vertical: 13),
+            margin: const EdgeInsets.symmetric(vertical: 8),
             color: isDark ? const Color(0xFF232732) : const Color(0xFFEEF2F6),
           ),
 
@@ -176,7 +161,7 @@ class TravelerBalanceCard extends StatelessWidget {
               // Sleek Vertical Divider
               Container(
                 width: 1.2,
-                height: 52,
+                height: 44,
                 margin: const EdgeInsets.symmetric(horizontal: 14),
                 color: isDark ? const Color(0xFF262C38) : const Color(0xFFE2E8F0),
               ),
@@ -292,10 +277,10 @@ class EmptyTravelerCard extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF161920) : const Color(0xFFF8FAFC),
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isDark ? const Color(0xFF262932) : const Color(0xFFE2E8F0),
           width: 1.2,

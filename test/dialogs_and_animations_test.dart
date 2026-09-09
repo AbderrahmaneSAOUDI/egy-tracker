@@ -144,6 +144,80 @@ void main() {
       expect(savedExpense!.paidBy, 'me_id');
       expect(savedExpense!.splitType, 'fifty_fifty');
     });
+
+    testWidgets(
+        'Disables save button when expense amount exceeds available cash or is empty, and prevents negative values',
+        (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () {
+                  showAddExpenseDialog(
+                    context: context,
+                    currentUserId: 'me_id',
+                    currentUserName: 'Me',
+                    friendUserId: 'friend_id',
+                    friendUserName: 'Friend',
+                    myUsdBalance: 50,
+                    myEgpBalance: 1000,
+                    onSave: (exp) async => true,
+                  );
+                },
+                child: const Text('Open Expense'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Open Expense'));
+      await tester.pumpAndSettle();
+
+      final textFields = find.byType(TextFormField);
+      final saveBtnFinder = find.widgetWithText(FilledButton, 'Save');
+
+      // Title and amount are empty -> Save button should be disabled
+      expect(tester.widget<FilledButton>(saveBtnFinder).onPressed, isNull);
+
+      // Enter title only
+      await tester.enterText(textFields.at(0), 'Coffee');
+      await tester.pumpAndSettle();
+      expect(tester.widget<FilledButton>(saveBtnFinder).onPressed, isNull);
+
+      // Try entering negative amount "-30" -> negative sign stripped by formatter
+      await tester.enterText(textFields.at(1), '-30');
+      await tester.pumpAndSettle();
+      expect(tester.widget<TextFormField>(textFields.at(1)).controller?.text, '30');
+      // 30 <= 1000 EGP owned -> valid, button enabled
+      expect(tester.widget<FilledButton>(saveBtnFinder).onPressed, isNotNull);
+
+      // Enter amount exceeding owned EGP (1200 > 1000)
+      await tester.enterText(textFields.at(1), '1200');
+      await tester.pumpAndSettle();
+
+      // Exceeds available physical cash -> Save button must be disabled
+      expect(tester.widget<FilledButton>(saveBtnFinder).onPressed, isNull);
+
+      // Enter amount within balance (400 <= 1000) -> enabled
+      await tester.enterText(textFields.at(1), '400');
+      await tester.pumpAndSettle();
+      expect(tester.widget<FilledButton>(saveBtnFinder).onPressed, isNotNull);
+
+      // Switch to USD (user has 50 USD)
+      await tester.tap(find.text('USD'));
+      await tester.pumpAndSettle();
+
+      // 400 > 50 USD -> Save button disabled
+      expect(tester.widget<FilledButton>(saveBtnFinder).onPressed, isNull);
+
+      // 40 <= 50 USD -> Save button enabled
+      await tester.enterText(textFields.at(1), '40');
+      await tester.pumpAndSettle();
+      expect(tester.widget<FilledButton>(saveBtnFinder).onPressed, isNotNull);
+    });
   });
 
   group('Add Exchange Dialog Tests', () {
@@ -268,6 +342,67 @@ void main() {
       expect(savedBorrow, isNotNull);
       expect(savedBorrow!.usdAmount, 20.0);
       expect(savedBorrow!.egpAmount, 500.0);
+    });
+
+    testWidgets(
+        'Disables save button when borrow amount exceeds friend cash and blocks negative signs',
+        (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () {
+                  showBorrowDialog(
+                    context: context,
+                    currentUserId: 'me_id',
+                    currentUserName: 'Me',
+                    friendUserId: 'friend_id',
+                    friendUserName: 'Friend',
+                    friendUsdBalance: 60.0,
+                    friendEgpBalance: 1500.0,
+                    onSave: (bor) async => true,
+                  );
+                },
+                child: const Text('Open Borrow'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Open Borrow'));
+      await tester.pumpAndSettle();
+
+      final textFields = find.byType(TextFormField);
+      final saveBtnFinder = find.widgetWithText(FilledButton, 'Save');
+
+      // Both USD and EGP empty -> disabled
+      expect(tester.widget<FilledButton>(saveBtnFinder).onPressed, isNull);
+
+      // Try entering negative value into USD -> negative sign stripped
+      await tester.enterText(textFields.at(0), '-20');
+      await tester.pumpAndSettle();
+      expect(tester.widget<TextFormField>(textFields.at(0)).controller?.text, '20');
+      // 20 <= 60 friend USD -> button enabled
+      expect(tester.widget<FilledButton>(saveBtnFinder).onPressed, isNotNull);
+
+      // Exceed friend's USD (70 > 60)
+      await tester.enterText(textFields.at(0), '70');
+      await tester.pumpAndSettle();
+      expect(tester.widget<FilledButton>(saveBtnFinder).onPressed, isNull);
+
+      // Reset USD to 0, test EGP exceeding friend's balance (2000 > 1500)
+      await tester.enterText(textFields.at(0), '0');
+      await tester.enterText(textFields.at(1), '2000');
+      await tester.pumpAndSettle();
+      expect(tester.widget<FilledButton>(saveBtnFinder).onPressed, isNull);
+
+      // Valid EGP (500 <= 1500) -> button enabled
+      await tester.enterText(textFields.at(1), '500');
+      await tester.pumpAndSettle();
+      expect(tester.widget<FilledButton>(saveBtnFinder).onPressed, isNotNull);
     });
 
     testWidgets('showAddExpenseDialog with initialExpense renders Edit Expense and pre-fills fields',

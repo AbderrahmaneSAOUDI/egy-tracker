@@ -10,8 +10,6 @@ class SlideActionItem {
   final Color? backgroundColor;
   final Color foregroundColor;
   final BorderRadius? borderRadius;
-  final BoxShadow? shadow;
-
   const SlideActionItem({
     required this.icon,
     required this.label,
@@ -20,7 +18,6 @@ class SlideActionItem {
     this.backgroundColor,
     this.foregroundColor = Colors.white,
     this.borderRadius,
-    this.shadow,
   });
 }
 
@@ -134,6 +131,25 @@ class _SlideActionCardState extends State<SlideActionCard>
     final hasEnd = widget.endAction != null && _dragOffset < 0;
     final actionWidth = _dragOffset.abs().clamp(0.0, widget.maxActionWidth + 25.0);
 
+    if (!hasStart && !hasEnd) {
+      return GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onHorizontalDragUpdate: _onHorizontalDragUpdate,
+        onHorizontalDragEnd: _onHorizontalDragEnd,
+        child: PressScale(
+          onTap: () {
+            if (_dragOffset.abs() > 5) {
+              _animateBackToZero();
+            } else {
+              widget.onTap?.call();
+            }
+          },
+          scaleDown: 0.98,
+          child: widget.child,
+        ),
+      );
+    }
+
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onHorizontalDragUpdate: _onHorizontalDragUpdate,
@@ -191,7 +207,7 @@ class _SlideActionCardState extends State<SlideActionCard>
       },
       child: Container(
         width: width,
-        margin: const EdgeInsets.only(bottom: 10),
+        margin: const EdgeInsets.only(bottom: 6),
         decoration: BoxDecoration(
           gradient: action.gradient,
           color: action.gradient == null
@@ -199,7 +215,6 @@ class _SlideActionCardState extends State<SlideActionCard>
                   Theme.of(context).colorScheme.primary)
               : null,
           borderRadius: borderRadius,
-          boxShadow: action.shadow != null ? [action.shadow!] : null,
         ),
         clipBehavior: Clip.antiAlias,
         child: Center(

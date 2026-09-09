@@ -20,8 +20,8 @@ class LoginLogoButton extends StatelessWidget {
         key: const Key('login_logo_button'),
         onTap: onTap,
         child: Container(
-          width: 72,
-          height: 72,
+          width: 96,
+          height: 96,
           decoration: BoxDecoration(
             color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
             borderRadius: BorderRadius.circular(20),
@@ -31,16 +31,19 @@ class LoginLogoButton extends StatelessWidget {
             ),
           ),
           clipBehavior: Clip.antiAlias,
-          child: Image.asset(
-            'assets/images/logo.png',
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              return Icon(
-                Icons.account_balance_wallet_rounded,
-                size: 36,
-                color: theme.colorScheme.primary,
-              );
-            },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Image.asset(
+              'assets/images/logo.png',
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Icon(
+                  Icons.account_balance_wallet_rounded,
+                  size: 36,
+                  color: theme.colorScheme.primary,
+                );
+              },
+            ),
           ),
         ),
       ),
