@@ -237,6 +237,7 @@ class HomeFeedViewModel extends ChangeNotifier {
         exchanges: _exchanges,
         expenses: _expenses,
         borrows: _borrows,
+        userEmail: user.email,
       );
 
   double get myEgpBalance => Calculations.calculateCashBalance(
@@ -246,6 +247,7 @@ class HomeFeedViewModel extends ChangeNotifier {
         exchanges: _exchanges,
         expenses: _expenses,
         borrows: _borrows,
+        userEmail: user.email,
       );
 
   double get friendUsdBalance {
@@ -258,6 +260,7 @@ class HomeFeedViewModel extends ChangeNotifier {
       exchanges: _exchanges,
       expenses: _expenses,
       borrows: _borrows,
+      userEmail: friendEmailDoc?.email ?? friendProfile?.email,
     );
   }
 
@@ -271,6 +274,7 @@ class HomeFeedViewModel extends ChangeNotifier {
       exchanges: _exchanges,
       expenses: _expenses,
       borrows: _borrows,
+      userEmail: friendEmailDoc?.email ?? friendProfile?.email,
     );
   }
 

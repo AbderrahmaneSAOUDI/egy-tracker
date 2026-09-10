@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:egy_tracker/core/models/mod_borrow.dart';
 import 'package:egy_tracker/core/models/mod_exchange.dart';
 import 'package:egy_tracker/core/models/mod_expense.dart';
 import 'package:egy_tracker/core/models/mod_initial_balance.dart';
@@ -95,6 +96,96 @@ void main() {
         expenses: expenses,
       );
       expect(egpBalance, equals(6600.0));
+    });
+
+    test('calculateCashBalance correctly adjusts balances for borrows and handles email aliases', () {
+      final initial = InitialBalance(
+        userId: 'user_me_uid',
+        usdAmount: 100.0,
+        egpAmount: 1000.0,
+        updatedAt: DateTime.now(),
+      );
+
+      final borrows = [
+        // Borrowed $50 USD from friend (stored with friend's email before profile creation)
+        Borrow(
+          id: 'b1',
+          borrowerId: 'user_me_uid',
+          lenderId: 'friend@example.com',
+          usdAmount: 50.0,
+          egpAmount: 0.0,
+          date: DateTime.now(),
+          createdAt: DateTime.now(),
+        ),
+        // Lent 300 EGP to friend (stored with my email)
+        Borrow(
+          id: 'b2',
+          borrowerId: 'friend_uid',
+          lenderId: 'me@example.com',
+          usdAmount: 0.0,
+          egpAmount: 300.0,
+          date: DateTime.now(),
+          createdAt: DateTime.now(),
+        ),
+      ];
+
+      // My balance:
+      // USD: 100 + 50 (borrowed in) = 150
+      final myUsd = Calculations.calculateCashBalance(
+        userId: 'user_me_uid',
+        currency: 'USD',
+        initialBalance: initial,
+        exchanges: const [],
+        expenses: const [],
+        borrows: borrows,
+        userEmail: 'me@example.com',
+      );
+      expect(myUsd, equals(150.0));
+
+      // EGP: 1000 - 300 (lent out, matching by email alias) = 700
+      final myEgp = Calculations.calculateCashBalance(
+        userId: 'user_me_uid',
+        currency: 'EGP',
+        initialBalance: initial,
+        exchanges: const [],
+        expenses: const [],
+        borrows: borrows,
+        userEmail: 'me@example.com',
+      );
+      expect(myEgp, equals(700.0));
+
+      // Friend's balance:
+      // Friend initial: USD 200, EGP 500
+      final friendInitial = InitialBalance(
+        userId: 'friend_uid',
+        usdAmount: 200.0,
+        egpAmount: 500.0,
+        updatedAt: DateTime.now(),
+      );
+
+      // Friend USD: 200 - 50 (lent out, matching by email alias) = 150
+      final friendUsd = Calculations.calculateCashBalance(
+        userId: 'friend_uid',
+        currency: 'USD',
+        initialBalance: friendInitial,
+        exchanges: const [],
+        expenses: const [],
+        borrows: borrows,
+        userEmail: 'friend@example.com',
+      );
+      expect(friendUsd, equals(150.0));
+
+      // Friend EGP: 500 + 300 (borrowed in, matching by friend_uid) = 800
+      final friendEgp = Calculations.calculateCashBalance(
+        userId: 'friend_uid',
+        currency: 'EGP',
+        initialBalance: friendInitial,
+        exchanges: const [],
+        expenses: const [],
+        borrows: borrows,
+        userEmail: 'friend@example.com',
+      );
+      expect(friendEgp, equals(800.0));
     });
 
     test('Personal share calculates percentage properly', () {

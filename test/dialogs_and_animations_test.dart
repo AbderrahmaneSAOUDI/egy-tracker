@@ -588,6 +588,107 @@ void main() {
       expect(updatedBorrow!.id, 'bor_existing');
       expect(updatedBorrow!.usdAmount, 80.0);
     });
+
+    testWidgets('showBorrowDialog allows switching to I lent mode and saves with correct roles', (tester) async {
+      Borrow? savedBorrow;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () {
+                  showBorrowDialog(
+                    context: context,
+                    currentUserId: 'me_uid',
+                    currentUserName: 'Me',
+                    friendUserId: 'friend_uid',
+                    friendUserName: 'Friend',
+                    myUsdBalance: 100.0,
+                    myEgpBalance: 2000.0,
+                    friendUsdBalance: 10.0,
+                    friendEgpBalance: 100.0,
+                    onSave: (bor) async {
+                      savedBorrow = bor;
+                      return true;
+                    },
+                  );
+                },
+                child: const Text('Open Borrow'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Open Borrow'));
+      await tester.pumpAndSettle();
+
+      // By default it shows I borrowed
+      expect(find.text('I borrowed'), findsOneWidget);
+      expect(find.text('I lent'), findsOneWidget);
+
+      // Tap on "I lent"
+      await tester.tap(find.text('I lent'));
+      await tester.pumpAndSettle();
+
+      // Banner updates
+      expect(find.text('Lending cash to Friend'), findsOneWidget);
+
+      // Enter amount (35 USD)
+      final textFields = find.byType(TextFormField);
+      await tester.enterText(textFields.at(0), '35.00');
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Save'));
+      await tester.pumpAndSettle();
+
+      expect(savedBorrow, isNotNull);
+      expect(savedBorrow!.borrowerId, equals('friend_uid'));
+      expect(savedBorrow!.lenderId, equals('me_uid'));
+      expect(savedBorrow!.usdAmount, equals(35.0));
+    });
+
+    testWidgets('showBorrowDialog shows error SnackBar when onSave fails', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () {
+                  showBorrowDialog(
+                    context: context,
+                    currentUserId: 'me_uid',
+                    currentUserName: 'Me',
+                    friendUserId: 'friend_uid',
+                    friendUserName: 'Friend',
+                    onSave: (bor) async => false, // Failure
+                  );
+                },
+                child: const Text('Open Borrow Fail'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Open Borrow Fail'));
+      await tester.pumpAndSettle();
+
+      final textFields = find.byType(TextFormField);
+      await tester.enterText(textFields.at(0), '10.00');
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Save'));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text('Failed to save borrow record. Please check your connection and try again.'),
+        findsOneWidget,
+      );
+    });
   });
 
   group('ConfirmationDialog Component Tests', () {
