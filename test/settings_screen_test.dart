@@ -92,7 +92,7 @@ class FakeFirestoreService extends FirestoreService {
   }
 
   @override
-  Future<void> deleteAllTripData() async {
+  Future<void> deleteAllTripData({String? keepEmail, String? keepUserId}) async {
     deleteAllTripDataCalled = true;
   }
 

@@ -127,14 +127,17 @@ class SettingsViewModel extends ChangeNotifier {
     }
   }
 
-  /// Purges all expenses, exchanges, initial balances, and user records
+  /// Purges all expenses, exchanges, borrows, initial balances, and trip members
   Future<bool> deleteAllTripData() async {
     _isProcessing = true;
     _errorMessage = null;
     notifyListeners();
 
     try {
-      await firestoreService.deleteAllTripData();
+      await firestoreService.deleteAllTripData(
+        keepEmail: user.email,
+        keepUserId: user.uid,
+      );
       _isProcessing = false;
       notifyListeners();
       return true;

@@ -5,12 +5,12 @@ import '../../../core/components/c_confirmation_dialog.dart';
 Future<void> showDeleteAllDataDialog({
   required BuildContext context,
   required Future<bool> Function() onDeleteAllData,
+  String? Function()? getErrorMessage,
 }) async {
   final theme = Theme.of(context);
   final colorScheme = theme.colorScheme;
   final isDark = theme.brightness == Brightness.dark;
   final messenger = ScaffoldMessenger.of(context);
-  final errorColor = colorScheme.error;
 
   final additionalContent = Column(
     mainAxisSize: MainAxisSize.min,
@@ -43,14 +43,20 @@ Future<void> showDeleteAllDataDialog({
             ),
             const SizedBox(height: 6),
             _buildDataDeleteRow(
+              Icons.handshake_outlined,
+              'All Borrow & Lend Records',
+              colorScheme,
+            ),
+            const SizedBox(height: 6),
+            _buildDataDeleteRow(
               Icons.account_balance_wallet_outlined,
               'All Initial Balances',
               colorScheme,
             ),
             const SizedBox(height: 6),
             _buildDataDeleteRow(
-              Icons.people_outline_rounded,
-              'All User Profiles',
+              Icons.group_remove_outlined,
+              'Trip Members & Whitelisted Friends',
               colorScheme,
             ),
           ],
@@ -92,11 +98,15 @@ Future<void> showDeleteAllDataDialog({
           ),
         );
       } else {
+        final errorMsg = getErrorMessage?.call() ?? 'Failed to delete data';
         messenger.showSnackBar(
           SnackBar(
-            content: const Text('Failed to delete data'),
-            backgroundColor: errorColor,
+            content: Text(errorMsg),
+            backgroundColor: colorScheme.error,
             behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
           ),
         );
       }

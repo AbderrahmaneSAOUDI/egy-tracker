@@ -237,40 +237,74 @@ class FirestoreService {
 
   // ===================== DATA WIPE PROTOCOL =====================
 
-  /// Purges all trip expenses, exchanges, borrows, initial balances, and user records.
-  Future<void> deleteAllTripData() async {
-    final batch = _firestore.batch();
+  /// Purges all trip expenses, exchanges, borrows, initial balances, and trip members,
+  /// while preserving the logged-in user's own email authorization and profile.
+  Future<void> deleteAllTripData({String? keepEmail, String? keepUserId}) async {
+    final normalizedKeepEmail = keepEmail?.toLowerCase().trim();
+    const defaultAdminEmail = 'abderrahmane.saoudi.26@gmail.com';
+
+    WriteBatch batch = _firestore.batch();
+    int opCount = 0;
+
+    Future<void> safeDelete(DocumentReference ref) async {
+      batch.delete(ref);
+      opCount++;
+      if (opCount >= 400) {
+        await batch.commit();
+        batch = _firestore.batch();
+        opCount = 0;
+      }
+    }
 
     // 1. Delete all expenses
     final expensesSnap = await _expensesCollection.get();
     for (final doc in expensesSnap.docs) {
-      batch.delete(doc.reference);
+      await safeDelete(doc.reference);
     }
 
     // 2. Delete all exchanges
     final exchangesSnap = await _exchangesCollection.get();
     for (final doc in exchangesSnap.docs) {
-      batch.delete(doc.reference);
+      await safeDelete(doc.reference);
     }
 
     // 3. Delete all borrows
     final borrowsSnap = await _borrowsCollection.get();
     for (final doc in borrowsSnap.docs) {
-      batch.delete(doc.reference);
+      await safeDelete(doc.reference);
     }
 
-    // 4. Reset/delete initial balances
+    // 4. Reset/delete all initial balances
     final balancesSnap = await _initialBalancesCollection.get();
     for (final doc in balancesSnap.docs) {
-      batch.delete(doc.reference);
+      await safeDelete(doc.reference);
     }
 
-    // 5. Delete user profiles
+    // 5. Purge allowed emails for trip members, preserving current user and default admin
+    final emailsSnap = await _allowedEmailsCollection.get();
+    for (final doc in emailsSnap.docs) {
+      final email = (doc.data()['email'] as String?)?.toLowerCase().trim();
+      final isSelf = normalizedKeepEmail != null && email == normalizedKeepEmail;
+      final isAdmin = email == defaultAdminEmail;
+      if (!isSelf && !isAdmin) {
+        await safeDelete(doc.reference);
+      }
+    }
+
+    // 6. Delete user profiles for friends/other users, preserving current user
     final usersSnap = await _usersCollection.get();
     for (final doc in usersSnap.docs) {
-      batch.delete(doc.reference);
+      final email = (doc.data()['email'] as String?)?.toLowerCase().trim();
+      final id = doc.id;
+      final isSelf = (keepUserId != null && id == keepUserId) ||
+          (normalizedKeepEmail != null && email == normalizedKeepEmail);
+      if (!isSelf) {
+        await safeDelete(doc.reference);
+      }
     }
 
-    await batch.commit();
+    if (opCount > 0) {
+      await batch.commit();
+    }
   }
 }
