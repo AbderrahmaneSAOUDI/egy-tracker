@@ -51,8 +51,9 @@ class DevUser implements User {
 
 class AuthService {
   final FirebaseAuth? auth;
-  User? _devUser;
-  final StreamController<User?> _authController = StreamController<User?>.broadcast();
+  static User? _devUser;
+  static final StreamController<User?> _authController =
+      StreamController<User?>.broadcast();
 
   static const String serverClientId =
       '27615434041-rpa8j2d54r5pkpmoctpu3oe48s5jfads.apps.googleusercontent.com';

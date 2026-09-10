@@ -136,9 +136,16 @@ Future<bool?> showConfirmationDialog({
             onConfirm: () async {
               if (onConfirm != null) {
                 setDialogState(() => isSubmitting = true);
-                final result = await onConfirm();
-                if (dialogContext.mounted) {
-                  Navigator.of(dialogContext).pop(result ?? true);
+                try {
+                  final result = await onConfirm();
+                  if (dialogContext.mounted) {
+                    Navigator.of(dialogContext).pop(result ?? true);
+                  }
+                } catch (e) {
+                  if (dialogContext.mounted) {
+                    setDialogState(() => isSubmitting = false);
+                    Navigator.of(dialogContext).pop(false);
+                  }
                 }
               } else {
                 Navigator.of(dialogContext).pop(true);
