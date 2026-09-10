@@ -259,14 +259,14 @@ void main() {
 
       // Cash Balance formula: Initial + ExchangesIn - ExchangesOut - ExpensesPaid + BorrowsIn - BorrowsOut
       // Me USD: 500 - 100 (exchange out) + 50 (borrow in) = 450.0
-      // Me EGP: 0 + 4900 (exchange in) - 900 (expense paid) + 500 (borrow in) = 4500.0
+      // Me EGP: 0 + 4900 (exchange in) - 450 (split expense 50%) + 500 (borrow in) = 4950.0
       expect(vm.myUsdBalance, 450.0);
-      expect(vm.myEgpBalance, 4500.0);
+      expect(vm.myEgpBalance, 4950.0);
 
       // Friend USD: 300.0 - 50 (borrow out) = 250.0
-      // Friend EGP: 1000.0 - 500 (borrow out) = 500.0
+      // Friend EGP: 1000.0 - 450 (split expense 50%) - 500 (borrow out) = 50.0
       expect(vm.friendUsdBalance, 250.0);
-      expect(vm.friendEgpBalance, 500.0);
+      expect(vm.friendEgpBalance, 50.0);
     });
   });
 
@@ -379,7 +379,7 @@ void main() {
       await tester.pump();
 
       expect(find.text('Pyramids Tour'), findsOneWidget);
-      expect(find.text('-\$60.00'), findsOneWidget);
+      expect(find.text('\$60.00'), findsOneWidget);
       expect(find.text('Paid by You · 50/50'), findsOneWidget);
     });
 

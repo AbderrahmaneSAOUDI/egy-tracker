@@ -44,7 +44,9 @@ class DangerButton extends StatelessWidget {
           width: 1.2,
         ),
         backgroundColor:
-            colorScheme.error.withValues(alpha: isDark ? 0.1 : 0.05),
+            colorScheme.error.withValues(alpha: isDark ? 0.12 : 0.06),
+        shadowColor: Colors.black.withValues(alpha: isDark ? 0.4 : 0.08),
+        elevation: 2,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),

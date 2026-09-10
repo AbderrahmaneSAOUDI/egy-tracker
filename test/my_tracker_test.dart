@@ -257,8 +257,8 @@ void main() {
       // Physical cash balances:
       // USD cash: 300 initial - 15 expA paid = 285 USD (expC was paid by Friend)
       expect(vm.myUsdBalance, equals(285.0));
-      // EGP cash: 5000 initial - 1000 expB paid = 4000 EGP (expD was paid by Friend)
-      expect(vm.myEgpBalance, equals(4000.0));
+      // EGP cash: 5000 initial - 500 (50% expB) - 1400 (70% expD) = 3100 EGP
+      expect(vm.myEgpBalance, equals(3100.0));
 
       // Filter tests
       expect(vm.filter, equals(MyTrackerFilter.all));

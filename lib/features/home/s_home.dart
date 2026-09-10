@@ -128,7 +128,19 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           bottomNavigationBar: FloatingPillNavBar(
             selectedIndex: selectedIndex,
-            showAddButton: selectedIndex == 1,
+            showAddButton: selectedIndex == 0 || selectedIndex == 1,
+            showExchangeButton: selectedIndex == 0 || selectedIndex == 1,
+            onExchangePressed: () {
+              showAddExchangeDialog(
+                context: context,
+                currentUserId: widget.user.uid,
+                currentUserName:
+                    _homeFeedViewModel.myProfile?.name ?? 'You',
+                myUsdBalance: _homeFeedViewModel.myUsdBalance,
+                myEgpBalance: _homeFeedViewModel.myEgpBalance,
+                onSave: _homeFeedViewModel.addExchange,
+              );
+            },
             onAddPressed: () {
               showAddActionSheet(
                 context: context,

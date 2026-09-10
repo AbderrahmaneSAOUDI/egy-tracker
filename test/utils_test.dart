@@ -87,7 +87,7 @@ void main() {
       );
       expect(usdBalance, equals(400.0));
 
-      // EGP Balance: 2000 initial + 4800 exchange in - 200 expense paid = 6600 EGP
+      // EGP Balance: 2000 initial + 4800 exchange in - 100 (50% of 200 split expense) = 6700 EGP
       final egpBalance = Calculations.calculateCashBalance(
         userId: 'userA',
         currency: 'EGP',
@@ -95,7 +95,7 @@ void main() {
         exchanges: exchanges,
         expenses: expenses,
       );
-      expect(egpBalance, equals(6600.0));
+      expect(egpBalance, equals(6700.0));
     });
 
     test('calculateCashBalance correctly adjusts balances for borrows and handles email aliases', () {

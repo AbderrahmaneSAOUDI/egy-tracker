@@ -112,8 +112,9 @@ void main() {
         findsOneWidget,
       );
 
-      // Add button is hidden on Home (dashboard only)
-      expect(find.byKey(const ValueKey('nav_add_button')), findsNothing);
+      // Add and Exchange buttons are visible on Home
+      expect(find.byKey(const ValueKey('nav_add_button')), findsOneWidget);
+      expect(find.byKey(const ValueKey('nav_exchange_button')), findsOneWidget);
 
       final navBar = tester.widget<FloatingPillNavBar>(find.byType(FloatingPillNavBar));
       expect(navBar.selectedIndex, equals(0));
@@ -131,10 +132,11 @@ void main() {
         ),
       );
 
-      // Starts on Home (index 0) with Add button hidden (dashboard only)
+      // Starts on Home (index 0) with Add and Exchange buttons visible
       var navBar = tester.widget<FloatingPillNavBar>(find.byType(FloatingPillNavBar));
       expect(navBar.selectedIndex, equals(0));
-      expect(find.byKey(const ValueKey('nav_add_button')), findsNothing);
+      expect(find.byKey(const ValueKey('nav_add_button')), findsOneWidget);
+      expect(find.byKey(const ValueKey('nav_exchange_button')), findsOneWidget);
 
       // Tap 'Settings' nav item
       final settingsItem = find.byKey(const ValueKey('nav_item_settings'));
@@ -152,8 +154,9 @@ void main() {
         findsNothing,
       );
 
-      // Add button is hidden on Settings
+      // Add and Exchange buttons are hidden on Settings
       expect(find.byKey(const ValueKey('nav_add_button')), findsNothing);
+      expect(find.byKey(const ValueKey('nav_exchange_button')), findsNothing);
 
       // Tap 'My Tracker' nav item
       final myTrackerItem = find.byKey(const ValueKey('nav_item_my_tracker'));
@@ -171,8 +174,9 @@ void main() {
         findsNothing,
       );
 
-      // Add button is visible on My Tracker
+      // Add and Exchange buttons are visible on My Tracker
       expect(find.byKey(const ValueKey('nav_add_button')), findsOneWidget);
+      expect(find.byKey(const ValueKey('nav_exchange_button')), findsOneWidget);
 
       // Tap 'Home' nav item
       final homeItem = find.byKey(const ValueKey('nav_item_home'));
@@ -190,8 +194,9 @@ void main() {
         findsNothing,
       );
 
-      // Add button is hidden on Home
-      expect(find.byKey(const ValueKey('nav_add_button')), findsNothing);
+      // Add and Exchange buttons are visible on Home
+      expect(find.byKey(const ValueKey('nav_add_button')), findsOneWidget);
+      expect(find.byKey(const ValueKey('nav_exchange_button')), findsOneWidget);
     });
   });
 }

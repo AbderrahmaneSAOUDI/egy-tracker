@@ -41,80 +41,96 @@ class HomeTabScreen extends StatelessWidget {
 
         return RefreshIndicator(
           onRefresh: viewModel.refresh,
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(12, 10, 12, 90),
+          child: Column(
             children: [
-              // ===================== SECTION 1: BALANCES CARD =====================
-              HomeBalancesCard(
-                myName: myName,
-                myPhotoUrl: myPhoto,
-                myEmail: user.email ?? '',
-                myUsd: viewModel.myUsdBalance,
-                myEgp: viewModel.myEgpBalance,
-                friendName: friendName,
-                friendPhotoUrl: friendPhoto,
-                friendEmail: friendEmail,
-                friendUsd: viewModel.friendUsdBalance,
-                friendEgp: viewModel.friendEgpBalance,
-              ),
-              const SizedBox(height: 10),
-
-              // ===================== SECTION 2: ANIMATED SEGMENTED FILTER =====================
-              SegmentedPillBar<HomeFeedFilter>(
-                selectedValue: viewModel.filter,
-                onValueChanged: viewModel.setFilter,
-                items: [
-                  SegmentedPillItem(
-                    value: HomeFeedFilter.all,
-                    label: 'All',
-                    count: viewModel.allActivities.length,
-                  ),
-                  SegmentedPillItem(
-                    value: HomeFeedFilter.mine,
-                    label: 'Mine',
-                    count: viewModel.mineActivities.length,
-                  ),
-                  SegmentedPillItem(
-                    value: HomeFeedFilter.shared,
-                    label: 'Shared',
-                    count: viewModel.sharedActivities.length,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-
-              // ===================== SECTION 3: ACTIVITY FEED OR EMPTY STATE =====================
-              if (activities.isEmpty)
-                EmptyState(
-                  icon: viewModel.filter == HomeFeedFilter.shared
-                      ? Icons.group_outlined
-                      : Icons.receipt_long_outlined,
-                  title: viewModel.filter == HomeFeedFilter.shared
-                      ? 'No shared activities'
-                      : (viewModel.filter == HomeFeedFilter.mine
-                          ? 'No personal activities'
-                          : 'No activity yet'),
-                  subtitle: 'Activities will appear here once recorded.',
-                )
-              else
-                ...activities.asMap().entries.map((entry) {
-                  final index = entry.key;
-                  final item = entry.value;
-                  return StaggeredItem(
-                    key: ValueKey('staggered_${item.id}'),
-                    index: index,
-                    child: ActivityTile(
-                      key: ValueKey('activity_${item.id}'),
-                      item: item,
-                      currentUserId: user.uid,
-                      currentUserEmail: user.email,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 10, 12, 0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // ===================== SECTION 1: BALANCES CARD =====================
+                    HomeBalancesCard(
+                      myName: myName,
+                      myPhotoUrl: myPhoto,
+                      myEmail: user.email ?? '',
+                      myUsd: viewModel.myUsdBalance,
+                      myEgp: viewModel.myEgpBalance,
                       friendName: friendName,
-                      isPrimaryUser: viewModel.isPrimaryUser,
-                      onEdit: () => _editItem(context, item),
-                      onDelete: () => _confirmDelete(context, item),
+                      friendPhotoUrl: friendPhoto,
+                      friendEmail: friendEmail,
+                      friendUsd: viewModel.friendUsdBalance,
+                      friendEgp: viewModel.friendEgpBalance,
                     ),
-                  );
-                }),
+                    const SizedBox(height: 10),
+
+                    // ===================== SECTION 2: ANIMATED SEGMENTED FILTER =====================
+                    SegmentedPillBar<HomeFeedFilter>(
+                      selectedValue: viewModel.filter,
+                      onValueChanged: viewModel.setFilter,
+                      items: [
+                        SegmentedPillItem(
+                          value: HomeFeedFilter.all,
+                          label: 'All',
+                          count: viewModel.allActivities.length,
+                        ),
+                        SegmentedPillItem(
+                          value: HomeFeedFilter.mine,
+                          label: 'Mine',
+                          count: viewModel.mineActivities.length,
+                        ),
+                        SegmentedPillItem(
+                          value: HomeFeedFilter.shared,
+                          label: 'Shared',
+                          count: viewModel.sharedActivities.length,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                  ],
+                ),
+              ),
+
+              // ===================== SECTION 3: SCROLLABLE ITEMS LIST CONTAINER =====================
+              Expanded(
+                child: activities.isEmpty
+                    ? SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        padding: const EdgeInsets.fromLTRB(12, 0, 12, 90),
+                        child: EmptyState(
+                          icon: viewModel.filter == HomeFeedFilter.shared
+                              ? Icons.group_outlined
+                              : Icons.receipt_long_outlined,
+                          title: viewModel.filter == HomeFeedFilter.shared
+                              ? 'No shared activities'
+                              : (viewModel.filter == HomeFeedFilter.mine
+                                  ? 'No personal activities'
+                                  : 'No activity yet'),
+                          subtitle: 'Activities will appear here once recorded.',
+                        ),
+                      )
+                    : ListView.builder(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        padding: const EdgeInsets.fromLTRB(12, 0, 12, 90),
+                        itemCount: activities.length,
+                        itemBuilder: (context, index) {
+                          final item = activities[index];
+                          return StaggeredItem(
+                            key: ValueKey('staggered_${item.id}'),
+                            index: index,
+                            child: ActivityTile(
+                              key: ValueKey('activity_${item.id}'),
+                              item: item,
+                              currentUserId: user.uid,
+                              currentUserEmail: user.email,
+                              friendName: friendName,
+                              isPrimaryUser: viewModel.isPrimaryUser,
+                              onEdit: () => _editItem(context, item),
+                              onDelete: () => _confirmDelete(context, item),
+                            ),
+                          );
+                        },
+                      ),
+              ),
             ],
           ),
         );
