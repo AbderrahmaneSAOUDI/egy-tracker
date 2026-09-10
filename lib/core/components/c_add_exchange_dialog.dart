@@ -148,6 +148,7 @@ Future<void> showAddExchangeDialog({
                     // Amount Given (with owned money validation)
                     TextFormField(
                       controller: fromAmountController,
+                      textAlign: TextAlign.right,
                       keyboardType: const TextInputType.numberWithOptions(
                           decimal: true),
                       inputFormatters: [
@@ -190,6 +191,7 @@ Future<void> showAddExchangeDialog({
                     // Amount Received
                     TextFormField(
                       controller: toAmountController,
+                      textAlign: TextAlign.right,
                       keyboardType: const TextInputType.numberWithOptions(
                           decimal: true),
                       inputFormatters: [

@@ -234,6 +234,7 @@ Future<void> showBorrowDialog({
                     // USD Field
                     TextFormField(
                       controller: usdController,
+                      textAlign: TextAlign.right,
                       keyboardType:
                           const TextInputType.numberWithOptions(decimal: true),
                       inputFormatters: [
@@ -270,6 +271,7 @@ Future<void> showBorrowDialog({
                     // EGP Field
                     TextFormField(
                       controller: egpController,
+                      textAlign: TextAlign.right,
                       keyboardType:
                           const TextInputType.numberWithOptions(decimal: true),
                       inputFormatters: [

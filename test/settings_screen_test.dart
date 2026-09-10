@@ -158,6 +158,11 @@ void main() {
 
       // Check Theme Mode Card header
       expect(find.text('Theme Mode'), findsOneWidget);
+
+      // Expand Theme Mode card
+      await tester.tap(find.text('Theme Mode'));
+      await tester.pumpAndSettle();
+
       expect(find.text('Light'), findsOneWidget);
       expect(find.text('Dark'), findsOneWidget);
       expect(find.text('Auto'), findsOneWidget);
@@ -187,6 +192,11 @@ void main() {
       await tester.pump();
 
       expect(find.text('Allowed Emails'), findsOneWidget);
+
+      // Expand Allowed Emails card
+      await tester.tap(find.text('Allowed Emails'));
+      await tester.pumpAndSettle();
+
       expect(find.text('No allowed emails yet'), findsOneWidget);
     });
 
@@ -206,6 +216,10 @@ void main() {
         ),
       ]);
       await tester.pump();
+
+      // Expand Allowed Emails card
+      await tester.tap(find.text('Allowed Emails'));
+      await tester.pumpAndSettle();
 
       expect(find.text('abderrahmane.saoudi.26@gmail.com'), findsNWidgets(3));
       expect(find.text('friend@example.com'), findsWidgets);
@@ -263,6 +277,10 @@ void main() {
         ),
       ]);
       await tester.pump();
+
+      // Expand Allowed Emails card
+      await tester.tap(find.text('Allowed Emails'));
+      await tester.pumpAndSettle();
 
       // Find delete button
       final deleteBtn = find.byTooltip('Remove');
@@ -328,6 +346,10 @@ void main() {
       expect(find.text('Theme Mode'), findsOneWidget);
       expect(find.text('Settings'), findsOneWidget); // Nav item
 
+      // Expand Theme Mode card
+      await tester.tap(find.text('Theme Mode'));
+      await tester.pumpAndSettle();
+
       // Now toggle theme to Dark from within the Settings card
       await tester.tap(find.text('Dark'));
       await tester.pumpAndSettle();
@@ -381,6 +403,11 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Initial Balances'), findsOneWidget);
+
+      // Expand Initial Balances card
+      await tester.tap(find.text('Initial Balances'));
+      await tester.pumpAndSettle();
+
       expect(find.text('\$150'), findsOneWidget);
       expect(find.text('0 EGP'), findsOneWidget);
       expect(find.text('\$200'), findsOneWidget);
@@ -393,6 +420,10 @@ void main() {
       await tester.pumpWidget(createWidget());
       firestoreService.emitEmails([]);
       firestoreService.emitBalances([]);
+      await tester.pumpAndSettle();
+
+      // Expand Initial Balances card
+      await tester.tap(find.text('Initial Balances'));
       await tester.pumpAndSettle();
 
       final editYouBtn = find.byKey(const ValueKey('edit_balance_you'));
@@ -431,6 +462,10 @@ void main() {
       await tester.pumpWidget(createWidget());
       firestoreService.emitEmails([]);
       firestoreService.emitBalances([]);
+      await tester.pumpAndSettle();
+
+      // Expand Trip Data & Reset card
+      await tester.tap(find.text('Trip Data & Reset'));
       await tester.pumpAndSettle();
 
       final deleteBtn = find.byKey(const ValueKey('delete_all_data_button'));

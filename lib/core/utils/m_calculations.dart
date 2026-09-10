@@ -24,6 +24,7 @@ class Calculations {
     required List<Expense> expenses,
     List<Borrow> borrows = const [],
     String? userEmail,
+    bool isPrimaryUser = true,
   }) {
     final normCurrency = currency.toUpperCase().trim();
     double balance = 0.0;
@@ -59,11 +60,28 @@ class Calculations {
       }
     }
 
-    // 3. Expenses: Physical cash subtracted strictly from the payer
+    // 3. Expenses: Physical cash subtracted strictly according to split percentage or single payer
     for (final expense in expenses) {
-      if (expense.currency.toUpperCase().trim() == normCurrency &&
-          matchesUser(expense.paidBy)) {
-        balance -= expense.amount;
+      if (expense.currency.toUpperCase().trim() != normCurrency) continue;
+
+      final isSplit = (expense.splitType == 'fifty_fifty') ||
+          (expense.splitType == 'custom' &&
+              expense.mePercentage > 0 &&
+              expense.friendPercentage > 0);
+
+      if (isSplit) {
+        if (expense.splitType == 'fifty_fifty') {
+          balance -= expense.amount * 0.5;
+        } else {
+          final pct = isPrimaryUser
+              ? expense.mePercentage
+              : expense.friendPercentage;
+          balance -= expense.amount * (pct / 100.0);
+        }
+      } else {
+        if (matchesUser(expense.paidBy)) {
+          balance -= expense.amount;
+        }
       }
     }
 

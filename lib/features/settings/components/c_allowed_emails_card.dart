@@ -31,6 +31,8 @@ class AllowedEmailsCard extends StatelessWidget {
       icon: Icons.shield_rounded,
       iconColor: isDark ? AppTheme.googleBlueDark : AppTheme.googleBlue,
       title: 'Allowed Emails',
+      isCollapsible: true,
+      initiallyExpanded: false,
       trailing: FilledButton.icon(
         onPressed: () => showAddEmailDialog(
           context: context,

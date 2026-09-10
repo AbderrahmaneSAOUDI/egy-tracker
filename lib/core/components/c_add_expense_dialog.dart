@@ -74,21 +74,61 @@ Future<void> showAddExpenseDialog({
           // Payer ID calculation: friend if friend mode, otherwise current user
           final actualPayerId = paidByMode == 'friend' ? friendId : currentUserId;
 
-          // Available balance for the actual payer
-          final isMePayer = actualPayerId == currentUserId;
-          final availableCash = isMePayer
-              ? (selectedCurrency == 'USD' ? myUsdBalance : myEgpBalance)
-              : (selectedCurrency == 'USD' ? friendUsdBalance : friendEgpBalance);
+          // Available balance for the actual payer or split shares
+          final enteredAmount = double.tryParse(amountController.text.trim()) ?? 0.0;
+          final myAvailableCash = selectedCurrency == 'USD' ? myUsdBalance : myEgpBalance;
+          final friendAvailableCash = selectedCurrency == 'USD' ? friendUsdBalance : friendEgpBalance;
 
-          final effectiveAvailable = availableCash +
+          final effectiveMyAvailable = myAvailableCash +
               (initialExpense != null &&
-                      initialExpense.paidBy == actualPayerId &&
                       initialExpense.currency == selectedCurrency
-                  ? initialExpense.amount
+                  ? (initialExpense.splitType == 'fifty_fifty'
+                      ? initialExpense.amount * 0.5
+                      : (initialExpense.splitType == 'custom'
+                          ? initialExpense.amount * ((isPrimaryUser ? initialExpense.mePercentage : initialExpense.friendPercentage) / 100.0)
+                          : (initialExpense.paidBy == currentUserId ? initialExpense.amount : 0.0)))
                   : 0.0);
 
-          final enteredAmount = double.tryParse(amountController.text.trim()) ?? 0.0;
-          final isOverBudget = enteredAmount > 0 && enteredAmount > effectiveAvailable;
+          final effectiveFriendAvailable = friendAvailableCash +
+              (initialExpense != null &&
+                      initialExpense.currency == selectedCurrency
+                  ? (initialExpense.splitType == 'fifty_fifty'
+                      ? initialExpense.amount * 0.5
+                      : (initialExpense.splitType == 'custom'
+                          ? initialExpense.amount * ((isPrimaryUser ? initialExpense.friendPercentage : initialExpense.mePercentage) / 100.0)
+                          : (initialExpense.paidBy == friendId ? initialExpense.amount : 0.0)))
+                  : 0.0);
+
+          bool isOverBudget = false;
+          String overBudgetWarning = '';
+
+          if (paidByMode == 'both') {
+            final myShare = sharedSplitType == 'fifty_fifty'
+                ? enteredAmount * 0.5
+                : enteredAmount * (customMePercentage / 100.0);
+            final friendShare = sharedSplitType == 'fifty_fifty'
+                ? enteredAmount * 0.5
+                : enteredAmount * (customFriendPercentage / 100.0);
+
+            if (enteredAmount > 0 && myShare > effectiveMyAvailable) {
+              isOverBudget = true;
+              overBudgetWarning = 'Your share (${Formatters.formatCurrency(myShare, selectedCurrency)}) exceeds available cash (${Formatters.formatCurrency(effectiveMyAvailable, selectedCurrency)}).';
+            } else if (enteredAmount > 0 && friendAvailableCash > 0 && friendShare > effectiveFriendAvailable) {
+              isOverBudget = true;
+              overBudgetWarning = '$friendName\'s share (${Formatters.formatCurrency(friendShare, selectedCurrency)}) exceeds available cash (${Formatters.formatCurrency(effectiveFriendAvailable, selectedCurrency)}).';
+            }
+          } else if (paidByMode == 'you') {
+            if (enteredAmount > 0 && enteredAmount > effectiveMyAvailable) {
+              isOverBudget = true;
+              overBudgetWarning = 'Amount exceeds available cash (${Formatters.formatCurrency(effectiveMyAvailable, selectedCurrency)}). You may need to exchange or borrow currency.';
+            }
+          } else {
+            if (enteredAmount > 0 && friendAvailableCash > 0 && enteredAmount > effectiveFriendAvailable) {
+              isOverBudget = true;
+              overBudgetWarning = 'Amount exceeds $friendName\'s available cash (${Formatters.formatCurrency(effectiveFriendAvailable, selectedCurrency)}).';
+            }
+          }
+
           final hasTitle = titleController.text.trim().isNotEmpty;
           final isCustomSplitValid = paidByMode != 'both' ||
               sharedSplitType != 'custom' ||
@@ -210,6 +250,7 @@ Future<void> showAddExpenseDialog({
                             flex: 3,
                             child: TextFormField(
                               controller: amountController,
+                              textAlign: TextAlign.right,
                               keyboardType: const TextInputType.numberWithOptions(
                                   decimal: true),
                               inputFormatters: [
@@ -305,7 +346,7 @@ Future<void> showAddExpenseDialog({
                               const SizedBox(width: 6),
                               Expanded(
                                 child: Text(
-                                  'Amount exceeds available cash (${Formatters.formatCurrency(effectiveAvailable, selectedCurrency)}). You may need to exchange or borrow currency.',
+                                  overBudgetWarning,
                                   style: TextStyle(
                                     fontSize: 11,
                                     color: isDark

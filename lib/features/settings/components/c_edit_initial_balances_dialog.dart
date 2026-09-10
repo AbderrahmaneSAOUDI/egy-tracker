@@ -104,6 +104,7 @@ Future<void> showEditInitialBalancesDialog({
                   // USD Input
                   TextFormField(
                     controller: usdController,
+                    textAlign: TextAlign.right,
                     keyboardType:
                         const TextInputType.numberWithOptions(decimal: true),
                     enabled: !isSubmitting,
@@ -159,6 +160,7 @@ Future<void> showEditInitialBalancesDialog({
                   // EGP Input
                   TextFormField(
                     controller: egpController,
+                    textAlign: TextAlign.right,
                     keyboardType:
                         const TextInputType.numberWithOptions(decimal: true),
                     enabled: !isSubmitting,

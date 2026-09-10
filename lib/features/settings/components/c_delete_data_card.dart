@@ -24,6 +24,8 @@ class DeleteDataCard extends StatelessWidget {
       iconColor: colorScheme.error,
       borderColor: colorScheme.error.withValues(alpha: isDark ? 0.35 : 0.25),
       title: 'Trip Data & Reset',
+      isCollapsible: true,
+      initiallyExpanded: false,
       child: DangerButton(
         key: const ValueKey('delete_all_data_button'),
         label: 'Delete all data',

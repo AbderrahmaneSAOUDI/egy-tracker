@@ -71,6 +71,15 @@ class TravelerBalanceCard extends StatelessWidget {
                   : const Color(0xFFEDE9FE)),
           width: 1.2,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: isDark
+                ? Colors.black.withValues(alpha: 0.35)
+                : accentColor.withValues(alpha: 0.06),
+            blurRadius: 14,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       child: Column(
@@ -191,7 +200,7 @@ class TravelerBalanceCard extends StatelessWidget {
     required String keyPrefix,
   }) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         // Currency code header pill
         Row(
@@ -225,32 +234,36 @@ class TravelerBalanceCard extends StatelessWidget {
         ),
         const SizedBox(height: 6),
 
-        // Big Prominent Balance Number
-        FittedBox(
-          fit: BoxFit.scaleDown,
-          alignment: Alignment.centerLeft,
-          child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 280),
-            transitionBuilder: (child, animation) => FadeTransition(
-              opacity: animation,
-              child: SlideTransition(
-                position: Tween<Offset>(
-                  begin: const Offset(0, 0.2),
-                  end: Offset.zero,
-                ).animate(animation),
-                child: child,
+        // Big Prominent Balance Number (Right-Aligned)
+        Align(
+          alignment: Alignment.centerRight,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerRight,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 280),
+              transitionBuilder: (child, animation) => FadeTransition(
+                opacity: animation,
+                child: SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(0, 0.2),
+                    end: Offset.zero,
+                  ).animate(animation),
+                  child: child,
+                ),
               ),
-            ),
-            child: Text(
-              amountFormatted,
-              key: ValueKey('${keyPrefix}_$amountFormatted'),
-              style: TextStyle(
-                fontSize: 23,
-                fontWeight: FontWeight.w900,
-                letterSpacing: -0.6,
-                color: color,
+              child: Text(
+                amountFormatted,
+                key: ValueKey('${keyPrefix}_$amountFormatted'),
+                textAlign: TextAlign.right,
+                style: TextStyle(
+                  fontSize: 23,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: -0.6,
+                  color: color,
+                ),
+                maxLines: 1,
               ),
-              maxLines: 1,
             ),
           ),
         ),

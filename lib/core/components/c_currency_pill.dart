@@ -44,12 +44,16 @@ class CurrencyPill extends StatelessWidget {
               letterSpacing: 0.3,
             ),
           ),
-          Text(
-            formattedAmount,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.bold,
-              color: currencyColor,
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              formattedAmount,
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.bold,
+                color: currencyColor,
+              ),
             ),
           ),
         ],

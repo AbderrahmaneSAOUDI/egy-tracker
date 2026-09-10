@@ -42,6 +42,19 @@ class ActionIconButton extends StatelessWidget {
               color: effectiveColor.withValues(alpha: 0.25),
               width: 1,
             ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+              if (isDark)
+                BoxShadow(
+                  color: Colors.white.withValues(alpha: 0.04),
+                  blurRadius: 0,
+                  offset: const Offset(0, -0.5),
+                ),
+            ],
           ),
           child: Icon(
             icon,

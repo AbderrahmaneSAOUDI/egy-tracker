@@ -31,6 +31,8 @@ class InitialBalancesCard extends StatelessWidget {
       icon: Icons.account_balance_wallet_rounded,
       iconColor: isDark ? AppTheme.usdColorDark : AppTheme.usdColorLight,
       title: 'Initial Balances',
+      isCollapsible: true,
+      initiallyExpanded: false,
       child: StreamBuilder<List<InitialBalance>>(
         stream: viewModel.initialBalancesStream,
         builder: (context, balancesSnap) {
@@ -85,11 +87,9 @@ class InitialBalancesCard extends StatelessWidget {
                   }
 
                   InitialBalance? friendBalance;
-                  String? friendUserId;
                   String? friendDisplayName;
                   if (friendEmailDoc != null) {
                     final fe = friendEmailDoc.email.toLowerCase().trim();
-                    friendUserId = friendProfile?.id ?? fe;
                     friendDisplayName = (friendProfile != null &&
                             friendProfile.name.isNotEmpty)
                         ? friendProfile.name
@@ -128,7 +128,7 @@ class InitialBalancesCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 10),
 
-                      // 2. Friend Starting Balance Item
+                      // 2. Friend Starting Balance Item (read-only for current user)
                       if (friendEmailDoc != null)
                         BalanceUserCard(
                           isCurrentUser: false,
@@ -137,14 +137,7 @@ class InitialBalancesCard extends StatelessWidget {
                           photoUrl: friendProfile?.photoUrl,
                           usdAmount: friendBalance?.usdAmount ?? 0.0,
                           egpAmount: friendBalance?.egpAmount ?? 0.0,
-                          onEdit: () => showEditInitialBalancesDialog(
-                            context: context,
-                            userId: friendUserId!,
-                            userName: friendDisplayName!,
-                            currentUsd: friendBalance?.usdAmount ?? 0.0,
-                            currentEgp: friendBalance?.egpAmount ?? 0.0,
-                            onSave: viewModel.setInitialBalances,
-                          ),
+                          onEdit: null,
                         )
                       else
                         Container(
