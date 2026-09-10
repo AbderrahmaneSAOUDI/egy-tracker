@@ -13,6 +13,7 @@ import 'c_slide_action_card.dart';
 class ActivityTile extends StatefulWidget {
   final ActivityItem item;
   final String currentUserId;
+  final String? currentUserEmail;
   final String? friendName;
   final double? personalShare;
   final bool isMyTrackerView;
@@ -24,6 +25,7 @@ class ActivityTile extends StatefulWidget {
     super.key,
     required this.item,
     required this.currentUserId,
+    this.currentUserEmail,
     this.friendName,
     this.personalShare,
     this.isMyTrackerView = false,
@@ -139,8 +141,11 @@ class _ActivityTileState extends State<ActivityTile>
         ? (isDark ? AppTheme.usdColorDark : AppTheme.usdColorLight)
         : (isDark ? AppTheme.egpColorDark : AppTheme.egpColorLight);
 
-    final isPaidByMe = expense.paidBy == currentUserId;
-    final payerLabel = isPaidByMe ? 'Paid by You' : 'Paid by ${friendName ?? "Friend"}';
+    final payerId = expense.paidBy.toLowerCase().trim();
+    final isPaidByMe = payerId == widget.currentUserId.toLowerCase().trim() ||
+        (widget.currentUserEmail != null &&
+            payerId == widget.currentUserEmail!.toLowerCase().trim());
+    final payerLabel = isPaidByMe ? 'Paid by You' : 'Paid by ${widget.friendName ?? "Friend"}';
 
     final myPct = isPrimaryUser ? expense.mePercentage : expense.friendPercentage;
     final friendPct = isPrimaryUser ? expense.friendPercentage : expense.mePercentage;
@@ -370,10 +375,13 @@ class _ActivityTileState extends State<ActivityTile>
 
   Widget _buildBorrowTile(BuildContext context, bool isDark) {
     final borrow = item.borrow!;
-    final isBorrower = borrow.borrowerId == currentUserId;
+    final borrowerId = borrow.borrowerId.toLowerCase().trim();
+    final isBorrower = borrowerId == widget.currentUserId.toLowerCase().trim() ||
+        (widget.currentUserEmail != null &&
+            borrowerId == widget.currentUserEmail!.toLowerCase().trim());
     final borrowColor = isDark ? AppTheme.googleYellowDark : AppTheme.googleYellow;
 
-    final name = friendName ?? 'Friend';
+    final name = widget.friendName ?? 'Friend';
     final actionTitle = isBorrower ? 'Borrowed from $name' : 'Lent to $name';
 
     final List<String> amounts = [];

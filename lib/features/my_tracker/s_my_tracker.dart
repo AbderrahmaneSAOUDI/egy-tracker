@@ -140,6 +140,7 @@ class _MyTrackerScreenState extends State<MyTrackerScreen> {
                     key: ValueKey('tracker_exp_${exp.id}'),
                     item: ActivityItem.expense(exp),
                     currentUserId: widget.user.uid,
+                    currentUserEmail: widget.user.email,
                     friendName: friendName,
                     personalShare: share,
                     isMyTrackerView: true,

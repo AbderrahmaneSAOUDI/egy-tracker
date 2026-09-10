@@ -21,5 +21,9 @@ service cloud.firestore {
     match /exchanges/{exchangeId} {
       allow read, write: if true;
     }
+
+    match /borrows/{borrowId} {
+      allow read, write: if true;
+    }
   }
 }

@@ -175,8 +175,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     currentUserId: widget.user.uid,
                     currentUserName:
                         _homeFeedViewModel.myProfile?.name ?? 'You',
+                    currentUserEmail: widget.user.email,
                     friendUserId: friendId,
                     friendUserName: friendName,
+                    myUsdBalance: _homeFeedViewModel.myUsdBalance,
+                    myEgpBalance: _homeFeedViewModel.myEgpBalance,
                     friendUsdBalance: _homeFeedViewModel.friendUsdBalance,
                     friendEgpBalance: _homeFeedViewModel.friendEgpBalance,
                     onSave: _homeFeedViewModel.addBorrow,

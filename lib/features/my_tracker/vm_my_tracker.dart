@@ -171,6 +171,7 @@ class MyTrackerViewModel extends ChangeNotifier {
         exchanges: exchanges,
         expenses: expenses,
         borrows: borrows,
+        userEmail: user.email,
       );
 
   /// Calculates the current user's physical cash balance in EGP.
@@ -181,6 +182,7 @@ class MyTrackerViewModel extends ChangeNotifier {
         exchanges: exchanges,
         expenses: expenses,
         borrows: borrows,
+        userEmail: user.email,
       );
 
   /// Returns the user's split percentage for a given [expense].
