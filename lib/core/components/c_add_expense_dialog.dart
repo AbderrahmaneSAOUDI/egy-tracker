@@ -25,6 +25,7 @@ Future<void> showAddExpenseDialog({
   required String currentUserName,
   String? friendUserId,
   String? friendUserName,
+  String? friendUserEmail,
   double myUsdBalance = 0.0,
   double myEgpBalance = 0.0,
   double friendUsdBalance = 0.0,
@@ -38,7 +39,7 @@ Future<void> showAddExpenseDialog({
     text: initialExpense != null ? initialExpense.amount.toStringAsFixed(2) : '',
   );
 
-  final friendId = friendUserId ?? 'friend';
+  final friendId = friendUserId ?? (friendUserEmail?.trim().isNotEmpty == true ? friendUserEmail!.trim() : 'friend');
   final friendName = friendUserName ?? 'Friend';
 
   await showAnimatedDialog<void>(

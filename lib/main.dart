@@ -16,6 +16,7 @@ void main() async {
   final authService = AuthService();
   await authService.tryRestoreSession();
   final firestoreService = FirestoreService();
+  await AppTheme.initTheme();
 
   runApp(
     MyApp(
@@ -26,13 +27,13 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final AuthService? authService;
-  final FirestoreService? firestoreService;
+  final AuthService authService;
+  final FirestoreService firestoreService;
 
   const MyApp({
     super.key,
-    this.authService,
-    this.firestoreService,
+    required this.authService,
+    required this.firestoreService,
   });
 
   @override
@@ -46,16 +47,10 @@ class MyApp extends StatelessWidget {
           darkTheme: AppTheme.darkTheme,
           themeMode: themeMode,
           debugShowCheckedModeBanner: false,
-          home: authService != null && firestoreService != null
-              ? AuthGate(
-                  authService: authService!,
-                  firestoreService: firestoreService!,
-                )
-              : const Scaffold(
-                  body: Center(
-                    child: Text('egy_tracker'),
-                  ),
-                ),
+          home: AuthGate(
+            authService: authService,
+            firestoreService: firestoreService,
+          ),
         );
       },
     );

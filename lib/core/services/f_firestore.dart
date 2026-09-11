@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import '../config/app_config.dart';
 import '../models/mod_allowed_email.dart';
 import '../models/mod_borrow.dart';
@@ -32,7 +33,14 @@ class FirestoreService extends FirestoreServiceBase
         FirestorePurgeMixin {
   final FirebaseFirestore? _customFirestore;
 
-  FirestoreService({FirebaseFirestore? firestore}) : _customFirestore = firestore;
+  FirestoreService({FirebaseFirestore? firestore}) : _customFirestore = firestore {
+    try {
+      _firestore.settings = const Settings(
+        persistenceEnabled: true,
+        cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
+      );
+    } catch (_) {}
+  }
 
   @override
   FirebaseFirestore get _firestore => _customFirestore ?? FirebaseFirestore.instance;

@@ -56,7 +56,7 @@ Widget buildExchangeTile({
               ),
               const SizedBox(height: 3),
               Text(
-                '$userLabel · Rate: ${exchange.exchangeRate.toStringAsFixed(2)}',
+                '$userLabel · Rate: ${exchange.exchangeRate.isFinite ? exchange.exchangeRate.toStringAsFixed(2) : '-'}',
                 style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
                 overflow: TextOverflow.ellipsis,
               ),

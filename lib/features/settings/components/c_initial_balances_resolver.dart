@@ -11,6 +11,7 @@ class InitialBalancesData {
   final UserProfile? friendProfile;
   final InitialBalance? friendBalance;
   final String? friendDisplayName;
+  final String? friendUserId;
 
   const InitialBalancesData({
     this.myBalance,
@@ -19,6 +20,7 @@ class InitialBalancesData {
     this.friendProfile,
     this.friendBalance,
     this.friendDisplayName,
+    this.friendUserId,
   });
 
   static InitialBalancesData resolve({
@@ -80,6 +82,9 @@ class InitialBalancesData {
       }
     }
 
+    final friendUserId =
+        friendProfile?.id ?? friendEmailDoc?.email.toLowerCase().trim();
+
     return InitialBalancesData(
       myBalance: myBalance,
       myProfile: myProfile,
@@ -87,6 +92,7 @@ class InitialBalancesData {
       friendProfile: friendProfile,
       friendBalance: friendBalance,
       friendDisplayName: friendDisplayName,
+      friendUserId: friendUserId,
     );
   }
 }

@@ -1,3 +1,5 @@
+import '../utils/m_formatters.dart';
+
 class Expense {
   final String id;
   final String title;
@@ -52,12 +54,8 @@ class Expense {
       splitType: map['split_type'] as String? ?? 'default_100',
       mePercentage: (map['me_percentage'] as num?)?.toDouble() ?? 100.0,
       friendPercentage: (map['friend_percentage'] as num?)?.toDouble() ?? 0.0,
-      date: map['date'] != null
-          ? DateTime.tryParse(map['date'] as String) ?? DateTime.now()
-          : DateTime.now(),
-      createdAt: map['created_at'] != null
-          ? DateTime.tryParse(map['created_at'] as String) ?? DateTime.now()
-          : DateTime.now(),
+      date: Formatters.parseDate(map['date']),
+      createdAt: Formatters.parseDate(map['created_at']),
       createdBy: map['created_by'] as String? ?? '',
     );
   }

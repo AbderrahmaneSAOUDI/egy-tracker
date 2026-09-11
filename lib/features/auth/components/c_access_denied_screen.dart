@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 class AccessDeniedScreen extends StatelessWidget {
   final String email;
   final VoidCallback onSignOut;
+  final VoidCallback? onRetry;
 
   const AccessDeniedScreen({
     super.key,
     required this.email,
     required this.onSignOut,
+    this.onRetry,
   });
 
   @override
@@ -50,6 +52,17 @@ class AccessDeniedScreen extends StatelessWidget {
                   style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.outline),
                 ),
                 const SizedBox(height: 32),
+                if (onRetry != null) ...[
+                  SizedBox(
+                    width: double.infinity,
+                    child: FilledButton.icon(
+                      onPressed: onRetry,
+                      icon: const Icon(Icons.refresh_rounded),
+                      label: const Text('Check Authorization Again'),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                ],
                 SizedBox(
                   width: double.infinity,
                   child: OutlinedButton.icon(

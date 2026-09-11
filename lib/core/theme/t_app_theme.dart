@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 't_button_input_themes.dart';
 import 't_palette.dart';
 import 't_surface_themes.dart';
@@ -12,11 +13,28 @@ export 't_surface_themes.dart';
 class AppTheme {
   AppTheme._();
 
+  static const String _themePrefKey = 'user_theme_mode_pref';
+  static SharedPreferences? _prefs;
+
   static final ValueNotifier<ThemeMode> themeModeNotifier =
       ValueNotifier<ThemeMode>(ThemeMode.system);
 
+  static Future<void> initTheme([SharedPreferences? prefs]) async {
+    try {
+      _prefs = prefs ?? await SharedPreferences.getInstance();
+      final savedMode = _prefs?.getString(_themePrefKey);
+      if (savedMode != null) {
+        themeModeNotifier.value = ThemeMode.values.firstWhere(
+          (m) => m.name == savedMode,
+          orElse: () => ThemeMode.system,
+        );
+      }
+    } catch (_) {}
+  }
+
   static void setThemeMode(ThemeMode mode) {
     themeModeNotifier.value = mode;
+    _prefs?.setString(_themePrefKey, mode.name);
   }
 
   // Backward-compatible palette aliases

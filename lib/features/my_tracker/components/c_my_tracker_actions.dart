@@ -17,6 +17,7 @@ class MyTrackerActions {
         viewModel.friendProfile?.id ?? viewModel.friendEmailDoc?.email;
     final friendName =
         viewModel.friendProfile?.name ?? viewModel.friendEmailDoc?.email;
+    final friendEmail = viewModel.friendEmailDoc?.email;
 
     showAddExpenseDialog(
       context: context,
@@ -24,6 +25,7 @@ class MyTrackerActions {
       currentUserName: viewModel.myProfile?.name ?? 'You',
       friendUserId: friendId,
       friendUserName: friendName,
+      friendUserEmail: friendEmail,
       myUsdBalance: viewModel.myUsdBalance,
       myEgpBalance: viewModel.myEgpBalance,
       friendUsdBalance: 0.0,

@@ -27,11 +27,18 @@ class AuthWhitelistGate extends StatefulWidget {
 
 class _AuthWhitelistGateState extends State<AuthWhitelistGate> {
   late Future<bool> _whitelistFuture;
+  bool _hasSyncedProfile = false;
 
   @override
   void initState() {
     super.initState();
     _whitelistFuture = widget.firestoreService.isEmailAllowed(widget.user.email ?? '');
+  }
+
+  void _retryCheck() {
+    setState(() {
+      _whitelistFuture = widget.firestoreService.isEmailAllowed(widget.user.email ?? '');
+    });
   }
 
   void _syncProfile() {
@@ -83,7 +90,10 @@ class _AuthWhitelistGateState extends State<AuthWhitelistGate> {
         }
 
         if (isAllowed) {
-          _syncProfile();
+          if (!_hasSyncedProfile) {
+            _hasSyncedProfile = true;
+            _syncProfile();
+          }
           return HomeScreen(
             key: const PageStorageKey('home_screen_root'),
             user: widget.user,
@@ -95,6 +105,7 @@ class _AuthWhitelistGateState extends State<AuthWhitelistGate> {
         return AccessDeniedScreen(
           email: widget.user.email ?? '',
           onSignOut: () => widget.authService.signOut(),
+          onRetry: _retryCheck,
         );
       },
     );

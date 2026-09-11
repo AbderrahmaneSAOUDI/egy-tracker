@@ -1,3 +1,5 @@
+import '../utils/m_formatters.dart';
+
 class Exchange {
   final String id;
   final String userId;
@@ -46,12 +48,8 @@ class Exchange {
       toCurrency: map['to_currency'] as String? ?? 'EGP',
       toAmount: (map['to_amount'] as num?)?.toDouble() ?? 0.0,
       exchangeRate: (map['exchange_rate'] as num?)?.toDouble() ?? 1.0,
-      date: map['date'] != null
-          ? DateTime.tryParse(map['date'] as String) ?? DateTime.now()
-          : DateTime.now(),
-      createdAt: map['created_at'] != null
-          ? DateTime.tryParse(map['created_at'] as String) ?? DateTime.now()
-          : DateTime.now(),
+      date: Formatters.parseDate(map['date']),
+      createdAt: Formatters.parseDate(map['created_at']),
     );
   }
 }

@@ -31,6 +31,7 @@ class ExpenseDialogFields extends StatelessWidget {
       children: [
         TextFormField(
           controller: titleController,
+          autofocus: true,
           textCapitalization: TextCapitalization.sentences,
           enabled: !isSubmitting,
           decoration: const InputDecoration(

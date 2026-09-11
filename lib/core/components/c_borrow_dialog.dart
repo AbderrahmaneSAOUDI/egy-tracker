@@ -22,6 +22,7 @@ Future<void> showBorrowDialog({
   String? currentUserEmail,
   String? friendUserId,
   String? friendUserName,
+  String? friendUserEmail,
   double myUsdBalance = 0.0,
   double myEgpBalance = 0.0,
   double friendUsdBalance = 0.0,
@@ -40,7 +41,7 @@ Future<void> showBorrowDialog({
         : '',
   );
 
-  final friendId = friendUserId ?? 'friend';
+  final friendId = friendUserId ?? (friendUserEmail?.trim().isNotEmpty == true ? friendUserEmail!.trim() : 'friend');
   final friendName = friendUserName ?? 'Friend';
 
   await showAnimatedDialog<void>(

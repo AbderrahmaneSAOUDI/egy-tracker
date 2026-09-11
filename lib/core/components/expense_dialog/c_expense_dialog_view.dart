@@ -39,12 +39,21 @@ class _ExpenseDialogViewState extends State<ExpenseDialogView> {
     _selectedDate = exp?.date ?? DateTime.now();
   }
 
-  void _submit() => ExpenseSubmitHandler.submit(
-        context: context, params: p, formKey: _formKey,
-        selectedCurrency: _currency, paidBy: _paidBy, splitType: _splitType,
-        customMePercentage: _customMePct, customFriendPercentage: _customFriendPct,
-        selectedDate: _selectedDate, setSubmitting: (val) => setState(() => _isSubmitting = val),
-      );
+  void _submit() {
+    if (_isSubmitting) return;
+    ExpenseSubmitHandler.submit(
+      context: context,
+      params: p,
+      formKey: _formKey,
+      selectedCurrency: _currency,
+      paidBy: _paidBy,
+      splitType: _splitType,
+      customMePercentage: _customMePct,
+      customFriendPercentage: _customFriendPct,
+      selectedDate: _selectedDate,
+      setSubmitting: (val) => setState(() => _isSubmitting = val),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

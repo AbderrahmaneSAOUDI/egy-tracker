@@ -9,6 +9,9 @@ mixin FirestoreExpensesMixin on FirestoreServiceBase {
             .toList();
         list.sort((a, b) => b.date.compareTo(a.date));
         return list;
+      }).handleError((error) {
+        debugPrint('Firestore expenses stream error: $error');
+        return <Expense>[];
       });
     } catch (_) {
       return const Stream.empty();

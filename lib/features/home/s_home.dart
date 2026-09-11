@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'components/c_home_nav_bar.dart';
 import 'components/c_home_tab_stack.dart';
 import '../../core/services/f_auth.dart';
@@ -87,7 +88,10 @@ class _HomeScreenState extends State<HomeScreen> {
             selectedIndex: selectedIndex,
             currentUserId: widget.user.uid,
             feedViewModel: _homeFeedViewModel,
-            onDestinationSelected: _viewModel.selectTab,
+            onDestinationSelected: (index) {
+              HapticFeedback.selectionClick();
+              _viewModel.selectTab(index);
+            },
           ),
         );
       },

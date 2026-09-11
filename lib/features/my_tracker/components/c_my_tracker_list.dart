@@ -25,7 +25,10 @@ class MyTrackerExpenseList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (expenses.isEmpty) {
+    final exchanges = viewModel.myExchanges;
+    final totalCount = expenses.length + exchanges.length;
+
+    if (totalCount == 0) {
       return const SingleChildScrollView(
         key: ValueKey('my_tracker_list_view'),
         padding: EdgeInsets.fromLTRB(12, 0, 12, 90),
@@ -40,32 +43,48 @@ class MyTrackerExpenseList extends StatelessWidget {
     return ListView.builder(
       key: const ValueKey('my_tracker_list_view'),
       padding: const EdgeInsets.fromLTRB(12, 0, 12, 90),
-      itemCount: expenses.length,
+      itemCount: totalCount,
       itemBuilder: (context, index) {
-        final exp = expenses[index];
-        final share = viewModel.calculateUserShare(exp);
+        if (index < expenses.length) {
+          final exp = expenses[index];
+          final share = viewModel.calculateUserShare(exp);
+          return StaggeredItem(
+            index: index,
+            child: ActivityTile(
+              key: ValueKey('tracker_exp_${exp.id}'),
+              item: ActivityItem.expense(exp),
+              currentUserId: user.uid,
+              currentUserEmail: user.email,
+              friendName: friendName,
+              personalShare: share,
+              isMyTrackerView: true,
+              isPrimaryUser: viewModel.isPrimaryUser,
+              onEdit: () => MyTrackerActions.openEditExpenseDialog(
+                context: context,
+                expense: exp,
+                currentUserId: user.uid,
+                viewModel: viewModel,
+              ),
+              onDelete: () => MyTrackerActions.openDeleteExpenseDialog(
+                context: context,
+                expense: exp,
+                viewModel: viewModel,
+              ),
+            ),
+          );
+        }
+
+        final exch = exchanges[index - expenses.length];
         return StaggeredItem(
           index: index,
           child: ActivityTile(
-            key: ValueKey('tracker_exp_${exp.id}'),
-            item: ActivityItem.expense(exp),
+            key: ValueKey('tracker_exch_${exch.id}'),
+            item: ActivityItem.exchange(exch),
             currentUserId: user.uid,
             currentUserEmail: user.email,
             friendName: friendName,
-            personalShare: share,
             isMyTrackerView: true,
             isPrimaryUser: viewModel.isPrimaryUser,
-            onEdit: () => MyTrackerActions.openEditExpenseDialog(
-              context: context,
-              expense: exp,
-              currentUserId: user.uid,
-              viewModel: viewModel,
-            ),
-            onDelete: () => MyTrackerActions.openDeleteExpenseDialog(
-              context: context,
-              expense: exp,
-              viewModel: viewModel,
-            ),
           ),
         );
       },

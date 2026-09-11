@@ -1,3 +1,5 @@
+import '../utils/m_formatters.dart';
+
 class AllowedEmail {
   final String id;
   final String email;
@@ -22,9 +24,7 @@ class AllowedEmail {
     return AllowedEmail(
       id: documentId,
       email: (map['email'] as String? ?? '').toLowerCase().trim(),
-      createdAt: map['created_at'] != null
-          ? DateTime.tryParse(map['created_at'] as String) ?? DateTime.now()
-          : DateTime.now(),
+      createdAt: Formatters.parseDate(map['created_at']),
     );
   }
 }

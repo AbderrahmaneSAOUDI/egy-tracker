@@ -51,8 +51,11 @@ class ExpenseDialogBody extends StatelessWidget {
       key: formKey,
       child: SizedBox(
         width: double.maxFinite,
-        height: 400,
-        child: SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.65,
+          ),
+          child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,6 +105,7 @@ class ExpenseDialogBody extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ),
+  );
   }
 }

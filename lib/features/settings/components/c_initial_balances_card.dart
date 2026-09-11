@@ -78,6 +78,16 @@ class InitialBalancesCard extends StatelessWidget {
                         friendDisplayName: data.friendDisplayName,
                         friendProfile: data.friendProfile,
                         friendBalance: data.friendBalance,
+                        onEdit: data.friendUserId != null
+                            ? () => showEditInitialBalancesDialog(
+                                context: context,
+                                userId: data.friendUserId!,
+                                userName: data.friendDisplayName ?? 'Friend',
+                                currentUsd: data.friendBalance?.usdAmount ?? 0.0,
+                                currentEgp: data.friendBalance?.egpAmount ?? 0.0,
+                                onSave: viewModel.setInitialBalances,
+                              )
+                            : null,
                       ),
                     ],
                   );

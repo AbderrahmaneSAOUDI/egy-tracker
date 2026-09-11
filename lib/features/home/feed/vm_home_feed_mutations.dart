@@ -6,14 +6,17 @@ import '../../../core/services/f_firestore.dart';
 /// Mutation operations for the home feed view model.
 class HomeFeedMutations {
   final FirestoreService firestoreService;
+  String? lastError;
 
-  const HomeFeedMutations({required this.firestoreService});
+  HomeFeedMutations({required this.firestoreService});
 
   Future<bool> _run(Future<void> Function() action) async {
     try {
+      lastError = null;
       await action();
       return true;
-    } catch (_) {
+    } catch (e) {
+      lastError = e.toString();
       return false;
     }
   }
