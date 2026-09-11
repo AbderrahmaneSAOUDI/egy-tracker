@@ -1,36 +1,41 @@
 import 'package:flutter/material.dart';
 import '../../../core/components/c_app_dialog.dart';
 import '../../../core/utils/m_validators.dart';
+import 'c_add_email_form.dart';
 
 /// Shows modal dialog for adding an authorized email to the whitelist.
 Future<void> showAddEmailDialog({
   required BuildContext context,
   required Future<bool> Function(String email) onAddEmail,
-}) {
+  String? initialEmail,
+}) async {
   final formKey = GlobalKey<FormState>();
-  final controller = TextEditingController();
+  final controller = TextEditingController(text: initialEmail ?? '');
   bool isSubmitting = false;
 
-  return showAnimatedDialog<void>(
-    context: context,
-    builder: (dialogContext) {
-      return StatefulBuilder(
-        builder: (context, setDialogState) {
-          final theme = Theme.of(context);
-          final colorScheme = theme.colorScheme;
-          final isDark = theme.brightness == Brightness.dark;
+  final isEditing = initialEmail != null && initialEmail.isNotEmpty;
 
-          return AppDialog(
-            icon: Icons.person_add_rounded,
-            title: 'Add Allowed Email',
-            actionLabel: 'Add',
-            isSubmitting: isSubmitting,
-            onCancel: () => Navigator.of(dialogContext).pop(),
+  await showAnimatedDialog<void>(
+    context: context,
+    disposables: [controller],
+    builder: (dialogContext) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            final theme = Theme.of(context);
+            final colorScheme = theme.colorScheme;
+
+            return AppDialog(
+              icon: isEditing ? Icons.edit_rounded : Icons.person_add_rounded,
+              title: isEditing ? 'Edit Allowed Email' : 'Add Allowed Email',
+              actionLabel: isEditing ? 'Save' : 'Add',
+              isSubmitting: isSubmitting,
+              onCancel: () => Navigator.of(dialogContext).pop(),
             onAction: () async {
               if (!formKey.currentState!.validate()) return;
               final messenger = ScaffoldMessenger.of(context);
               final errorColor = colorScheme.error;
-              final email = controller.text.trim().toLowerCase();
+              final rawEmail = controller.text.trim();
+              final email = Validators.normalizeEmail(rawEmail).toLowerCase();
               setDialogState(() => isSubmitting = true);
 
               final success = await onAddEmail(email);
@@ -40,7 +45,9 @@ Future<void> showAddEmailDialog({
                 }
                 messenger.showSnackBar(
                   SnackBar(
-                    content: Text('Added $email to whitelist'),
+                    content: Text(isEditing
+                        ? 'Updated email to $email'
+                        : 'Added $email to whitelist'),
                     behavior: SnackBarBehavior.floating,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -51,49 +58,17 @@ Future<void> showAddEmailDialog({
                 setDialogState(() => isSubmitting = false);
                 messenger.showSnackBar(
                   SnackBar(
-                    content: const Text('Failed to add email'),
+                    content: Text(isEditing ? 'Failed to update email' : 'Failed to add email'),
                     backgroundColor: errorColor,
                     behavior: SnackBarBehavior.floating,
                   ),
                 );
               }
             },
-            content: Form(
-              key: formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Grant a travel partner access to this Egypt expense tracker with their Google account.',
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                      height: 1.35,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    controller: controller,
-                    keyboardType: TextInputType.emailAddress,
-                    autofocus: true,
-                    autocorrect: false,
-                    enabled: !isSubmitting,
-                    decoration: InputDecoration(
-                      labelText: 'Email Address',
-                      hintText: 'partner@gmail.com',
-                      prefixIcon: const Icon(Icons.email_outlined),
-                      filled: true,
-                      fillColor: isDark
-                          ? Colors.white.withValues(alpha: 0.05)
-                          : Colors.black.withValues(alpha: 0.03),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                    ),
-                    validator: Validators.validateEmail,
-                  ),
-                ],
-              ),
+            content: AddEmailForm(
+              formKey: formKey,
+              controller: controller,
+              isSubmitting: isSubmitting,
             ),
           );
         },

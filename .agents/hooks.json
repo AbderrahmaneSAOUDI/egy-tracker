@@ -2,7 +2,7 @@
   "invariant-guard": {
     "PreToolUse": [
       {
-        "matcher": "write_to_file|replace_file_content|run_command",
+        "matcher": "write_to_file|replace_file_content|multi_replace_file_content|run_command",
         "hooks": [
           {
             "type": "command",
@@ -14,11 +14,34 @@
     ],
     "PostToolUse": [
       {
-        "matcher": "write_to_file|replace_file_content",
+        "matcher": "write_to_file|replace_file_content|multi_replace_file_content",
         "hooks": [
           {
             "type": "command",
             "command": "python3 ../scripts/invariant_guard.py",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  },
+  "fast-context-injector": {
+    "PreInvocation": [
+      {
+        "type": "command",
+        "command": "python3 ../scripts/pre_invocation_context.py",
+        "timeout": 10
+      }
+    ]
+  },
+  "cache-auto-updater": {
+    "PostToolUse": [
+      {
+        "matcher": "write_to_file|replace_file_content|multi_replace_file_content",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ../scripts/generate_codebase_index.py --quiet",
             "timeout": 15
           }
         ]

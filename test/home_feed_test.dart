@@ -268,6 +268,65 @@ void main() {
       expect(vm.friendUsdBalance, 250.0);
       expect(vm.friendEgpBalance, 50.0);
     });
+
+    test('Filters feed into Friend and Split activity sets correctly', () async {
+      final now = DateTime.now();
+      firestore.emailsController.add([
+        AllowedEmail(id: 'e1', email: 'me@test.com', createdAt: now),
+        AllowedEmail(id: 'e2', email: 'friend@test.com', createdAt: now),
+      ]);
+
+      // 1. Friend solo expense (0% me, 100% friend)
+      final friendSoloExp = Expense(
+        id: 'exp_friend',
+        title: 'Friend Solo Coffee',
+        amount: 50.0,
+        currency: 'EGP',
+        paidBy: friendId,
+        splitType: 'default_100',
+        mePercentage: 0.0,
+        friendPercentage: 100.0,
+        date: now,
+        createdAt: now,
+      );
+
+      // 2. Split expense (50% me, 50% friend)
+      final splitExp = Expense(
+        id: 'exp_split',
+        title: 'Shared Dinner',
+        amount: 200.0,
+        currency: 'EGP',
+        paidBy: myId,
+        splitType: 'fifty_fifty',
+        mePercentage: 50.0,
+        friendPercentage: 50.0,
+        date: now,
+        createdAt: now,
+      );
+
+      firestore.expensesController.add([friendSoloExp, splitExp]);
+      firestore.exchangesController.add([]);
+      firestore.borrowsController.add([]);
+      await pumpEventQueue();
+
+      expect(vm.allActivities.length, 2);
+      expect(vm.friendActivities.length, 1);
+      expect(vm.friendActivities.first.expense?.id, 'exp_friend');
+      expect(vm.splitActivities.length, 1);
+      expect(vm.splitActivities.first.expense?.id, 'exp_split');
+
+      // Test filteredActivities based on filter setting
+      vm.setFilter(HomeFeedFilter.friend);
+      expect(vm.filteredActivities.length, 1);
+      expect(vm.filteredActivities.first.expense?.id, 'exp_friend');
+
+      vm.setFilter(HomeFeedFilter.split);
+      expect(vm.filteredActivities.length, 1);
+      expect(vm.filteredActivities.first.expense?.id, 'exp_split');
+
+      vm.setFilter(HomeFeedFilter.all);
+      expect(vm.filteredActivities.length, 2);
+    });
   });
 
   group('HomeTabScreen Widget Tests', () {

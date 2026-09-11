@@ -9,6 +9,8 @@ import '../../../core/utils/m_auth_helpers.dart';
 import '../vm_settings.dart';
 import 'c_balance_user_card.dart';
 import 'c_edit_initial_balances_dialog.dart';
+import 'c_friend_balance_item.dart';
+import 'c_initial_balances_resolver.dart';
 
 /// Card containing starting cash configurations for You and Friend.
 class InitialBalancesCard extends StatelessWidget {
@@ -23,9 +25,7 @@ class InitialBalancesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final isDark = theme.brightness == Brightness.dark;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return SectionCard(
       icon: Icons.account_balance_wallet_rounded,
@@ -42,140 +42,43 @@ class InitialBalancesCard extends StatelessWidget {
               return StreamBuilder<List<UserProfile>>(
                 stream: viewModel.usersStream,
                 builder: (context, usersSnap) {
-                  final balances = balancesSnap.data ?? [];
-                  final emails = emailsSnap.data ?? [];
-                  final users = usersSnap.data ?? [];
+                  final data = InitialBalancesData.resolve(
+                    balances: balancesSnap.data ?? [],
+                    emails: emailsSnap.data ?? [],
+                    users: usersSnap.data ?? [],
+                    user: user,
+                  );
 
-                  // Current user balance lookup
-                  final myEmail = (user.email ?? '').toLowerCase().trim();
-                  InitialBalance? myBalance;
-                  for (final b in balances) {
-                    if (b.userId == user.uid ||
-                        b.userId.toLowerCase().trim() == myEmail) {
-                      myBalance = b;
-                      break;
-                    }
-                  }
-
-                  // Current user profile resolution
-                  UserProfile? myProfile;
-                  for (final u in users) {
-                    if (u.id == user.uid || u.email.toLowerCase().trim() == myEmail) {
-                      myProfile = u;
-                      break;
-                    }
-                  }
-
-                  // Friend resolution from whitelist
-                  AllowedEmail? friendEmailDoc;
-                  for (final e in emails) {
-                    if (e.email.toLowerCase().trim() != myEmail) {
-                      friendEmailDoc = e;
-                      break;
-                    }
-                  }
-
-                  UserProfile? friendProfile;
-                  if (friendEmailDoc != null) {
-                    final fe = friendEmailDoc.email.toLowerCase().trim();
-                    for (final u in users) {
-                      if (u.email.toLowerCase().trim() == fe) {
-                        friendProfile = u;
-                        break;
-                      }
-                    }
-                  }
-
-                  InitialBalance? friendBalance;
-                  String? friendDisplayName;
-                  if (friendEmailDoc != null) {
-                    final fe = friendEmailDoc.email.toLowerCase().trim();
-                    friendDisplayName = (friendProfile != null &&
-                            friendProfile.name.isNotEmpty)
-                        ? friendProfile.name
-                        : friendEmailDoc.email;
-
-                    for (final b in balances) {
-                      if (b.userId == friendProfile?.id ||
-                          b.userId.toLowerCase().trim() == fe) {
-                        friendBalance = b;
-                        break;
-                      }
-                    }
-                  }
-
-                  final myDisplayName = resolveUserName(user, myProfile?.name);
-                  final myPhotoUrl = resolveUserPhoto(user, myProfile?.photoUrl);
+                  final myDisplayName =
+                      resolveUserName(user, data.myProfile?.name);
+                  final myPhotoUrl =
+                      resolveUserPhoto(user, data.myProfile?.photoUrl);
 
                   return Column(
                     children: [
-                      // 1. You Starting Balance Item
                       BalanceUserCard(
                         isCurrentUser: true,
                         name: myDisplayName,
                         email: user.email ?? '',
                         photoUrl: myPhotoUrl,
-                        usdAmount: myBalance?.usdAmount ?? 0.0,
-                        egpAmount: myBalance?.egpAmount ?? 0.0,
+                        usdAmount: data.myBalance?.usdAmount ?? 0.0,
+                        egpAmount: data.myBalance?.egpAmount ?? 0.0,
                         onEdit: () => showEditInitialBalancesDialog(
                           context: context,
                           userId: user.uid,
                           userName: myDisplayName,
-                          currentUsd: myBalance?.usdAmount ?? 0.0,
-                          currentEgp: myBalance?.egpAmount ?? 0.0,
+                          currentUsd: data.myBalance?.usdAmount ?? 0.0,
+                          currentEgp: data.myBalance?.egpAmount ?? 0.0,
                           onSave: viewModel.setInitialBalances,
                         ),
                       ),
                       const SizedBox(height: 10),
-
-                      // 2. Friend Starting Balance Item (read-only for current user)
-                      if (friendEmailDoc != null)
-                        BalanceUserCard(
-                          isCurrentUser: false,
-                          name: friendDisplayName!,
-                          email: friendEmailDoc.email,
-                          photoUrl: friendProfile?.photoUrl,
-                          usdAmount: friendBalance?.usdAmount ?? 0.0,
-                          egpAmount: friendBalance?.egpAmount ?? 0.0,
-                          onEdit: null,
-                        )
-                      else
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 14,
-                          ),
-                          decoration: BoxDecoration(
-                            color: isDark
-                                ? Colors.white.withValues(alpha: 0.02)
-                                : Colors.black.withValues(alpha: 0.02),
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(
-                              color: isDark
-                                  ? Colors.white.withValues(alpha: 0.06)
-                                  : Colors.black.withValues(alpha: 0.05),
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.person_add_alt_1_outlined,
-                                size: 20,
-                                color: colorScheme.outline,
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Text(
-                                  'Add your travel partner in Allowed Emails below to configure their starting cash.',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: colorScheme.outline,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                      FriendBalanceItem(
+                        friendEmailDoc: data.friendEmailDoc,
+                        friendDisplayName: data.friendDisplayName,
+                        friendProfile: data.friendProfile,
+                        friendBalance: data.friendBalance,
+                      ),
                     ],
                   );
                 },

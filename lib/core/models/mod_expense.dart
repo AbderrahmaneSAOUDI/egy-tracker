@@ -9,6 +9,7 @@ class Expense {
   final double friendPercentage;
   final DateTime date;
   final DateTime createdAt;
+  final String createdBy; // UID of the user who created this expense (resolves me/friend perspective)
 
   const Expense({
     required this.id,
@@ -21,6 +22,7 @@ class Expense {
     required this.friendPercentage,
     required this.date,
     required this.createdAt,
+    this.createdBy = '',
   });
 
   Map<String, dynamic> toMap() {
@@ -35,6 +37,7 @@ class Expense {
       'friend_percentage': friendPercentage,
       'date': date.toIso8601String(),
       'created_at': createdAt.toIso8601String(),
+      'created_by': createdBy,
     };
   }
 
@@ -55,6 +58,7 @@ class Expense {
       createdAt: map['created_at'] != null
           ? DateTime.tryParse(map['created_at'] as String) ?? DateTime.now()
           : DateTime.now(),
+      createdBy: map['created_by'] as String? ?? '',
     );
   }
 }

@@ -110,17 +110,14 @@ void main() {
       await tester.tap(find.text('Open Expense'));
       await tester.pumpAndSettle();
 
-      // Initial state: Paid By is 'You' -> split is hidden
-      expect(find.text('50 / 50'), findsNothing);
-      expect(find.text('Who paid the bill?'), findsNothing);
-
-      // Select 'Both'
-      await tester.tap(find.text('Both'));
-      await tester.pumpAndSettle();
-
-      // Split options are now visible
+      // Initial state: Paid By has 'You' and friendName, Split has '100% Payer', '50 / 50', 'Custom'
+      expect(find.text('100% Payer'), findsOneWidget);
       expect(find.text('50 / 50'), findsOneWidget);
       expect(find.text('Custom'), findsOneWidget);
+
+      // Select '50 / 50'
+      await tester.tap(find.text('50 / 50'));
+      await tester.pumpAndSettle();
 
       // Invariant: 'Who paid the bill?' must NOT exist
       expect(find.text('Who paid the bill?'), findsNothing);
@@ -198,24 +195,28 @@ void main() {
       await tester.enterText(textFields.at(1), '1200');
       await tester.pumpAndSettle();
 
-      // Exceeds available physical cash -> Save button must be disabled
-      expect(tester.widget<FilledButton>(saveBtnFinder).onPressed, isNull);
+      // Exceeds available physical cash -> Shows soft warning, but Save button remains enabled (Item 2.1)
+      expect(find.textContaining('Amount exceeds available cash'), findsOneWidget);
+      expect(tester.widget<FilledButton>(saveBtnFinder).onPressed, isNotNull);
 
-      // Enter amount within balance (400 <= 1000) -> enabled
+      // Enter amount within balance (400 <= 1000) -> enabled and warning disappears
       await tester.enterText(textFields.at(1), '400');
       await tester.pumpAndSettle();
+      expect(find.textContaining('Amount exceeds available cash'), findsNothing);
       expect(tester.widget<FilledButton>(saveBtnFinder).onPressed, isNotNull);
 
       // Switch to USD (user has 50 USD)
       await tester.tap(find.text('USD'));
       await tester.pumpAndSettle();
 
-      // 400 > 50 USD -> Save button disabled
-      expect(tester.widget<FilledButton>(saveBtnFinder).onPressed, isNull);
+      // 400 > 50 USD -> Shows soft warning, Save button remains enabled
+      expect(find.textContaining('Amount exceeds available cash'), findsOneWidget);
+      expect(tester.widget<FilledButton>(saveBtnFinder).onPressed, isNotNull);
 
-      // 40 <= 50 USD -> Save button enabled
+      // 40 <= 50 USD -> Save button enabled, warning disappears
       await tester.enterText(textFields.at(1), '40');
       await tester.pumpAndSettle();
+      expect(find.textContaining('Amount exceeds available cash'), findsNothing);
       expect(tester.widget<FilledButton>(saveBtnFinder).onPressed, isNotNull);
     });
   });
@@ -264,18 +265,14 @@ void main() {
       await tester.enterText(textFields.at(1), '7500');
       await tester.pumpAndSettle();
 
-      // Try to save
-      await tester.tap(find.text('Save'));
-      await tester.pumpAndSettle();
-
-      // Error message indicates amount exceeds owned money
+      // Error message indicates amount exceeds owned money (soft warning)
       expect(find.textContaining('Exceeds owned money'), findsOneWidget);
-      expect(savedExchange, isNull);
 
       // Enter valid amount within owned ($50 <= $100)
       await tester.enterText(textFields.at(0), '50');
       await tester.pumpAndSettle();
 
+      // Try to save
       await tester.tap(find.text('Save'));
       await tester.pumpAndSettle();
 

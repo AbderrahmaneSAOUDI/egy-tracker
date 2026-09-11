@@ -4,13 +4,10 @@ import '../../../core/components/c_alert_banner.dart';
 import '../../../core/components/c_empty_state.dart';
 import '../../../core/components/c_section_card.dart';
 import '../../../core/models/mod_allowed_email.dart';
-import '../../../core/models/mod_user_profile.dart';
 import '../../../core/theme/t_app_theme.dart';
-import '../../../core/utils/m_auth_helpers.dart';
 import '../vm_settings.dart';
 import 'c_add_email_dialog.dart';
-import 'c_allowed_email_tile.dart';
-import 'c_confirm_delete_email_dialog.dart';
+import 'c_allowed_emails_list.dart';
 
 /// Card managing the allowed email whitelist for access gating.
 class AllowedEmailsCard extends StatelessWidget {
@@ -97,48 +94,10 @@ class AllowedEmailsCard extends StatelessWidget {
             );
           }
 
-          return StreamBuilder<List<UserProfile>>(
-            stream: viewModel.usersStream,
-            builder: (context, usersSnapshot) {
-              final users = usersSnapshot.data ?? [];
-
-              return Column(
-                children: emails.map((allowed) {
-                  final normEmail = allowed.email.toLowerCase().trim();
-                  final isCurrentUser =
-                      normEmail == (user.email ?? '').toLowerCase().trim();
-
-                  // Look up matching user profile for profile picture and name
-                  UserProfile? matchingProfile;
-                  for (final u in users) {
-                    if (u.email.toLowerCase().trim() == normEmail) {
-                      matchingProfile = u;
-                      break;
-                    }
-                  }
-
-                  final photoUrl = isCurrentUser
-                      ? resolveUserPhoto(user, matchingProfile?.photoUrl)
-                      : matchingProfile?.photoUrl;
-                  final displayName = isCurrentUser
-                      ? resolveUserName(user, matchingProfile?.name)
-                      : matchingProfile?.name;
-
-                  return AllowedEmailTile(
-                    allowedEmail: allowed,
-                    isCurrentUser: isCurrentUser,
-                    photoUrl: photoUrl,
-                    displayName: displayName,
-                    onDelete: () => showConfirmDeleteEmailDialog(
-                      context: context,
-                      allowedEmail: allowed,
-                      isCurrentUser: isCurrentUser,
-                      onDeleteEmail: viewModel.deleteAllowedEmail,
-                    ),
-                  );
-                }).toList(),
-              );
-            },
+          return AllowedEmailsList(
+            emails: emails,
+            user: user,
+            viewModel: viewModel,
           );
         },
       ),

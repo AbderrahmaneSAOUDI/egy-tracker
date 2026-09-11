@@ -36,6 +36,8 @@ class LoginLogoButton extends StatelessWidget {
             child: Image.asset(
               'assets/images/logo.png',
               fit: BoxFit.cover,
+              cacheWidth: 256,
+              cacheHeight: 256,
               errorBuilder: (context, error, stackTrace) {
                 return Icon(
                   Icons.account_balance_wallet_rounded,

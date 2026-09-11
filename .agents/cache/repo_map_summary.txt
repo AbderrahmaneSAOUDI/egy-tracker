@@ -1,0 +1,10 @@
+EGY_TRACKER ARCHITECTURE MAP (FAST REFERENCE):
+- Models (lib/core/models/): Expense(mod_expense.dart), Exchange(mod_exchange.dart), Borrow(mod_borrow.dart), UserProfile(mod_user_profile.dart), AllowedEmail(mod_allowed_email.dart), InitialBalance(mod_initial_balance.dart)
+- Services (lib/core/services/): AuthService(f_auth.dart), FirestoreService(f_firestore.dart)
+- Math & Utils (lib/core/utils/): calculateCurrentBalances, calculatePersonalShare (m_calculations.dart), Validators(m_validators.dart), Formatters(m_formatters.dart)
+- Home Tab (lib/features/home/): HomeScreen(s_home.dart), HomeTab(s_home_tab.dart), HomeFeedVM(vm_home_feed.dart)
+- My Tracker Tab (lib/features/my_tracker/): MyTrackerScreen(s_my_tracker.dart), MyTrackerVM(vm_my_tracker.dart)
+- Settings Tab (lib/features/settings/): SettingsScreen(s_settings.dart), SettingsVM(vm_settings.dart)
+- Auth (lib/features/auth/): LoginScreen(s_login.dart)
+- Navigation: 3 tabs (Home, My Tracker, Settings). Strict separation of USD ($) and EGP (EGP).
+- Quick Lookup: Run `python3 scripts/find_symbol.py <symbol>` or grep_search. Avoid reading full files.

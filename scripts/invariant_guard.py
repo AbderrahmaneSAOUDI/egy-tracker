@@ -56,6 +56,10 @@ def handle_hook_input(payload):
         code_to_check += args["CodeContent"] + "\n"
     if "ReplacementContent" in args:
         code_to_check += args["ReplacementContent"] + "\n"
+    if "ReplacementChunks" in args and isinstance(args["ReplacementChunks"], list):
+        for chunk in args["ReplacementChunks"]:
+            if isinstance(chunk, dict) and "ReplacementContent" in chunk:
+                code_to_check += chunk["ReplacementContent"] + "\n"
     if "CommandLine" in args:
         code_to_check += args["CommandLine"] + "\n"
 

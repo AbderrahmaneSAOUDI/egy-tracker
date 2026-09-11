@@ -26,6 +26,8 @@
     ".flutter-plugins-dependencies": true,
     ".metadata": true,
     ".windsurfrules": true,
-    "firestore.indexes.json": true
+    "firestore.indexes.json": true,
+    "scripts": false,
+    "firebase-debug.log": true
   }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:egy_tracker/core/components/c_floating_pill_nav_bar.dart';
+import 'package:egy_tracker/core/components/c_slide_action_card.dart';
 import 'package:egy_tracker/core/models/mod_allowed_email.dart';
 import 'package:egy_tracker/core/models/mod_borrow.dart';
 import 'package:egy_tracker/core/models/mod_exchange.dart';
@@ -93,6 +94,19 @@ class FakeFirestoreService extends FirestoreService {
 
   @override
   Future<void> deleteAllTripData({String? keepEmail, String? keepUserId}) async {
+    deleteAllTripDataCalled = true;
+  }
+
+  @override
+  Future<void> deleteTripData({
+    bool deleteExpenses = true,
+    bool deleteExchanges = true,
+    bool deleteBorrows = true,
+    bool deleteInitialBalances = true,
+    bool deleteFriends = true,
+    String? keepEmail,
+    String? keepUserId,
+  }) async {
     deleteAllTripDataCalled = true;
   }
 
@@ -249,16 +263,16 @@ void main() {
       expect(find.text('Please enter an email'), findsOneWidget);
       expect(firestoreService.addedEmails, isEmpty);
 
-      // Enter invalid email
+      // Enter invalid email (contains invalid characters/spaces)
       final textField = find.byType(TextFormField);
-      await tester.enterText(textField, 'not-an-email');
+      await tester.enterText(textField, 'invalid email with spaces');
       await tester.tap(addDialogButton);
       await tester.pumpAndSettle();
       expect(find.text('Enter a valid email address'), findsOneWidget);
       expect(firestoreService.addedEmails, isEmpty);
 
-      // Enter valid email
-      await tester.enterText(textField, 'partner@gmail.com');
+      // Enter username without @gmail.com (should auto-append @gmail.com)
+      await tester.enterText(textField, 'partner');
       await tester.tap(addDialogButton);
       await tester.pumpAndSettle();
 
@@ -282,11 +296,11 @@ void main() {
       await tester.tap(find.text('Allowed Emails'));
       await tester.pumpAndSettle();
 
-      // Find delete button
-      final deleteBtn = find.byTooltip('Remove');
-      expect(deleteBtn, findsOneWidget);
+      // Drag left on email tile to trigger remove action
+      final emailSlideCard = find.byType(SlideActionCard);
+      expect(emailSlideCard, findsOneWidget);
 
-      await tester.tap(deleteBtn);
+      await tester.drag(emailSlideCard, const Offset(-250, 0));
       await tester.pumpAndSettle();
 
       expect(find.text('Remove Allowed Email?'), findsOneWidget);
@@ -298,8 +312,8 @@ void main() {
       await tester.pumpAndSettle();
       expect(firestoreService.deletedEmailIds, isEmpty);
 
-      // Tap delete again and confirm
-      await tester.tap(deleteBtn);
+      // Drag left again and confirm
+      await tester.drag(emailSlideCard, const Offset(-250, 0));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Remove'));
       await tester.pumpAndSettle();

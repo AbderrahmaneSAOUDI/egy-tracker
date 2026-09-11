@@ -19,7 +19,8 @@ class Exchange {
     required this.exchangeRate,
     required this.date,
     required this.createdAt,
-  });
+  }) : assert(fromCurrency != toCurrency, 'fromCurrency and toCurrency must be different');
+
 
   Map<String, dynamic> toMap() {
     return {

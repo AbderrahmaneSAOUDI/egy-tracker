@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../../core/components/c_action_icon_button.dart';
-import '../../../core/components/c_badge.dart';
 import '../../../core/components/c_user_avatar.dart';
+import 'c_profile_info.dart';
 import '../../../core/theme/t_app_theme.dart';
 import '../../../core/utils/m_auth_helpers.dart';
 
@@ -78,37 +78,11 @@ class ProfileCard extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (resolvedName.isNotEmpty) ...[
-                  Text(
-                    resolvedName,
-                    style: const TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: -0.3,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 3),
-                ],
-                Text(
-                  user.email ?? 'Unknown User',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: colorScheme.onSurfaceVariant,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 6),
-                StatusBadge(
-                  label: 'Google Account',
-                  icon: Icons.verified_user_rounded,
-                  color: isDark ? AppTheme.googleBlueDark : AppTheme.googleBlue,
-                ),
-              ],
+            child: ProfileInfoColumn(
+              name: resolvedName,
+              email: user.email,
+              isDark: isDark,
+              colorScheme: colorScheme,
             ),
           ),
           const SizedBox(width: 10),

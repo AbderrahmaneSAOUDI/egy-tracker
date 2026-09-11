@@ -1,27 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../core/animations/a_staggered_item.dart';
-import '../../core/components/c_activity_tile.dart';
-import '../../core/components/c_add_expense_dialog.dart';
-import '../../core/components/c_delete_activity_dialog.dart';
-import '../../core/components/c_empty_state.dart';
 import '../../core/components/c_traveler_balance_card.dart';
-import '../../core/models/mod_activity_item.dart';
-import '../../core/models/mod_expense.dart';
 import '../../core/services/f_firestore.dart';
 import '../../core/utils/m_auth_helpers.dart';
 import '../home/vm_home_feed.dart';
+import 'components/c_my_tracker_list.dart';
 import 'vm_my_tracker.dart';
 
 /// Screen (View) for "My Tracker" tab.
-///
-/// Answers:
-/// "What money do I currently have, and what is my share of personal & shared expenses?"
-///
-/// Features:
-/// - Personal physical cash balances (USD and EGP separate, zero cross-currency pollution).
-/// - Modern animated segmented pill bar for fast filtering between All, Mine (100%), and Shared.
-/// - Single unified, uninterrupted expense feed with personal consumption shares and slide actions.
 class MyTrackerScreen extends StatefulWidget {
   final User user;
   final FirestoreService firestoreService;
@@ -67,50 +53,20 @@ class _MyTrackerScreenState extends State<MyTrackerScreen> {
     super.dispose();
   }
 
-  void _openEditExpenseDialog(BuildContext context, Expense expense) {
-    final friendId = _viewModel.friendProfile?.id ?? _viewModel.friendEmailDoc?.email;
-    final friendName = _viewModel.friendProfile?.name ?? _viewModel.friendEmailDoc?.email;
-
-    showAddExpenseDialog(
-      context: context,
-      currentUserId: widget.user.uid,
-      currentUserName: _viewModel.myProfile?.name ?? 'You',
-      friendUserId: friendId,
-      friendUserName: friendName,
-      myUsdBalance: _viewModel.myUsdBalance,
-      myEgpBalance: _viewModel.myEgpBalance,
-      friendUsdBalance: 0.0,
-      friendEgpBalance: 0.0,
-      initialExpense: expense,
-      isPrimaryUser: _viewModel.isPrimaryUser,
-      onSave: (updated) => _viewModel.updateExpense(updated),
-    );
-  }
-
-  void _openDeleteExpenseDialog(BuildContext context, Expense expense) {
-    showDeleteActivityDialog(
-      context: context,
-      item: ActivityItem.expense(expense),
-      onDelete: () => _viewModel.deleteExpense(expense.id),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
       listenable: _viewModel,
       builder: (context, _) {
         final myName = resolveUserName(widget.user, _viewModel.myProfile?.name);
-        final myPhoto = resolveUserPhoto(widget.user, _viewModel.myProfile?.photoUrl);
+        final myPhoto =
+            resolveUserPhoto(widget.user, _viewModel.myProfile?.photoUrl);
         final friendName = _viewModel.friendProfile?.name.isNotEmpty == true
             ? _viewModel.friendProfile!.name
             : _viewModel.friendEmailDoc?.email;
 
-        final allExpenses = _viewModel.allPersonalExpenses;
-
         return Column(
           children: [
-            // ===================== SECTION 1: PERSONAL CASH BALANCES (FIXED) =====================
             Padding(
               padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
               child: TravelerBalanceCard(
@@ -122,45 +78,13 @@ class _MyTrackerScreenState extends State<MyTrackerScreen> {
                 egpAmount: _viewModel.myEgpBalance,
               ),
             ),
-
-            // ===================== SECTION 2: UNIFIED EXPENSE LIST (SCROLLABLE) =====================
             Expanded(
-              child: allExpenses.isEmpty
-                  ? const SingleChildScrollView(
-                      key: ValueKey('my_tracker_list_view'),
-                      padding: EdgeInsets.fromLTRB(12, 0, 12, 90),
-                      child: EmptyState(
-                        icon: Icons.receipt_long_outlined,
-                        title: 'No personal expenses yet',
-                        subtitle:
-                            'Expenses where you have a personal share will appear here.',
-                      ),
-                    )
-                  : ListView.builder(
-                      key: const ValueKey('my_tracker_list_view'),
-                      padding: const EdgeInsets.fromLTRB(12, 0, 12, 90),
-                      itemCount: allExpenses.length,
-                      itemBuilder: (context, index) {
-                        final exp = allExpenses[index];
-                        final share = _viewModel.calculateUserShare(exp);
-                        return StaggeredItem(
-                          index: index,
-                          child: ActivityTile(
-                            key: ValueKey('tracker_exp_${exp.id}'),
-                            item: ActivityItem.expense(exp),
-                            currentUserId: widget.user.uid,
-                            currentUserEmail: widget.user.email,
-                            friendName: friendName,
-                            personalShare: share,
-                            isMyTrackerView: true,
-                            isPrimaryUser: _viewModel.isPrimaryUser,
-                            onEdit: () => _openEditExpenseDialog(context, exp),
-                            onDelete: () =>
-                                _openDeleteExpenseDialog(context, exp),
-                          ),
-                        );
-                      },
-                    ),
+              child: MyTrackerExpenseList(
+                expenses: _viewModel.allPersonalExpenses,
+                user: widget.user,
+                friendName: friendName,
+                viewModel: _viewModel,
+              ),
             ),
           ],
         );

@@ -1,29 +1,61 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Whitelist and app collections for the private 2-user tracker
+    // ─── Helper functions ───
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAllowedUser() {
+      return isAuthenticated() &&
+             exists(/databases/$(database)/documents/allowed_emails/$(request.auth.token.email));
+    }
+
+    // ─── Users collection ───
     match /users/{userId} {
-      allow read, write: if true;
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && request.auth.uid == userId;
     }
 
+    // ─── Allowed emails whitelist ───
     match /allowed_emails/{emailId} {
-      allow read, write: if true;
+      allow read: if isAuthenticated();
+      allow write: if isAllowedUser();
     }
 
+    // ─── Initial balances ───
     match /initial_balances/{balanceId} {
-      allow read, write: if true;
+      allow read, write: if isAllowedUser();
     }
 
+    // ─── Expenses ───
     match /expenses/{expenseId} {
-      allow read, write: if true;
+      allow read: if isAllowedUser();
+      allow create: if isAllowedUser()
+        && request.resource.data.amount is number
+        && request.resource.data.amount > 0
+        && request.resource.data.currency in ['USD', 'EGP']
+        && request.resource.data.split_type in ['default_100', 'fifty_fifty', 'custom']
+        && request.resource.data.me_percentage is number
+        && request.resource.data.friend_percentage is number
+        && (request.resource.data.me_percentage + request.resource.data.friend_percentage) > 99.9
+        && (request.resource.data.me_percentage + request.resource.data.friend_percentage) < 100.1;
+      allow update: if isAllowedUser()
+        && request.resource.data.amount is number
+        && request.resource.data.amount > 0
+        && request.resource.data.currency in ['USD', 'EGP']
+        && request.resource.data.split_type in ['default_100', 'fifty_fifty', 'custom'];
+      allow delete: if isAllowedUser();
     }
 
+    // ─── Exchanges ───
     match /exchanges/{exchangeId} {
-      allow read, write: if true;
+      allow read, write: if isAllowedUser();
     }
 
+    // ─── Borrows ───
     match /borrows/{borrowId} {
-      allow read, write: if true;
+      allow read, write: if isAllowedUser();
     }
   }
 }

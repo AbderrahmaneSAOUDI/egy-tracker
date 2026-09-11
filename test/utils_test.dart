@@ -18,6 +18,20 @@ void main() {
       expect(Validators.validateEmail('user@domain.com'), isNull);
     });
 
+    test('normalizeEmail appends @gmail.com when omitted', () {
+      expect(Validators.normalizeEmail(null), '');
+      expect(Validators.normalizeEmail(''), '');
+      expect(Validators.normalizeEmail('partner'), 'partner@gmail.com');
+      expect(Validators.normalizeEmail('partner@gmail.com'), 'partner@gmail.com');
+      expect(Validators.normalizeEmail('partner@yahoo.com'), 'partner@yahoo.com');
+    });
+
+    test('validateEmail with allowUsernameOnly permits username-only input', () {
+      expect(Validators.validateEmail('partner', allowUsernameOnly: true), isNull);
+      expect(Validators.validateEmail('partner with space', allowUsernameOnly: true), isNotNull);
+      expect(Validators.validateEmail('partner@example.com', allowUsernameOnly: true), isNull);
+    });
+
     test('validateNonNegativeAmount enforces valid positive numbers', () {
       expect(Validators.validateNonNegativeAmount(null, 'USD'), isNotNull);
       expect(Validators.validateNonNegativeAmount('abc', 'USD'), isNotNull);
