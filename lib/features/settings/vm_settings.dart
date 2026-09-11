@@ -26,130 +26,74 @@ class SettingsViewModel extends ChangeNotifier {
   bool get isProcessing => _isProcessing;
   String? get errorMessage => _errorMessage;
 
-  // Streams
-  Stream<List<UserProfile>> get usersStream => firestoreService.getUsersStream();
-  Stream<List<AllowedEmail>> get allowedEmailsStream => firestoreService.getAllowedEmailsStream();
-  Stream<List<InitialBalance>> get initialBalancesStream => firestoreService.getInitialBalancesStream();
+  Stream<List<UserProfile>> get usersStream =>
+      firestoreService.getUsersStream();
+  Stream<List<AllowedEmail>> get allowedEmailsStream =>
+      firestoreService.getAllowedEmailsStream();
+  Stream<List<InitialBalance>> get initialBalancesStream =>
+      firestoreService.getInitialBalancesStream();
 
-  /// Adds a new email to the whitelist
-  Future<bool> addAllowedEmail(String email) async {
-    _isProcessing = true;
-    _errorMessage = null;
-    notifyListeners();
+  Future<bool> updateAllowedEmail(String id, String email) => _run(
+      'Failed to update email',
+      () => firestoreService.updateAllowedEmail(id, email.trim().toLowerCase()));
 
-    try {
-      await firestoreService.addAllowedEmail(email.trim().toLowerCase());
-      _isProcessing = false;
-      notifyListeners();
-      return true;
-    } catch (e) {
-      _errorMessage = 'Failed to add email: $e';
-      _isProcessing = false;
-      notifyListeners();
-      return false;
-    }
-  }
+  Future<bool> addAllowedEmail(String email) => _run(
+      'Failed to add email',
+      () => firestoreService.addAllowedEmail(email.trim().toLowerCase()));
 
-  /// Removes an email from the whitelist
-  Future<bool> deleteAllowedEmail(String id) async {
-    _isProcessing = true;
-    _errorMessage = null;
-    notifyListeners();
+  Future<bool> deleteAllowedEmail(String id) => _run(
+      'Failed to delete email', () => firestoreService.deleteAllowedEmail(id));
 
-    try {
-      await firestoreService.deleteAllowedEmail(id);
-      _isProcessing = false;
-      notifyListeners();
-      return true;
-    } catch (e) {
-      _errorMessage = 'Failed to delete email: $e';
-      _isProcessing = false;
-      notifyListeners();
-      return false;
-    }
-  }
-
-  /// Sets starting cash configuration for a user
   Future<bool> setInitialBalances({
     required String userId,
     required double usdAmount,
     required double egpAmount,
-  }) async {
-    _isProcessing = true;
-    _errorMessage = null;
-    notifyListeners();
+  }) => _run('Failed to update starting cash', () =>
+          firestoreService.setInitialBalances(
+            userId: userId, usdAmount: usdAmount, egpAmount: egpAmount));
 
-    try {
-      await firestoreService.setInitialBalances(
-        userId: userId,
-        usdAmount: usdAmount,
-        egpAmount: egpAmount,
-      );
-      _isProcessing = false;
-      notifyListeners();
-      return true;
-    } catch (e) {
-      _errorMessage = 'Failed to update starting cash: $e';
-      _isProcessing = false;
-      notifyListeners();
-      return false;
-    }
-  }
-
-  /// Updates current user's profile display name
   Future<bool> updateDisplayName(String newName) async {
     final trimmed = newName.trim();
     if (trimmed.isEmpty) return false;
-
-    _isProcessing = true;
-    _errorMessage = null;
-    notifyListeners();
-
-    try {
+    return _run('Failed to update profile name', () async {
       await user.updateDisplayName(trimmed);
-      await firestoreService.saveUserProfile(
-        UserProfile(
-          id: user.uid,
-          name: trimmed,
-          email: user.email ?? '',
-          photoUrl: resolveUserPhoto(user),
-          createdAt: DateTime.now(),
-        ),
-      );
-      _isProcessing = false;
-      notifyListeners();
-      return true;
-    } catch (e) {
-      _errorMessage = 'Failed to update profile name: $e';
-      _isProcessing = false;
-      notifyListeners();
-      return false;
-    }
+      await firestoreService.saveUserProfile(UserProfile(
+        id: user.uid, name: trimmed, email: user.email ?? '',
+        photoUrl: resolveUserPhoto(user), createdAt: DateTime.now(),
+      ));
+    });
   }
 
-  /// Purges all expenses, exchanges, borrows, initial balances, and trip members
-  Future<bool> deleteAllTripData() async {
+  Future<bool> deleteTripData({
+    bool deleteExpenses = true,
+    bool deleteExchanges = true,
+    bool deleteBorrows = true,
+    bool deleteInitialBalances = true,
+    bool deleteFriends = true,
+  }) => _run('Failed to delete data', () => firestoreService.deleteTripData(
+        deleteExpenses: deleteExpenses, deleteExchanges: deleteExchanges,
+        deleteBorrows: deleteBorrows, deleteInitialBalances: deleteInitialBalances,
+        deleteFriends: deleteFriends, keepEmail: user.email, keepUserId: user.uid,
+      ));
+
+  Future<bool> deleteAllTripData() => deleteTripData();
+
+  Future<void> signOut() => authService.signOut();
+
+  Future<bool> _run(String errorPrefix, Future<void> Function() action) async {
     _isProcessing = true;
     _errorMessage = null;
     notifyListeners();
-
     try {
-      await firestoreService.deleteAllTripData(
-        keepEmail: user.email,
-        keepUserId: user.uid,
-      );
+      await action();
       _isProcessing = false;
       notifyListeners();
       return true;
     } catch (e) {
-      _errorMessage = 'Failed to delete data: $e';
+      _errorMessage = '$errorPrefix: $e';
       _isProcessing = false;
       notifyListeners();
       return false;
     }
-  }
-
-  Future<void> signOut() async {
-    await authService.signOut();
   }
 }

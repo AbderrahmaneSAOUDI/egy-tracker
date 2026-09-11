@@ -32,6 +32,19 @@ class DeleteDataCard extends StatelessWidget {
         onPressed: () => showDeleteAllDataDialog(
           context: context,
           onDeleteAllData: viewModel.deleteAllTripData,
+          onDeleteSelectedData: ({
+            bool deleteExpenses = true,
+            bool deleteExchanges = true,
+            bool deleteBorrows = true,
+            bool deleteInitialBalances = true,
+            bool deleteFriends = true,
+          }) => viewModel.deleteTripData(
+            deleteExpenses: deleteExpenses,
+            deleteExchanges: deleteExchanges,
+            deleteBorrows: deleteBorrows,
+            deleteInitialBalances: deleteInitialBalances,
+            deleteFriends: deleteFriends,
+          ),
           getErrorMessage: () => viewModel.errorMessage,
         ),
       ),

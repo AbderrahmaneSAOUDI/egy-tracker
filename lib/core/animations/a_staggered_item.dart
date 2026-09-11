@@ -25,21 +25,23 @@ class StaggeredItem extends StatefulWidget {
 
 class _StaggeredItemState extends State<StaggeredItem>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _fade;
-  late Animation<Offset> _slide;
+  AnimationController? _controller;
+  Animation<double>? _fade;
+  Animation<Offset>? _slide;
   Timer? _timer;
 
   @override
   void initState() {
     super.initState();
+    if (widget.index >= 10) return;
+
     _controller = AnimationController(
       vsync: this,
       duration: widget.duration,
     );
 
     final curve = CurvedAnimation(
-      parent: _controller,
+      parent: _controller!,
       curve: Curves.easeOutCubic,
     );
 
@@ -51,11 +53,11 @@ class _StaggeredItemState extends State<StaggeredItem>
 
     final delay = widget.delayPerIndex * widget.index;
     if (delay == Duration.zero) {
-      _controller.forward();
+      _controller!.forward();
     } else {
       _timer = Timer(delay, () {
         if (mounted) {
-          _controller.forward();
+          _controller?.forward();
         }
       });
     }
@@ -64,16 +66,19 @@ class _StaggeredItemState extends State<StaggeredItem>
   @override
   void dispose() {
     _timer?.cancel();
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (widget.index >= 10 || _slide == null || _fade == null) {
+      return widget.child;
+    }
     return SlideTransition(
-      position: _slide,
+      position: _slide!,
       child: FadeTransition(
-        opacity: _fade,
+        opacity: _fade!,
         child: widget.child,
       ),
     );

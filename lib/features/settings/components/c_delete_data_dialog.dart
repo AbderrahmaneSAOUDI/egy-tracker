@@ -1,135 +1,64 @@
 import 'package:flutter/material.dart';
-import '../../../core/components/c_confirmation_dialog.dart';
+import '../../../core/components/c_app_dialog.dart';
+import 'c_delete_data_action_runner.dart';
+import 'c_delete_data_content.dart';
+import 'c_delete_data_selection.dart';
 
-/// Shows modal dialog for confirming complete trip data deletion.
+/// Shows modal dialog with checkboxes allowing the user to choose which trip data to delete.
 Future<void> showDeleteAllDataDialog({
   required BuildContext context,
-  required Future<bool> Function() onDeleteAllData,
+  Future<bool> Function()? onDeleteAllData,
+  Future<bool> Function({
+    bool deleteExpenses,
+    bool deleteExchanges,
+    bool deleteBorrows,
+    bool deleteInitialBalances,
+    bool deleteFriends,
+  })? onDeleteSelectedData,
   String? Function()? getErrorMessage,
 }) async {
-  final theme = Theme.of(context);
-  final colorScheme = theme.colorScheme;
-  final isDark = theme.brightness == Brightness.dark;
   final messenger = ScaffoldMessenger.of(context);
+  final selection = DeleteDataSelection();
+  bool isSubmitting = false;
 
-  final additionalContent = Column(
-    mainAxisSize: MainAxisSize.min,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: isDark
-              ? Colors.white.withValues(alpha: 0.03)
-              : Colors.black.withValues(alpha: 0.03),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: colorScheme.error.withValues(alpha: 0.25),
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildDataDeleteRow(
-              Icons.receipt_long_outlined,
-              'All Expenses (USD & EGP)',
-              colorScheme,
-            ),
-            const SizedBox(height: 6),
-            _buildDataDeleteRow(
-              Icons.currency_exchange_rounded,
-              'All Currency Exchanges',
-              colorScheme,
-            ),
-            const SizedBox(height: 6),
-            _buildDataDeleteRow(
-              Icons.handshake_outlined,
-              'All Borrow & Lend Records',
-              colorScheme,
-            ),
-            const SizedBox(height: 6),
-            _buildDataDeleteRow(
-              Icons.account_balance_wallet_outlined,
-              'All Initial Balances',
-              colorScheme,
-            ),
-            const SizedBox(height: 6),
-            _buildDataDeleteRow(
-              Icons.group_remove_outlined,
-              'Trip Members & Whitelisted Friends',
-              colorScheme,
-            ),
-          ],
-        ),
-      ),
-      const SizedBox(height: 10),
-      Text(
-        'Your Google login access will remain active.',
-        style: TextStyle(
-          fontSize: 12,
-          color: colorScheme.onSurfaceVariant,
-        ),
-      ),
-    ],
-  );
-
-  await showConfirmationDialog(
+  await showAnimatedDialog<bool>(
     context: context,
-    icon: Icons.warning_amber_rounded,
-    title: 'Delete All Trip Data?',
-    message:
-        'This action is irreversible. All data from your trip will be permanently erased:',
-    additionalContent: additionalContent,
-    confirmLabel: 'Delete Everything',
-    cancelLabel: 'Cancel',
-    isDestructive: true,
-    onConfirm: () async {
-      final success = await onDeleteAllData();
-      if (success) {
-        messenger.showSnackBar(
-          SnackBar(
-            content: const Text(
-              'All trip data has been deleted.',
-            ),
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-        );
-      } else {
-        final errorMsg = getErrorMessage?.call() ?? 'Failed to delete data';
-        messenger.showSnackBar(
-          SnackBar(
-            content: Text(errorMsg),
-            backgroundColor: colorScheme.error,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-        );
-      }
-      return success;
-    },
-  );
-}
+    builder: (dialogContext) {
+      return StatefulBuilder(
+        builder: (context, setDialogState) {
+          final colorScheme = Theme.of(context).colorScheme;
 
-Widget _buildDataDeleteRow(
-  IconData icon,
-  String text,
-  ColorScheme colorScheme,
-) {
-  return Row(
-    children: [
-      Icon(icon, size: 16, color: colorScheme.error),
-      const SizedBox(width: 8),
-      Expanded(
-        child: Text(
-          text,
-          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
-        ),
-      ),
-    ],
+          return AppDialog(
+            icon: Icons.warning_amber_rounded,
+            iconColor: colorScheme.error,
+            title: 'Delete All Trip Data?',
+            actionLabel: selection.allSelected
+                ? 'Delete Everything'
+                : 'Delete Selected',
+            actionColor: colorScheme.error,
+            actionForegroundColor: colorScheme.onError,
+            isSubmitting: isSubmitting,
+            onCancel: () => Navigator.of(dialogContext).pop(false),
+            onAction: selection.hasSelection && !isSubmitting
+                ? () => DeleteDataActionRunner.run(
+                      dialogContext: dialogContext,
+                      messenger: messenger,
+                      colorScheme: colorScheme,
+                      selection: selection,
+                      setSubmitting: (v) =>
+                          setDialogState(() => isSubmitting = v),
+                      onDeleteAllData: onDeleteAllData,
+                      onDeleteSelectedData: onDeleteSelectedData,
+                      getErrorMessage: getErrorMessage,
+                    )
+                : null,
+            content: DeleteDataContent(
+              selection: selection,
+              onChanged: () => setDialogState(() {}),
+            ),
+          );
+        },
+      );
+    },
   );
 }

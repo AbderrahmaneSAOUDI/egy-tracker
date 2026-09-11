@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import '../../core/config/app_config.dart';
 import '../../core/services/f_auth.dart';
 
 /// ViewModel managing authentication state and Google / Dev sign-in flows.
@@ -17,12 +18,15 @@ class AuthViewModel extends ChangeNotifier {
   Stream<User?> get authStateChanges => authService.authStateChanges;
 
   Future<void> handleAutoLogin() async {
+    // SECURITY: Dev login is disabled in release builds (Fix 1.5.3)
+    if (!kDebugMode) return;
+
     _isSigningIn = true;
     _errorMessage = null;
     notifyListeners();
 
     try {
-      await authService.signInAsDevUser('abderrahmane.saoudi.26@gmail.com');
+      await authService.signInAsDevUser(AppConfig.adminEmail);
     } catch (e) {
       _errorMessage = 'Auto-login failed: ${e.toString()}';
     } finally {

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../core/components/c_badge.dart';
 import '../../../core/components/c_currency_pill.dart';
-import '../../../core/components/c_user_avatar.dart';
-import '../../../core/theme/t_app_theme.dart';
+import 'c_balance_user_header.dart';
 
 /// Card showing starting cash (USD and EGP) for a single user (You or Friend).
 class BalanceUserCard extends StatelessWidget {
@@ -27,9 +25,7 @@ class BalanceUserCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final isDark = theme.brightness == Brightness.dark;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final usdFormatted =
         '\$${usdAmount.toStringAsFixed(usdAmount % 1 == 0 ? 0 : 2)}';
@@ -54,103 +50,12 @@ class BalanceUserCard extends StatelessWidget {
       padding: const EdgeInsets.all(14),
       child: Column(
         children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(1.5),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: (isCurrentUser
-                            ? (isDark ? AppTheme.usdColorDark : AppTheme.usdColorLight)
-                            : (isDark ? const Color(0xFFA78BFA) : const Color(0xFF7C3AED)))
-                        .withValues(alpha: 0.5),
-                    width: 1.5,
-                  ),
-                ),
-                child: UserAvatar(
-                  photoUrl: photoUrl,
-                  name: name,
-                  email: email,
-                  radius: 17,
-                  backgroundColor: isCurrentUser
-                      ? colorScheme.primaryContainer
-                      : colorScheme.surfaceContainerHighest,
-                  foregroundColor: isCurrentUser
-                      ? colorScheme.onPrimaryContainer
-                      : colorScheme.onSurfaceVariant,
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            name,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: -0.1,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        const SizedBox(width: 6),
-                        StatusBadge(
-                          label: isCurrentUser ? 'You' : 'Friend',
-                          color: isCurrentUser
-                              ? (isDark
-                                  ? AppTheme.usdColorDark
-                                  : AppTheme.usdColorLight)
-                              : (isDark
-                                  ? const Color(0xFFA78BFA)
-                                  : const Color(0xFF7C3AED)),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      email,
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: colorScheme.outline,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-              // Edit button (only available for current user)
-              if (isCurrentUser && onEdit != null)
-                TextButton.icon(
-                  key: const ValueKey('edit_balance_you'),
-                  onPressed: onEdit,
-                  icon: const Icon(Icons.edit_outlined, size: 13),
-                  label: const Text('Edit'),
-                  style: TextButton.styleFrom(
-                    visualDensity: VisualDensity.compact,
-                    foregroundColor:
-                        isDark ? AppTheme.googleBlueDark : AppTheme.googleBlue,
-                    backgroundColor: (isDark
-                            ? AppTheme.googleBlueDark
-                            : AppTheme.googleBlue)
-                        .withValues(alpha: isDark ? 0.14 : 0.08),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    textStyle: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-            ],
+          BalanceUserHeader(
+            isCurrentUser: isCurrentUser,
+            name: name,
+            email: email,
+            photoUrl: photoUrl,
+            onEdit: onEdit,
           ),
           const SizedBox(height: 12),
           Row(

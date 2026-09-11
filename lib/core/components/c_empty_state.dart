@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'c_empty_state_content.dart';
+
+export 'c_empty_state_content.dart';
+export 'c_empty_state_icon.dart';
 
 /// Reusable empty state component with circular tinted icon, title, subtitle,
 /// and optional call-to-action widget.
@@ -56,9 +60,8 @@ class _EmptyStateState extends State<EmptyState>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
     final isDark = theme.brightness == Brightness.dark;
-    final effectiveColor = widget.iconColor ?? colorScheme.primary;
+    final effectiveColor = widget.iconColor ?? theme.colorScheme.primary;
 
     return Container(
       padding: widget.padding,
@@ -67,52 +70,13 @@ class _EmptyStateState extends State<EmptyState>
         opacity: _fadeAnimation,
         child: ScaleTransition(
           scale: _scaleAnimation,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 56,
-                height: 56,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: effectiveColor.withValues(alpha: isDark ? 0.18 : 0.12),
-                  border: Border.all(
-                    color: effectiveColor.withValues(alpha: isDark ? 0.35 : 0.25),
-                    width: 1.5,
-                  ),
-                ),
-                child: Icon(
-                  widget.icon,
-                  size: 26,
-                  color: effectiveColor,
-                ),
-              ),
-              const SizedBox(height: 14),
-              Text(
-                widget.title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                  letterSpacing: -0.2,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              if (widget.subtitle != null) ...[
-                const SizedBox(height: 4),
-                Text(
-                  widget.subtitle!,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: colorScheme.outline,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-              if (widget.action != null) ...[
-                const SizedBox(height: 16),
-                widget.action!,
-              ],
-            ],
+          child: EmptyStateContent(
+            icon: widget.icon,
+            title: widget.title,
+            subtitle: widget.subtitle,
+            iconColor: effectiveColor,
+            isDark: isDark,
+            action: widget.action,
           ),
         ),
       ),
