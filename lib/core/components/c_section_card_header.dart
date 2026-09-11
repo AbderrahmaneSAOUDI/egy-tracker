@@ -65,7 +65,7 @@ class SectionCardHeader extends StatelessWidget {
                 ],
               ),
             ),
-            ?trailing,
+            if (trailing != null) trailing!,
             if (isCollapsible) ...[
               const SizedBox(width: 6),
               RotationTransition(

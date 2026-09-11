@@ -38,47 +38,77 @@ class HomeTabScreen extends StatelessWidget {
 
         return RefreshIndicator(
           onRefresh: viewModel.refresh,
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(12, 10, 12, 0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    HomeBalancesCard(
-                      myName: myName,
-                      myPhotoUrl: myPhoto,
-                      myEmail: user.email ?? '',
-                      myUsd: viewModel.myUsdBalance,
-                      myEgp: viewModel.myEgpBalance,
-                      friendName: friendName,
-                      friendPhotoUrl: friendPhoto,
-                      friendEmail: friendEmail,
-                      friendUsd: viewModel.friendUsdBalance,
-                      friendEgp: viewModel.friendEgpBalance,
-                    ),
-                    const SizedBox(height: 10),
-                    SegmentedPillBar<HomeFeedFilter>(
-                      selectedValue: viewModel.filter,
-                      onValueChanged: viewModel.setFilter,
-                      items: [
-                        SegmentedPillItem(value: HomeFeedFilter.all, label: 'All', count: viewModel.allActivities.length),
-                        SegmentedPillItem(value: HomeFeedFilter.friend, label: 'Friend', count: viewModel.friendActivities.length),
-                        SegmentedPillItem(value: HomeFeedFilter.split, label: 'Split', count: viewModel.splitActivities.length),
+          child: CustomScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            slivers: [
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 10, 12, 0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (viewModel.errorMessage != null) ...[
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.errorContainer,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(Icons.error_outline,
+                                  size: 18,
+                                  color: Theme.of(context).colorScheme.error),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  viewModel.errorMessage!,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onErrorContainer,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
-                    ),
-                    const SizedBox(height: 10),
-                  ],
+                      HomeBalancesCard(
+                        myName: myName,
+                        myPhotoUrl: myPhoto,
+                        myEmail: user.email ?? '',
+                        myUsd: viewModel.myUsdBalance,
+                        myEgp: viewModel.myEgpBalance,
+                        friendName: friendName,
+                        friendPhotoUrl: friendPhoto,
+                        friendEmail: friendEmail,
+                        friendUsd: viewModel.friendUsdBalance,
+                        friendEgp: viewModel.friendEgpBalance,
+                      ),
+                      const SizedBox(height: 10),
+                      SegmentedPillBar<HomeFeedFilter>(
+                        selectedValue: viewModel.filter,
+                        onValueChanged: viewModel.setFilter,
+                        items: [
+                          SegmentedPillItem(value: HomeFeedFilter.all, label: 'All', count: viewModel.allActivities.length),
+                          SegmentedPillItem(value: HomeFeedFilter.friend, label: 'Friend', count: viewModel.friendActivities.length),
+                          SegmentedPillItem(value: HomeFeedFilter.split, label: 'Split', count: viewModel.splitActivities.length),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                    ],
+                  ),
                 ),
               ),
-              Expanded(
-                child: HomeActivitiesList(
-                  activities: activities,
-                  filter: viewModel.filter,
-                  user: user,
-                  friendName: friendName,
-                  viewModel: viewModel,
-                ),
+              HomeActivitiesList(
+                activities: activities,
+                filter: viewModel.filter,
+                user: user,
+                friendName: friendName,
+                viewModel: viewModel,
               ),
             ],
           ),

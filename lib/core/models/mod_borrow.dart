@@ -1,3 +1,5 @@
+import '../utils/m_formatters.dart';
+
 /// Immutable model representing physical money borrowed between users.
 ///
 /// Borrower receives the cash (+), Lender hands over the cash (-).
@@ -40,12 +42,8 @@ class Borrow {
       lenderId: map['lender_id'] as String? ?? '',
       usdAmount: (map['usd_amount'] as num?)?.toDouble() ?? 0.0,
       egpAmount: (map['egp_amount'] as num?)?.toDouble() ?? 0.0,
-      date: map['date'] != null
-          ? DateTime.tryParse(map['date'] as String) ?? DateTime.now()
-          : DateTime.now(),
-      createdAt: map['created_at'] != null
-          ? DateTime.tryParse(map['created_at'] as String) ?? DateTime.now()
-          : DateTime.now(),
+      date: Formatters.parseDate(map['date']),
+      createdAt: Formatters.parseDate(map['created_at']),
     );
   }
 

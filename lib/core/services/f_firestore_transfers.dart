@@ -10,6 +10,9 @@ mixin FirestoreTransfersMixin on FirestoreServiceBase {
             .toList();
         list.sort((a, b) => b.date.compareTo(a.date));
         return list;
+      }).handleError((error) {
+        debugPrint('Firestore exchanges stream error: $error');
+        return <Exchange>[];
       });
     } catch (_) {
       return const Stream.empty();
@@ -45,6 +48,9 @@ mixin FirestoreTransfersMixin on FirestoreServiceBase {
             .toList();
         list.sort((a, b) => b.date.compareTo(a.date));
         return list;
+      }).handleError((error) {
+        debugPrint('Firestore borrows stream error: $error');
+        return <Borrow>[];
       });
     } catch (_) {
       return const Stream.empty();

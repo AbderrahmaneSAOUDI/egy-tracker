@@ -11,7 +11,7 @@ import 'package:egy_tracker/core/models/mod_user_profile.dart';
 import 'package:egy_tracker/core/services/f_auth.dart';
 import 'package:egy_tracker/core/services/f_firestore.dart';
 import 'package:egy_tracker/core/theme/t_app_theme.dart';
-import 'package:egy_tracker/features/home/components/c_activity_tile.dart';
+import 'package:egy_tracker/core/components/c_activity_tile.dart';
 import 'package:egy_tracker/features/home/models/mod_activity_item.dart';
 import 'package:egy_tracker/features/home/s_home_tab.dart';
 import 'package:egy_tracker/features/home/vm_home_feed.dart';

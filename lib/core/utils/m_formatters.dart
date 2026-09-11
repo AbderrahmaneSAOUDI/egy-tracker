@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 /// Formatters for currency and numbers in egy_tracker.
 class Formatters {
   Formatters._();
@@ -54,5 +56,28 @@ class Formatters {
     final period = dt.hour >= 12 ? 'PM' : 'AM';
     final minute = dt.minute.toString().padLeft(2, '0');
     return '$month ${dt.day}, $hour:$minute $period';
+  }
+
+  /// Safely parses a dynamic date value from Firestore (Timestamp, DateTime, or ISO string).
+  static DateTime parseDate(dynamic val, [DateTime? fallback]) {
+    if (val == null) {
+      if (fallback != null) return fallback;
+      debugPrint('Formatters.parseDate warning: null date value provided; defaulting to DateTime.now()');
+      return DateTime.now();
+    }
+    if (val is DateTime) return val;
+    if (val is String) {
+      final parsed = DateTime.tryParse(val);
+      if (parsed != null) return parsed;
+    }
+    try {
+      final dt = (val as dynamic).toDate();
+      if (dt is DateTime) return dt;
+    } catch (_) {}
+    final fallbackParsed = DateTime.tryParse(val.toString());
+    if (fallbackParsed != null) return fallbackParsed;
+
+    debugPrint('Formatters.parseDate warning: Invalid date value "$val"; falling back to default.');
+    return fallback ?? DateTime.now();
   }
 }

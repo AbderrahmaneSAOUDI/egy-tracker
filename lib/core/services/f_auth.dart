@@ -14,14 +14,15 @@ export 'f_auth_sync.dart';
 class AuthService {
   final FirebaseAuth? auth;
   static User? _devUser;
-  static final StreamController<User?> _authController =
+  final StreamController<User?> _authController =
       StreamController<User?>.broadcast();
+  StreamSubscription<User?>? _authSubscription;
 
   static const String serverClientId = AppConfig.serverClientId;
 
   AuthService({this.auth, bool initializeGoogleSignIn = true}) {
     try {
-      _firebaseAuth.authStateChanges().listen((user) {
+      _authSubscription = _firebaseAuth.authStateChanges().listen((user) {
         if (_devUser == null) {
           _authController.add(user);
         }
@@ -72,5 +73,10 @@ class AuthService {
     _authController.add(null);
     await GoogleAuthHelper.signOut();
     await _firebaseAuth.signOut();
+  }
+
+  void dispose() {
+    _authSubscription?.cancel();
+    _authController.close();
   }
 }

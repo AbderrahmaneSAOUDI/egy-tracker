@@ -3,4 +3,5 @@ enum MyTrackerFilter {
   all,
   myExpenses,
   sharedExpenses,
+  exchanges,
 }

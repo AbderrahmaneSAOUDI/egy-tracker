@@ -6,11 +6,11 @@ import 'package:egy_tracker/core/models/mod_borrow.dart';
 import 'package:egy_tracker/core/models/mod_exchange.dart';
 import 'package:egy_tracker/core/models/mod_expense.dart';
 import 'package:egy_tracker/core/theme/t_app_theme.dart';
-import 'package:egy_tracker/features/home/components/c_add_exchange_dialog.dart';
-import 'package:egy_tracker/features/home/components/c_add_expense_dialog.dart';
-import 'package:egy_tracker/features/home/components/c_borrow_dialog.dart';
+import 'package:egy_tracker/core/components/c_add_exchange_dialog.dart';
+import 'package:egy_tracker/core/components/c_add_expense_dialog.dart';
+import 'package:egy_tracker/core/components/c_borrow_dialog.dart';
 import 'package:egy_tracker/core/components/c_confirmation_dialog.dart';
-import 'package:egy_tracker/features/home/components/c_delete_activity_dialog.dart';
+import 'package:egy_tracker/core/components/c_delete_activity_dialog.dart';
 import 'package:egy_tracker/features/home/models/mod_activity_item.dart';
 
 void main() {

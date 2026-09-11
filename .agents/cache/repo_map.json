@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-09-11T13:45:01Z",
-  "totalFiles": 203,
-  "totalLines": 16178,
-  "totalSymbols": 1730,
+  "generatedAt": "2026-09-11T18:42:36Z",
+  "totalFiles": 195,
+  "totalLines": 16444,
+  "totalSymbols": 1748,
   "files": {
     "lib/main.dart": {
       "category": "Root / Config",
-      "lineCount": 63,
+      "lineCount": 58,
       "symbols": [
         {
           "name": "main",
@@ -21,7 +21,7 @@
           "kind": "class",
           "class": null,
           "file": "lib/main.dart",
-          "line": 28,
+          "line": 29,
           "signature": "class MyApp extends StatelessWidget"
         },
         {
@@ -29,23 +29,23 @@
           "kind": "field",
           "class": "MyApp",
           "file": "lib/main.dart",
-          "line": 29,
-          "signature": "AuthService? authService"
+          "line": 30,
+          "signature": "AuthService authService"
         },
         {
           "name": "firestoreService",
           "kind": "field",
           "class": "MyApp",
           "file": "lib/main.dart",
-          "line": 30,
-          "signature": "FirestoreService? firestoreService"
+          "line": 31,
+          "signature": "FirestoreService firestoreService"
         },
         {
           "name": "MyApp",
           "kind": "constructor",
           "class": "MyApp",
           "file": "lib/main.dart",
-          "line": 32,
+          "line": 33,
           "signature": "const MyApp("
         },
         {
@@ -53,7 +53,7 @@
           "kind": "method",
           "class": "MyApp",
           "file": "lib/main.dart",
-          "line": 39,
+          "line": 40,
           "signature": "Widget build(BuildContext context)"
         },
         {
@@ -61,16 +61,8 @@
           "kind": "method",
           "class": "MyApp",
           "file": "lib/main.dart",
-          "line": 43,
+          "line": 44,
           "signature": "return MaterialApp("
-        },
-        {
-          "name": "AuthGate",
-          "kind": "method",
-          "class": "MyApp",
-          "file": "lib/main.dart",
-          "line": 50,
-          "signature": "? AuthGate("
         }
       ]
     },
@@ -138,14 +130,14 @@
     },
     "lib/core/theme/t_app_theme.dart": {
       "category": "Theme",
-      "lineCount": 91,
+      "lineCount": 109,
       "symbols": [
         {
           "name": "AppTheme",
           "kind": "class",
           "class": null,
           "file": "lib/core/theme/t_app_theme.dart",
-          "line": 12,
+          "line": 13,
           "signature": "class AppTheme"
         },
         {
@@ -153,15 +145,31 @@
           "kind": "constructor",
           "class": "AppTheme",
           "file": "lib/core/theme/t_app_theme.dart",
-          "line": 13,
+          "line": 14,
           "signature": "AppTheme._()"
+        },
+        {
+          "name": "initTheme",
+          "kind": "method",
+          "class": "AppTheme",
+          "file": "lib/core/theme/t_app_theme.dart",
+          "line": 22,
+          "signature": "static Future<void> initTheme([SharedPreferences? prefs]) async"
+        },
+        {
+          "name": "try",
+          "kind": "method",
+          "class": "AppTheme",
+          "file": "lib/core/theme/t_app_theme.dart",
+          "line": 23,
+          "signature": "try"
         },
         {
           "name": "setThemeMode",
           "kind": "method",
           "class": "AppTheme",
           "file": "lib/core/theme/t_app_theme.dart",
-          "line": 18,
+          "line": 35,
           "signature": "static void setThemeMode(ThemeMode mode)"
         },
         {
@@ -169,7 +177,7 @@
           "kind": "getter",
           "class": "AppTheme",
           "file": "lib/core/theme/t_app_theme.dart",
-          "line": 37,
+          "line": 55,
           "signature": "get lightTheme"
         },
         {
@@ -177,7 +185,7 @@
           "kind": "getter",
           "class": "AppTheme",
           "file": "lib/core/theme/t_app_theme.dart",
-          "line": 65,
+          "line": 83,
           "signature": "get darkTheme"
         }
       ]
@@ -215,7 +223,7 @@
           "kind": "class",
           "class": null,
           "file": "lib/core/models/mod_user_profile.dart",
-          "line": 1,
+          "line": 3,
           "signature": "class UserProfile"
         },
         {
@@ -223,7 +231,7 @@
           "kind": "field",
           "class": "UserProfile",
           "file": "lib/core/models/mod_user_profile.dart",
-          "line": 2,
+          "line": 4,
           "signature": "String id"
         },
         {
@@ -231,7 +239,7 @@
           "kind": "field",
           "class": "UserProfile",
           "file": "lib/core/models/mod_user_profile.dart",
-          "line": 3,
+          "line": 5,
           "signature": "String name"
         },
         {
@@ -239,7 +247,7 @@
           "kind": "field",
           "class": "UserProfile",
           "file": "lib/core/models/mod_user_profile.dart",
-          "line": 4,
+          "line": 6,
           "signature": "String email"
         },
         {
@@ -247,7 +255,7 @@
           "kind": "field",
           "class": "UserProfile",
           "file": "lib/core/models/mod_user_profile.dart",
-          "line": 5,
+          "line": 7,
           "signature": "String? photoUrl"
         },
         {
@@ -255,7 +263,7 @@
           "kind": "field",
           "class": "UserProfile",
           "file": "lib/core/models/mod_user_profile.dart",
-          "line": 6,
+          "line": 8,
           "signature": "DateTime createdAt"
         },
         {
@@ -263,7 +271,7 @@
           "kind": "constructor",
           "class": "UserProfile",
           "file": "lib/core/models/mod_user_profile.dart",
-          "line": 8,
+          "line": 10,
           "signature": "const UserProfile("
         },
         {
@@ -271,21 +279,21 @@
           "kind": "method",
           "class": "UserProfile",
           "file": "lib/core/models/mod_user_profile.dart",
-          "line": 28,
+          "line": 30,
           "signature": "return UserProfile("
         }
       ]
     },
     "lib/core/models/mod_expense.dart": {
       "category": "Core Models",
-      "lineCount": 64,
+      "lineCount": 62,
       "symbols": [
         {
           "name": "Expense",
           "kind": "class",
           "class": null,
           "file": "lib/core/models/mod_expense.dart",
-          "line": 1,
+          "line": 3,
           "signature": "class Expense"
         },
         {
@@ -293,7 +301,7 @@
           "kind": "field",
           "class": "Expense",
           "file": "lib/core/models/mod_expense.dart",
-          "line": 2,
+          "line": 4,
           "signature": "String id"
         },
         {
@@ -301,7 +309,7 @@
           "kind": "field",
           "class": "Expense",
           "file": "lib/core/models/mod_expense.dart",
-          "line": 3,
+          "line": 5,
           "signature": "String title"
         },
         {
@@ -309,7 +317,7 @@
           "kind": "field",
           "class": "Expense",
           "file": "lib/core/models/mod_expense.dart",
-          "line": 4,
+          "line": 6,
           "signature": "double amount"
         },
         {
@@ -317,7 +325,7 @@
           "kind": "field",
           "class": "Expense",
           "file": "lib/core/models/mod_expense.dart",
-          "line": 5,
+          "line": 7,
           "signature": "String currency"
         },
         {
@@ -325,7 +333,7 @@
           "kind": "field",
           "class": "Expense",
           "file": "lib/core/models/mod_expense.dart",
-          "line": 6,
+          "line": 8,
           "signature": "String paidBy"
         },
         {
@@ -333,7 +341,7 @@
           "kind": "field",
           "class": "Expense",
           "file": "lib/core/models/mod_expense.dart",
-          "line": 7,
+          "line": 9,
           "signature": "String splitType"
         },
         {
@@ -341,7 +349,7 @@
           "kind": "field",
           "class": "Expense",
           "file": "lib/core/models/mod_expense.dart",
-          "line": 8,
+          "line": 10,
           "signature": "double mePercentage"
         },
         {
@@ -349,7 +357,7 @@
           "kind": "field",
           "class": "Expense",
           "file": "lib/core/models/mod_expense.dart",
-          "line": 9,
+          "line": 11,
           "signature": "double friendPercentage"
         },
         {
@@ -357,7 +365,7 @@
           "kind": "field",
           "class": "Expense",
           "file": "lib/core/models/mod_expense.dart",
-          "line": 10,
+          "line": 12,
           "signature": "DateTime date"
         },
         {
@@ -365,7 +373,7 @@
           "kind": "field",
           "class": "Expense",
           "file": "lib/core/models/mod_expense.dart",
-          "line": 11,
+          "line": 13,
           "signature": "DateTime createdAt"
         },
         {
@@ -373,7 +381,7 @@
           "kind": "field",
           "class": "Expense",
           "file": "lib/core/models/mod_expense.dart",
-          "line": 12,
+          "line": 14,
           "signature": "String createdBy"
         },
         {
@@ -381,7 +389,7 @@
           "kind": "constructor",
           "class": "Expense",
           "file": "lib/core/models/mod_expense.dart",
-          "line": 14,
+          "line": 16,
           "signature": "const Expense("
         },
         {
@@ -389,21 +397,21 @@
           "kind": "method",
           "class": "Expense",
           "file": "lib/core/models/mod_expense.dart",
-          "line": 46,
+          "line": 48,
           "signature": "return Expense("
         }
       ]
     },
     "lib/core/models/mod_exchange.dart": {
       "category": "Core Models",
-      "lineCount": 57,
+      "lineCount": 55,
       "symbols": [
         {
           "name": "Exchange",
           "kind": "class",
           "class": null,
           "file": "lib/core/models/mod_exchange.dart",
-          "line": 1,
+          "line": 3,
           "signature": "class Exchange"
         },
         {
@@ -411,7 +419,7 @@
           "kind": "field",
           "class": "Exchange",
           "file": "lib/core/models/mod_exchange.dart",
-          "line": 2,
+          "line": 4,
           "signature": "String id"
         },
         {
@@ -419,7 +427,7 @@
           "kind": "field",
           "class": "Exchange",
           "file": "lib/core/models/mod_exchange.dart",
-          "line": 3,
+          "line": 5,
           "signature": "String userId"
         },
         {
@@ -427,7 +435,7 @@
           "kind": "field",
           "class": "Exchange",
           "file": "lib/core/models/mod_exchange.dart",
-          "line": 4,
+          "line": 6,
           "signature": "String fromCurrency"
         },
         {
@@ -435,7 +443,7 @@
           "kind": "field",
           "class": "Exchange",
           "file": "lib/core/models/mod_exchange.dart",
-          "line": 5,
+          "line": 7,
           "signature": "double fromAmount"
         },
         {
@@ -443,7 +451,7 @@
           "kind": "field",
           "class": "Exchange",
           "file": "lib/core/models/mod_exchange.dart",
-          "line": 6,
+          "line": 8,
           "signature": "String toCurrency"
         },
         {
@@ -451,7 +459,7 @@
           "kind": "field",
           "class": "Exchange",
           "file": "lib/core/models/mod_exchange.dart",
-          "line": 7,
+          "line": 9,
           "signature": "double toAmount"
         },
         {
@@ -459,7 +467,7 @@
           "kind": "field",
           "class": "Exchange",
           "file": "lib/core/models/mod_exchange.dart",
-          "line": 8,
+          "line": 10,
           "signature": "double exchangeRate"
         },
         {
@@ -467,7 +475,7 @@
           "kind": "field",
           "class": "Exchange",
           "file": "lib/core/models/mod_exchange.dart",
-          "line": 9,
+          "line": 11,
           "signature": "DateTime date"
         },
         {
@@ -475,7 +483,7 @@
           "kind": "field",
           "class": "Exchange",
           "file": "lib/core/models/mod_exchange.dart",
-          "line": 10,
+          "line": 12,
           "signature": "DateTime createdAt"
         },
         {
@@ -483,7 +491,7 @@
           "kind": "constructor",
           "class": "Exchange",
           "file": "lib/core/models/mod_exchange.dart",
-          "line": 12,
+          "line": 14,
           "signature": "const Exchange("
         },
         {
@@ -491,7 +499,7 @@
           "kind": "method",
           "class": "Exchange",
           "file": "lib/core/models/mod_exchange.dart",
-          "line": 41,
+          "line": 43,
           "signature": "return Exchange("
         }
       ]
@@ -505,7 +513,7 @@
           "kind": "class",
           "class": null,
           "file": "lib/core/models/mod_initial_balance.dart",
-          "line": 1,
+          "line": 3,
           "signature": "class InitialBalance"
         },
         {
@@ -513,7 +521,7 @@
           "kind": "field",
           "class": "InitialBalance",
           "file": "lib/core/models/mod_initial_balance.dart",
-          "line": 2,
+          "line": 4,
           "signature": "String userId"
         },
         {
@@ -521,7 +529,7 @@
           "kind": "field",
           "class": "InitialBalance",
           "file": "lib/core/models/mod_initial_balance.dart",
-          "line": 3,
+          "line": 5,
           "signature": "double usdAmount"
         },
         {
@@ -529,7 +537,7 @@
           "kind": "field",
           "class": "InitialBalance",
           "file": "lib/core/models/mod_initial_balance.dart",
-          "line": 4,
+          "line": 6,
           "signature": "double egpAmount"
         },
         {
@@ -537,7 +545,7 @@
           "kind": "field",
           "class": "InitialBalance",
           "file": "lib/core/models/mod_initial_balance.dart",
-          "line": 5,
+          "line": 7,
           "signature": "DateTime updatedAt"
         },
         {
@@ -545,7 +553,7 @@
           "kind": "constructor",
           "class": "InitialBalance",
           "file": "lib/core/models/mod_initial_balance.dart",
-          "line": 7,
+          "line": 9,
           "signature": "const InitialBalance("
         },
         {
@@ -553,7 +561,7 @@
           "kind": "method",
           "class": "InitialBalance",
           "file": "lib/core/models/mod_initial_balance.dart",
-          "line": 25,
+          "line": 27,
           "signature": "return InitialBalance("
         }
       ]
@@ -567,7 +575,7 @@
           "kind": "class",
           "class": null,
           "file": "lib/core/models/mod_allowed_email.dart",
-          "line": 1,
+          "line": 3,
           "signature": "class AllowedEmail"
         },
         {
@@ -575,7 +583,7 @@
           "kind": "field",
           "class": "AllowedEmail",
           "file": "lib/core/models/mod_allowed_email.dart",
-          "line": 2,
+          "line": 4,
           "signature": "String id"
         },
         {
@@ -583,7 +591,7 @@
           "kind": "field",
           "class": "AllowedEmail",
           "file": "lib/core/models/mod_allowed_email.dart",
-          "line": 3,
+          "line": 5,
           "signature": "String email"
         },
         {
@@ -591,7 +599,7 @@
           "kind": "field",
           "class": "AllowedEmail",
           "file": "lib/core/models/mod_allowed_email.dart",
-          "line": 4,
+          "line": 6,
           "signature": "DateTime createdAt"
         },
         {
@@ -599,7 +607,7 @@
           "kind": "constructor",
           "class": "AllowedEmail",
           "file": "lib/core/models/mod_allowed_email.dart",
-          "line": 6,
+          "line": 8,
           "signature": "const AllowedEmail("
         },
         {
@@ -607,21 +615,21 @@
           "kind": "method",
           "class": "AllowedEmail",
           "file": "lib/core/models/mod_allowed_email.dart",
-          "line": 22,
+          "line": 24,
           "signature": "return AllowedEmail("
         }
       ]
     },
     "lib/core/models/mod_borrow.dart": {
       "category": "Core Models",
-      "lineCount": 71,
+      "lineCount": 69,
       "symbols": [
         {
           "name": "Borrow",
           "kind": "class",
           "class": null,
           "file": "lib/core/models/mod_borrow.dart",
-          "line": 4,
+          "line": 6,
           "signature": "class Borrow"
         },
         {
@@ -629,7 +637,7 @@
           "kind": "field",
           "class": "Borrow",
           "file": "lib/core/models/mod_borrow.dart",
-          "line": 5,
+          "line": 7,
           "signature": "String id"
         },
         {
@@ -637,7 +645,7 @@
           "kind": "field",
           "class": "Borrow",
           "file": "lib/core/models/mod_borrow.dart",
-          "line": 6,
+          "line": 8,
           "signature": "String borrowerId"
         },
         {
@@ -645,7 +653,7 @@
           "kind": "field",
           "class": "Borrow",
           "file": "lib/core/models/mod_borrow.dart",
-          "line": 7,
+          "line": 9,
           "signature": "String lenderId"
         },
         {
@@ -653,7 +661,7 @@
           "kind": "field",
           "class": "Borrow",
           "file": "lib/core/models/mod_borrow.dart",
-          "line": 8,
+          "line": 10,
           "signature": "double usdAmount"
         },
         {
@@ -661,7 +669,7 @@
           "kind": "field",
           "class": "Borrow",
           "file": "lib/core/models/mod_borrow.dart",
-          "line": 9,
+          "line": 11,
           "signature": "double egpAmount"
         },
         {
@@ -669,7 +677,7 @@
           "kind": "field",
           "class": "Borrow",
           "file": "lib/core/models/mod_borrow.dart",
-          "line": 10,
+          "line": 12,
           "signature": "DateTime date"
         },
         {
@@ -677,7 +685,7 @@
           "kind": "field",
           "class": "Borrow",
           "file": "lib/core/models/mod_borrow.dart",
-          "line": 11,
+          "line": 13,
           "signature": "DateTime createdAt"
         },
         {
@@ -685,7 +693,7 @@
           "kind": "constructor",
           "class": "Borrow",
           "file": "lib/core/models/mod_borrow.dart",
-          "line": 13,
+          "line": 15,
           "signature": "const Borrow("
         },
         {
@@ -693,7 +701,7 @@
           "kind": "method",
           "class": "Borrow",
           "file": "lib/core/models/mod_borrow.dart",
-          "line": 37,
+          "line": 39,
           "signature": "return Borrow("
         },
         {
@@ -701,7 +709,7 @@
           "kind": "method",
           "class": "Borrow",
           "file": "lib/core/models/mod_borrow.dart",
-          "line": 52,
+          "line": 50,
           "signature": "Borrow copyWith("
         },
         {
@@ -709,7 +717,7 @@
           "kind": "method",
           "class": "Borrow",
           "file": "lib/core/models/mod_borrow.dart",
-          "line": 61,
+          "line": 59,
           "signature": "return Borrow("
         }
       ]
@@ -826,7 +834,7 @@
     },
     "lib/core/services/f_auth.dart": {
       "category": "Core Services",
-      "lineCount": 76,
+      "lineCount": 82,
       "symbols": [
         {
           "name": "AuthService",
@@ -845,11 +853,19 @@
           "signature": "FirebaseAuth? auth"
         },
         {
+          "name": "_authController",
+          "kind": "field",
+          "class": "AuthService",
+          "file": "lib/core/services/f_auth.dart",
+          "line": 17,
+          "signature": "StreamController<User?> _authController"
+        },
+        {
           "name": "AuthService",
           "kind": "constructor",
           "class": "AuthService",
           "file": "lib/core/services/f_auth.dart",
-          "line": 22,
+          "line": 23,
           "signature": "AuthService("
         },
         {
@@ -857,7 +873,7 @@
           "kind": "method",
           "class": "AuthService",
           "file": "lib/core/services/f_auth.dart",
-          "line": 23,
+          "line": 24,
           "signature": "try"
         },
         {
@@ -865,7 +881,7 @@
           "kind": "getter",
           "class": "AuthService",
           "file": "lib/core/services/f_auth.dart",
-          "line": 36,
+          "line": 37,
           "signature": "get _firebaseAuth"
         },
         {
@@ -873,7 +889,7 @@
           "kind": "getter",
           "class": "AuthService",
           "file": "lib/core/services/f_auth.dart",
-          "line": 38,
+          "line": 39,
           "signature": "get _safeAuth"
         },
         {
@@ -881,7 +897,7 @@
           "kind": "method",
           "class": "AuthService",
           "file": "lib/core/services/f_auth.dart",
-          "line": 39,
+          "line": 40,
           "signature": "try"
         },
         {
@@ -889,7 +905,7 @@
           "kind": "getter",
           "class": "AuthService",
           "file": "lib/core/services/f_auth.dart",
-          "line": 51,
+          "line": 52,
           "signature": "get currentUser"
         },
         {
@@ -897,7 +913,7 @@
           "kind": "method",
           "class": "AuthService",
           "file": "lib/core/services/f_auth.dart",
-          "line": 53,
+          "line": 54,
           "signature": "try"
         },
         {
@@ -905,7 +921,7 @@
           "kind": "method",
           "class": "AuthService",
           "file": "lib/core/services/f_auth.dart",
-          "line": 60,
+          "line": 61,
           "signature": "Future<User> signInAsDevUser([String email = AppConfig.adminEmail]) async"
         },
         {
@@ -913,7 +929,7 @@
           "kind": "method",
           "class": "AuthService",
           "file": "lib/core/services/f_auth.dart",
-          "line": 66,
+          "line": 67,
           "signature": "Future<void> tryRestoreSession() => AuthOperations.tryRestoreSession(_firebaseAuth)"
         },
         {
@@ -921,7 +937,7 @@
           "kind": "method",
           "class": "AuthService",
           "file": "lib/core/services/f_auth.dart",
-          "line": 68,
+          "line": 69,
           "signature": "Future<UserCredential?> signInWithGoogle() => AuthOperations.signInWithGoogle(_firebaseAuth)"
         },
         {
@@ -929,21 +945,29 @@
           "kind": "method",
           "class": "AuthService",
           "file": "lib/core/services/f_auth.dart",
-          "line": 70,
+          "line": 71,
           "signature": "Future<void> signOut() async"
+        },
+        {
+          "name": "dispose",
+          "kind": "method",
+          "class": "AuthService",
+          "file": "lib/core/services/f_auth.dart",
+          "line": 78,
+          "signature": "void dispose()"
         }
       ]
     },
     "lib/core/services/f_firestore.dart": {
       "category": "Core Services",
-      "lineCount": 59,
+      "lineCount": 67,
       "symbols": [
         {
           "name": "FirestoreServiceBase",
           "kind": "class",
           "class": null,
           "file": "lib/core/services/f_firestore.dart",
-          "line": 16,
+          "line": 17,
           "signature": "abstract class FirestoreServiceBase"
         },
         {
@@ -951,7 +975,7 @@
           "kind": "class",
           "class": null,
           "file": "lib/core/services/f_firestore.dart",
-          "line": 26,
+          "line": 27,
           "signature": "class FirestoreService extends FirestoreServiceBase"
         },
         {
@@ -959,7 +983,7 @@
           "kind": "method",
           "class": "FirestoreService",
           "file": "lib/core/services/f_firestore.dart",
-          "line": 32,
+          "line": 33,
           "signature": "FirestorePurgeMixin"
         },
         {
@@ -967,7 +991,7 @@
           "kind": "field",
           "class": "FirestoreService",
           "file": "lib/core/services/f_firestore.dart",
-          "line": 33,
+          "line": 34,
           "signature": "FirebaseFirestore? _customFirestore"
         },
         {
@@ -975,15 +999,23 @@
           "kind": "constructor",
           "class": "FirestoreService",
           "file": "lib/core/services/f_firestore.dart",
-          "line": 35,
+          "line": 36,
           "signature": "FirestoreService("
+        },
+        {
+          "name": "try",
+          "kind": "method",
+          "class": "FirestoreService",
+          "file": "lib/core/services/f_firestore.dart",
+          "line": 37,
+          "signature": "try"
         },
         {
           "name": "_firestore",
           "kind": "getter",
           "class": "FirestoreService",
           "file": "lib/core/services/f_firestore.dart",
-          "line": 38,
+          "line": 46,
           "signature": "get _firestore"
         }
       ]
@@ -1167,7 +1199,7 @@
     },
     "lib/core/services/f_firestore_users_balances.dart": {
       "category": "Core Services",
-      "lineCount": 37,
+      "lineCount": 49,
       "symbols": [
         {
           "name": "FirestoreUsersBalancesMixin",
@@ -1186,11 +1218,19 @@
           "signature": "Stream<List<UserProfile>> getUsersStream()"
         },
         {
+          "name": "debugPrint",
+          "kind": "method",
+          "class": "FirestoreUsersBalancesMixin",
+          "file": "lib/core/services/f_firestore_users_balances.dart",
+          "line": 11,
+          "signature": "debugPrint('Firestore users stream error: $error')"
+        },
+        {
           "name": "saveUserProfile",
           "kind": "method",
           "class": "FirestoreUsersBalancesMixin",
           "file": "lib/core/services/f_firestore_users_balances.dart",
-          "line": 10,
+          "line": 16,
           "signature": "Future<void> saveUserProfile(UserProfile user) async"
         },
         {
@@ -1198,22 +1238,30 @@
           "kind": "method",
           "class": "FirestoreUsersBalancesMixin",
           "file": "lib/core/services/f_firestore_users_balances.dart",
-          "line": 18,
+          "line": 24,
           "signature": "Stream<List<InitialBalance>> getInitialBalancesStream()"
+        },
+        {
+          "name": "debugPrint",
+          "kind": "method",
+          "class": "FirestoreUsersBalancesMixin",
+          "file": "lib/core/services/f_firestore_users_balances.dart",
+          "line": 31,
+          "signature": "debugPrint('Firestore initial balances stream error: $error')"
         },
         {
           "name": "setInitialBalances",
           "kind": "method",
           "class": "FirestoreUsersBalancesMixin",
           "file": "lib/core/services/f_firestore_users_balances.dart",
-          "line": 24,
+          "line": 36,
           "signature": "Future<void> setInitialBalances("
         }
       ]
     },
     "lib/core/services/f_firestore_emails.dart": {
       "category": "Core Services",
-      "lineCount": 71,
+      "lineCount": 72,
       "symbols": [
         {
           "name": "FirestoreEmailsMixin",
@@ -1232,11 +1280,19 @@
           "signature": "Stream<List<AllowedEmail>> getAllowedEmailsStream()"
         },
         {
+          "name": "debugPrint",
+          "kind": "method",
+          "class": "FirestoreEmailsMixin",
+          "file": "lib/core/services/f_firestore_emails.dart",
+          "line": 20,
+          "signature": "debugPrint('Firestore allowed emails stream error: $error')"
+        },
+        {
           "name": "isEmailAllowed",
           "kind": "method",
           "class": "FirestoreEmailsMixin",
           "file": "lib/core/services/f_firestore_emails.dart",
-          "line": 22,
+          "line": 25,
           "signature": "Future<bool> isEmailAllowed(String email) async"
         },
         {
@@ -1244,15 +1300,15 @@
           "kind": "method",
           "class": "FirestoreEmailsMixin",
           "file": "lib/core/services/f_firestore_emails.dart",
-          "line": 31,
-          "signature": "await addAllowedEmail(normalized)"
+          "line": 30,
+          "signature": "await addAllowedEmail(AppConfig.adminEmail)"
         },
         {
           "name": "addAllowedEmail",
           "kind": "method",
           "class": "FirestoreEmailsMixin",
           "file": "lib/core/services/f_firestore_emails.dart",
-          "line": 41,
+          "line": 42,
           "signature": "Future<void> addAllowedEmail(String email) async"
         },
         {
@@ -1260,7 +1316,7 @@
           "kind": "method",
           "class": "FirestoreEmailsMixin",
           "file": "lib/core/services/f_firestore_emails.dart",
-          "line": 61,
+          "line": 62,
           "signature": "Future<void> updateAllowedEmail(String id, String newEmail) async"
         },
         {
@@ -1268,7 +1324,7 @@
           "kind": "method",
           "class": "FirestoreEmailsMixin",
           "file": "lib/core/services/f_firestore_emails.dart",
-          "line": 68,
+          "line": 69,
           "signature": "Future<void> deleteAllowedEmail(String id) async"
         }
       ]
@@ -1310,66 +1366,26 @@
           "signature": "Future<void> deleteTripData("
         },
         {
-          "name": "safeDelete",
+          "name": "try",
           "kind": "method",
           "class": "FirestorePurgeMixin",
           "file": "lib/core/services/f_firestore_purge.dart",
-          "line": 31,
-          "signature": "Future<void> safeDelete(DocumentReference ref) async"
+          "line": 88,
+          "signature": "try"
         },
         {
-          "name": "safeDelete",
+          "name": "debugPrint",
           "kind": "method",
           "class": "FirestorePurgeMixin",
           "file": "lib/core/services/f_firestore_purge.dart",
-          "line": 44,
-          "signature": "await safeDelete(doc.reference)"
-        },
-        {
-          "name": "safeDelete",
-          "kind": "method",
-          "class": "FirestorePurgeMixin",
-          "file": "lib/core/services/f_firestore_purge.dart",
-          "line": 51,
-          "signature": "await safeDelete(doc.reference)"
-        },
-        {
-          "name": "safeDelete",
-          "kind": "method",
-          "class": "FirestorePurgeMixin",
-          "file": "lib/core/services/f_firestore_purge.dart",
-          "line": 58,
-          "signature": "await safeDelete(doc.reference)"
-        },
-        {
-          "name": "safeDelete",
-          "kind": "method",
-          "class": "FirestorePurgeMixin",
-          "file": "lib/core/services/f_firestore_purge.dart",
-          "line": 65,
-          "signature": "await safeDelete(doc.reference)"
-        },
-        {
-          "name": "safeDelete",
-          "kind": "method",
-          "class": "FirestorePurgeMixin",
-          "file": "lib/core/services/f_firestore_purge.dart",
-          "line": 76,
-          "signature": "await safeDelete(doc.reference)"
-        },
-        {
-          "name": "safeDelete",
-          "kind": "method",
-          "class": "FirestorePurgeMixin",
-          "file": "lib/core/services/f_firestore_purge.dart",
-          "line": 87,
-          "signature": "await safeDelete(doc.reference)"
+          "line": 91,
+          "signature": "debugPrint('Firestore delete batch chunk failed: $e')"
         }
       ]
     },
     "lib/core/services/f_firestore_expenses.dart": {
       "category": "Core Services",
-      "lineCount": 38,
+      "lineCount": 41,
       "symbols": [
         {
           "name": "FirestoreExpensesMixin",
@@ -1396,11 +1412,19 @@
           "signature": "try"
         },
         {
+          "name": "debugPrint",
+          "kind": "method",
+          "class": "FirestoreExpensesMixin",
+          "file": "lib/core/services/f_firestore_expenses.dart",
+          "line": 13,
+          "signature": "debugPrint('Firestore expenses stream error: $error')"
+        },
+        {
           "name": "addExpense",
           "kind": "method",
           "class": "FirestoreExpensesMixin",
           "file": "lib/core/services/f_firestore_expenses.dart",
-          "line": 18,
+          "line": 21,
           "signature": "Future<void> addExpense(Expense expense) async"
         },
         {
@@ -1408,14 +1432,14 @@
           "kind": "method",
           "class": "FirestoreExpensesMixin",
           "file": "lib/core/services/f_firestore_expenses.dart",
-          "line": 35,
+          "line": 38,
           "signature": "Future<void> deleteExpense(String id) async"
         }
       ]
     },
     "lib/core/services/f_firestore_transfers.dart": {
       "category": "Core Services",
-      "lineCount": 71,
+      "lineCount": 77,
       "symbols": [
         {
           "name": "FirestoreTransfersMixin",
@@ -1442,11 +1466,19 @@
           "signature": "try"
         },
         {
+          "name": "debugPrint",
+          "kind": "method",
+          "class": "FirestoreTransfersMixin",
+          "file": "lib/core/services/f_firestore_transfers.dart",
+          "line": 14,
+          "signature": "debugPrint('Firestore exchanges stream error: $error')"
+        },
+        {
           "name": "addExchange",
           "kind": "method",
           "class": "FirestoreTransfersMixin",
           "file": "lib/core/services/f_firestore_transfers.dart",
-          "line": 19,
+          "line": 22,
           "signature": "Future<void> addExchange(Exchange exchange) async"
         },
         {
@@ -1454,7 +1486,7 @@
           "kind": "method",
           "class": "FirestoreTransfersMixin",
           "file": "lib/core/services/f_firestore_transfers.dart",
-          "line": 35,
+          "line": 38,
           "signature": "Future<void> deleteExchange(String id) async"
         },
         {
@@ -1462,7 +1494,7 @@
           "kind": "method",
           "class": "FirestoreTransfersMixin",
           "file": "lib/core/services/f_firestore_transfers.dart",
-          "line": 40,
+          "line": 43,
           "signature": "Stream<List<Borrow>> getBorrowsStream()"
         },
         {
@@ -1470,15 +1502,23 @@
           "kind": "method",
           "class": "FirestoreTransfersMixin",
           "file": "lib/core/services/f_firestore_transfers.dart",
-          "line": 41,
+          "line": 44,
           "signature": "try"
+        },
+        {
+          "name": "debugPrint",
+          "kind": "method",
+          "class": "FirestoreTransfersMixin",
+          "file": "lib/core/services/f_firestore_transfers.dart",
+          "line": 52,
+          "signature": "debugPrint('Firestore borrows stream error: $error')"
         },
         {
           "name": "addBorrow",
           "kind": "method",
           "class": "FirestoreTransfersMixin",
           "file": "lib/core/services/f_firestore_transfers.dart",
-          "line": 54,
+          "line": 60,
           "signature": "Future<void> addBorrow(Borrow borrow) async"
         },
         {
@@ -1486,7 +1526,7 @@
           "kind": "method",
           "class": "FirestoreTransfersMixin",
           "file": "lib/core/services/f_firestore_transfers.dart",
-          "line": 68,
+          "line": 74,
           "signature": "Future<void> deleteBorrow(String id) async"
         }
       ]
@@ -1719,14 +1759,14 @@
     },
     "lib/core/utils/m_formatters.dart": {
       "category": "Core Utilities & Math",
-      "lineCount": 58,
+      "lineCount": 83,
       "symbols": [
         {
           "name": "Formatters",
           "kind": "class",
           "class": null,
           "file": "lib/core/utils/m_formatters.dart",
-          "line": 2,
+          "line": 4,
           "signature": "class Formatters"
         },
         {
@@ -1734,7 +1774,7 @@
           "kind": "constructor",
           "class": "Formatters",
           "file": "lib/core/utils/m_formatters.dart",
-          "line": 3,
+          "line": 5,
           "signature": "Formatters._()"
         },
         {
@@ -1742,7 +1782,7 @@
           "kind": "method",
           "class": "Formatters",
           "file": "lib/core/utils/m_formatters.dart",
-          "line": 6,
+          "line": 8,
           "signature": "static String formatAmount(double amount)"
         },
         {
@@ -1750,7 +1790,7 @@
           "kind": "method",
           "class": "Formatters",
           "file": "lib/core/utils/m_formatters.dart",
-          "line": 26,
+          "line": 28,
           "signature": "static String formatUsd(double amount)"
         },
         {
@@ -1758,7 +1798,7 @@
           "kind": "method",
           "class": "Formatters",
           "file": "lib/core/utils/m_formatters.dart",
-          "line": 34,
+          "line": 36,
           "signature": "static String formatEgp(double amount)"
         },
         {
@@ -1766,7 +1806,7 @@
           "kind": "method",
           "class": "Formatters",
           "file": "lib/core/utils/m_formatters.dart",
-          "line": 39,
+          "line": 41,
           "signature": "static String formatCurrency(double amount, String currency)"
         },
         {
@@ -1774,7 +1814,7 @@
           "kind": "method",
           "class": "Formatters",
           "file": "lib/core/utils/m_formatters.dart",
-          "line": 41,
+          "line": 43,
           "signature": "return formatUsd(amount)"
         },
         {
@@ -1782,7 +1822,7 @@
           "kind": "method",
           "class": "Formatters",
           "file": "lib/core/utils/m_formatters.dart",
-          "line": 43,
+          "line": 45,
           "signature": "return formatEgp(amount)"
         },
         {
@@ -1790,8 +1830,40 @@
           "kind": "method",
           "class": "Formatters",
           "file": "lib/core/utils/m_formatters.dart",
-          "line": 47,
+          "line": 49,
           "signature": "static String formatDate(DateTime dt)"
+        },
+        {
+          "name": "parseDate",
+          "kind": "method",
+          "class": "Formatters",
+          "file": "lib/core/utils/m_formatters.dart",
+          "line": 62,
+          "signature": "static DateTime parseDate(dynamic val, [DateTime? fallback])"
+        },
+        {
+          "name": "debugPrint",
+          "kind": "method",
+          "class": "Formatters",
+          "file": "lib/core/utils/m_formatters.dart",
+          "line": 65,
+          "signature": "debugPrint('Formatters.parseDate warning: null date value provided"
+        },
+        {
+          "name": "try",
+          "kind": "method",
+          "class": "Formatters",
+          "file": "lib/core/utils/m_formatters.dart",
+          "line": 73,
+          "signature": "try"
+        },
+        {
+          "name": "debugPrint",
+          "kind": "method",
+          "class": "Formatters",
+          "file": "lib/core/utils/m_formatters.dart",
+          "line": 80,
+          "signature": "debugPrint('Formatters.parseDate warning: Invalid date value \"$val\""
         }
       ]
     },
@@ -3546,7 +3618,7 @@
     },
     "lib/core/components/c_borrow_dialog.dart": {
       "category": "Core UI Components",
-      "lineCount": 69,
+      "lineCount": 70,
       "symbols": []
     },
     "lib/core/components/c_delete_activity_dialog.dart": {
@@ -3714,7 +3786,7 @@
     },
     "lib/core/components/c_add_expense_dialog.dart": {
       "category": "Core UI Components",
-      "lineCount": 68,
+      "lineCount": 69,
       "symbols": []
     },
     "lib/core/components/c_empty_state_icon.dart": {
@@ -5306,7 +5378,7 @@
     },
     "lib/core/components/activity_tiles/c_activity_expense_tile.dart": {
       "category": "Core UI Components",
-      "lineCount": 105,
+      "lineCount": 108,
       "symbols": []
     },
     "lib/core/components/activity_tiles/c_activity_exchange_tile.dart": {
@@ -5757,7 +5829,7 @@
     },
     "lib/core/components/expense_dialog/c_expense_dialog_fields.dart": {
       "category": "Core UI Components",
-      "lineCount": 105,
+      "lineCount": 106,
       "symbols": [
         {
           "name": "ExpenseDialogFields",
@@ -5860,7 +5932,7 @@
           "kind": "method",
           "class": "ExpenseDialogFields",
           "file": "lib/core/components/expense_dialog/c_expense_dialog_fields.dart",
-          "line": 43,
+          "line": 44,
           "signature": "const SizedBox(height: 12),"
         },
         {
@@ -5868,7 +5940,7 @@
           "kind": "method",
           "class": "ExpenseDialogFields",
           "file": "lib/core/components/expense_dialog/c_expense_dialog_fields.dart",
-          "line": 44,
+          "line": 45,
           "signature": "Row("
         },
         {
@@ -5876,7 +5948,7 @@
           "kind": "method",
           "class": "ExpenseDialogFields",
           "file": "lib/core/components/expense_dialog/c_expense_dialog_fields.dart",
-          "line": 47,
+          "line": 48,
           "signature": "Expanded("
         },
         {
@@ -5884,7 +5956,7 @@
           "kind": "method",
           "class": "ExpenseDialogFields",
           "file": "lib/core/components/expense_dialog/c_expense_dialog_fields.dart",
-          "line": 69,
+          "line": 70,
           "signature": "const SizedBox(width: 8),"
         },
         {
@@ -5892,7 +5964,7 @@
           "kind": "method",
           "class": "ExpenseDialogFields",
           "file": "lib/core/components/expense_dialog/c_expense_dialog_fields.dart",
-          "line": 70,
+          "line": 71,
           "signature": "Expanded("
         },
         {
@@ -5900,7 +5972,7 @@
           "kind": "method",
           "class": "ExpenseDialogFields",
           "file": "lib/core/components/expense_dialog/c_expense_dialog_fields.dart",
-          "line": 84,
+          "line": 85,
           "signature": "buildCurrencyOption("
         },
         {
@@ -5908,7 +5980,7 @@
           "kind": "method",
           "class": "ExpenseDialogFields",
           "file": "lib/core/components/expense_dialog/c_expense_dialog_fields.dart",
-          "line": 90,
+          "line": 91,
           "signature": "buildCurrencyOption("
         }
       ]
@@ -6127,14 +6199,14 @@
     },
     "lib/core/components/expense_dialog/c_expense_dialog_submit.dart": {
       "category": "Core UI Components",
-      "lineCount": 67,
+      "lineCount": 86,
       "symbols": [
         {
           "name": "ExpenseSubmitHandler",
           "kind": "class",
           "class": null,
           "file": "lib/core/components/expense_dialog/c_expense_dialog_submit.dart",
-          "line": 7,
+          "line": 8,
           "signature": "class ExpenseSubmitHandler"
         },
         {
@@ -6142,7 +6214,7 @@
           "kind": "method",
           "class": "ExpenseSubmitHandler",
           "file": "lib/core/components/expense_dialog/c_expense_dialog_submit.dart",
-          "line": 8,
+          "line": 9,
           "signature": "static Future<void> submit("
         },
         {
@@ -6150,7 +6222,7 @@
           "kind": "method",
           "class": "ExpenseSubmitHandler",
           "file": "lib/core/components/expense_dialog/c_expense_dialog_submit.dart",
-          "line": 33,
+          "line": 34,
           "signature": "setSubmitting(true)"
         },
         {
@@ -6158,7 +6230,7 @@
           "kind": "method",
           "class": "ExpenseSubmitHandler",
           "file": "lib/core/components/expense_dialog/c_expense_dialog_submit.dart",
-          "line": 56,
+          "line": 77,
           "signature": "SnackBar("
         },
         {
@@ -6166,14 +6238,14 @@
           "kind": "method",
           "class": "ExpenseSubmitHandler",
           "file": "lib/core/components/expense_dialog/c_expense_dialog_submit.dart",
-          "line": 64,
+          "line": 83,
           "signature": "setSubmitting(false)"
         }
       ]
     },
     "lib/core/components/expense_dialog/c_expense_dialog_body.dart": {
       "category": "Core UI Components",
-      "lineCount": 107,
+      "lineCount": 111,
       "symbols": [
         {
           "name": "ExpenseDialogBody",
@@ -6332,7 +6404,7 @@
           "kind": "method",
           "class": "ExpenseDialogBody",
           "file": "lib/core/components/expense_dialog/c_expense_dialog_body.dart",
-          "line": 60,
+          "line": 63,
           "signature": "ExpenseDialogFields("
         },
         {
@@ -6340,7 +6412,7 @@
           "kind": "method",
           "class": "ExpenseDialogBody",
           "file": "lib/core/components/expense_dialog/c_expense_dialog_body.dart",
-          "line": 69,
+          "line": 72,
           "signature": "ExpenseCashWarning("
         },
         {
@@ -6348,7 +6420,7 @@
           "kind": "method",
           "class": "ExpenseDialogBody",
           "file": "lib/core/components/expense_dialog/c_expense_dialog_body.dart",
-          "line": 79,
+          "line": 82,
           "signature": "const SizedBox(height: 14),"
         },
         {
@@ -6356,7 +6428,7 @@
           "kind": "method",
           "class": "ExpenseDialogBody",
           "file": "lib/core/components/expense_dialog/c_expense_dialog_body.dart",
-          "line": 80,
+          "line": 83,
           "signature": "ExpensePayerSelector("
         },
         {
@@ -6364,7 +6436,7 @@
           "kind": "method",
           "class": "ExpenseDialogBody",
           "file": "lib/core/components/expense_dialog/c_expense_dialog_body.dart",
-          "line": 86,
+          "line": 89,
           "signature": "const SizedBox(height: 14),"
         },
         {
@@ -6372,7 +6444,7 @@
           "kind": "method",
           "class": "ExpenseDialogBody",
           "file": "lib/core/components/expense_dialog/c_expense_dialog_body.dart",
-          "line": 87,
+          "line": 90,
           "signature": "ExpenseSplitSelector("
         },
         {
@@ -6380,7 +6452,7 @@
           "kind": "method",
           "class": "ExpenseDialogBody",
           "file": "lib/core/components/expense_dialog/c_expense_dialog_body.dart",
-          "line": 96,
+          "line": 99,
           "signature": "const SizedBox(height: 16),"
         },
         {
@@ -6388,7 +6460,7 @@
           "kind": "method",
           "class": "ExpenseDialogBody",
           "file": "lib/core/components/expense_dialog/c_expense_dialog_body.dart",
-          "line": 97,
+          "line": 100,
           "signature": "ExpenseDatePicker("
         }
       ]
@@ -6735,7 +6807,7 @@
     },
     "lib/core/components/expense_dialog/c_expense_dialog_view.dart": {
       "category": "Core UI Components",
-      "lineCount": 92,
+      "lineCount": 101,
       "symbols": [
         {
           "name": "ExpenseDialogView",
@@ -6799,14 +6871,14 @@
           "class": "_ExpenseDialogViewState",
           "file": "lib/core/components/expense_dialog/c_expense_dialog_view.dart",
           "line": 42,
-          "signature": "void _submit() => ExpenseSubmitHandler.submit("
+          "signature": "void _submit()"
         },
         {
           "name": "build",
           "kind": "method",
           "class": "_ExpenseDialogViewState",
           "file": "lib/core/components/expense_dialog/c_expense_dialog_view.dart",
-          "line": 50,
+          "line": 59,
           "signature": "Widget build(BuildContext context)"
         },
         {
@@ -6814,7 +6886,7 @@
           "kind": "method",
           "class": "_ExpenseDialogViewState",
           "file": "lib/core/components/expense_dialog/c_expense_dialog_view.dart",
-          "line": 68,
+          "line": 77,
           "signature": "return AppDialog("
         }
       ]
@@ -8288,7 +8360,7 @@
     },
     "lib/core/components/exchange_dialog/c_exchange_submit_handler.dart": {
       "category": "Core UI Components",
-      "lineCount": 63,
+      "lineCount": 65,
       "symbols": [
         {
           "name": "ExchangeSubmitHandler",
@@ -8311,7 +8383,7 @@
           "kind": "method",
           "class": "ExchangeSubmitHandler",
           "file": "lib/core/components/exchange_dialog/c_exchange_submit_handler.dart",
-          "line": 32,
+          "line": 34,
           "signature": "setSubmitting(true)"
         },
         {
@@ -8319,7 +8391,7 @@
           "kind": "method",
           "class": "ExchangeSubmitHandler",
           "file": "lib/core/components/exchange_dialog/c_exchange_submit_handler.dart",
-          "line": 50,
+          "line": 52,
           "signature": "SnackBar("
         },
         {
@@ -8327,7 +8399,7 @@
           "kind": "method",
           "class": "ExchangeSubmitHandler",
           "file": "lib/core/components/exchange_dialog/c_exchange_submit_handler.dart",
-          "line": 60,
+          "line": 62,
           "signature": "setSubmitting(false)"
         }
       ]
@@ -8882,100 +8954,6 @@
         }
       ]
     },
-    "lib/core/animations/a_animated_amount.dart": {
-      "category": "Core Animations",
-      "lineCount": 42,
-      "symbols": [
-        {
-          "name": "AnimatedAmount",
-          "kind": "class",
-          "class": null,
-          "file": "lib/core/animations/a_animated_amount.dart",
-          "line": 4,
-          "signature": "class AnimatedAmount extends StatelessWidget"
-        },
-        {
-          "name": "amount",
-          "kind": "field",
-          "class": "AnimatedAmount",
-          "file": "lib/core/animations/a_animated_amount.dart",
-          "line": 5,
-          "signature": "double amount"
-        },
-        {
-          "name": "prefix",
-          "kind": "field",
-          "class": "AnimatedAmount",
-          "file": "lib/core/animations/a_animated_amount.dart",
-          "line": 6,
-          "signature": "String prefix"
-        },
-        {
-          "name": "suffix",
-          "kind": "field",
-          "class": "AnimatedAmount",
-          "file": "lib/core/animations/a_animated_amount.dart",
-          "line": 7,
-          "signature": "String suffix"
-        },
-        {
-          "name": "style",
-          "kind": "field",
-          "class": "AnimatedAmount",
-          "file": "lib/core/animations/a_animated_amount.dart",
-          "line": 8,
-          "signature": "TextStyle? style"
-        },
-        {
-          "name": "duration",
-          "kind": "field",
-          "class": "AnimatedAmount",
-          "file": "lib/core/animations/a_animated_amount.dart",
-          "line": 9,
-          "signature": "Duration duration"
-        },
-        {
-          "name": "curve",
-          "kind": "field",
-          "class": "AnimatedAmount",
-          "file": "lib/core/animations/a_animated_amount.dart",
-          "line": 10,
-          "signature": "Curve curve"
-        },
-        {
-          "name": "fractionDigits",
-          "kind": "field",
-          "class": "AnimatedAmount",
-          "file": "lib/core/animations/a_animated_amount.dart",
-          "line": 11,
-          "signature": "int fractionDigits"
-        },
-        {
-          "name": "AnimatedAmount",
-          "kind": "constructor",
-          "class": "AnimatedAmount",
-          "file": "lib/core/animations/a_animated_amount.dart",
-          "line": 13,
-          "signature": "const AnimatedAmount("
-        },
-        {
-          "name": "build",
-          "kind": "method",
-          "class": "AnimatedAmount",
-          "file": "lib/core/animations/a_animated_amount.dart",
-          "line": 25,
-          "signature": "Widget build(BuildContext context)"
-        },
-        {
-          "name": "Text",
-          "kind": "method",
-          "class": "AnimatedAmount",
-          "file": "lib/core/animations/a_animated_amount.dart",
-          "line": 35,
-          "signature": "return Text("
-        }
-      ]
-    },
     "lib/core/animations/a_shimmer.dart": {
       "category": "Core Animations",
       "lineCount": 86,
@@ -9131,76 +9109,6 @@
           "file": "lib/core/animations/a_shimmer.dart",
           "line": 79,
           "signature": "Matrix4? transform(Rect bounds,"
-        }
-      ]
-    },
-    "lib/core/animations/a_expandable.dart": {
-      "category": "Core Animations",
-      "lineCount": 32,
-      "symbols": [
-        {
-          "name": "AnimatedExpandable",
-          "kind": "class",
-          "class": null,
-          "file": "lib/core/animations/a_expandable.dart",
-          "line": 4,
-          "signature": "class AnimatedExpandable extends StatelessWidget"
-        },
-        {
-          "name": "isExpanded",
-          "kind": "field",
-          "class": "AnimatedExpandable",
-          "file": "lib/core/animations/a_expandable.dart",
-          "line": 5,
-          "signature": "bool isExpanded"
-        },
-        {
-          "name": "child",
-          "kind": "field",
-          "class": "AnimatedExpandable",
-          "file": "lib/core/animations/a_expandable.dart",
-          "line": 6,
-          "signature": "Widget child"
-        },
-        {
-          "name": "duration",
-          "kind": "field",
-          "class": "AnimatedExpandable",
-          "file": "lib/core/animations/a_expandable.dart",
-          "line": 7,
-          "signature": "Duration duration"
-        },
-        {
-          "name": "curve",
-          "kind": "field",
-          "class": "AnimatedExpandable",
-          "file": "lib/core/animations/a_expandable.dart",
-          "line": 8,
-          "signature": "Curve curve"
-        },
-        {
-          "name": "AnimatedExpandable",
-          "kind": "constructor",
-          "class": "AnimatedExpandable",
-          "file": "lib/core/animations/a_expandable.dart",
-          "line": 10,
-          "signature": "const AnimatedExpandable("
-        },
-        {
-          "name": "build",
-          "kind": "method",
-          "class": "AnimatedExpandable",
-          "file": "lib/core/animations/a_expandable.dart",
-          "line": 19,
-          "signature": "Widget build(BuildContext context)"
-        },
-        {
-          "name": "AnimatedCrossFade",
-          "kind": "method",
-          "class": "AnimatedExpandable",
-          "file": "lib/core/animations/a_expandable.dart",
-          "line": 20,
-          "signature": "return AnimatedCrossFade("
         }
       ]
     },
@@ -9868,7 +9776,7 @@
     },
     "lib/features/auth/components/c_access_denied_screen.dart": {
       "category": "Feature: Auth",
-      "lineCount": 68,
+      "lineCount": 81,
       "symbols": [
         {
           "name": "AccessDeniedScreen",
@@ -9895,11 +9803,19 @@
           "signature": "VoidCallback onSignOut"
         },
         {
+          "name": "onRetry",
+          "kind": "field",
+          "class": "AccessDeniedScreen",
+          "file": "lib/features/auth/components/c_access_denied_screen.dart",
+          "line": 7,
+          "signature": "VoidCallback? onRetry"
+        },
+        {
           "name": "AccessDeniedScreen",
           "kind": "constructor",
           "class": "AccessDeniedScreen",
           "file": "lib/features/auth/components/c_access_denied_screen.dart",
-          "line": 8,
+          "line": 9,
           "signature": "const AccessDeniedScreen("
         },
         {
@@ -9907,7 +9823,7 @@
           "kind": "method",
           "class": "AccessDeniedScreen",
           "file": "lib/features/auth/components/c_access_denied_screen.dart",
-          "line": 15,
+          "line": 17,
           "signature": "Widget build(BuildContext context)"
         },
         {
@@ -9915,7 +9831,7 @@
           "kind": "method",
           "class": "AccessDeniedScreen",
           "file": "lib/features/auth/components/c_access_denied_screen.dart",
-          "line": 18,
+          "line": 20,
           "signature": "return Scaffold("
         },
         {
@@ -9923,7 +9839,7 @@
           "kind": "method",
           "class": "AccessDeniedScreen",
           "file": "lib/features/auth/components/c_access_denied_screen.dart",
-          "line": 28,
+          "line": 30,
           "signature": "Container("
         },
         {
@@ -9931,7 +9847,7 @@
           "kind": "method",
           "class": "AccessDeniedScreen",
           "file": "lib/features/auth/components/c_access_denied_screen.dart",
-          "line": 41,
+          "line": 43,
           "signature": "const SizedBox(height: 24),"
         },
         {
@@ -9939,7 +9855,7 @@
           "kind": "method",
           "class": "AccessDeniedScreen",
           "file": "lib/features/auth/components/c_access_denied_screen.dart",
-          "line": 42,
+          "line": 44,
           "signature": "Text("
         },
         {
@@ -9947,7 +9863,7 @@
           "kind": "method",
           "class": "AccessDeniedScreen",
           "file": "lib/features/auth/components/c_access_denied_screen.dart",
-          "line": 46,
+          "line": 48,
           "signature": "const SizedBox(height: 12),"
         },
         {
@@ -9955,7 +9871,7 @@
           "kind": "method",
           "class": "AccessDeniedScreen",
           "file": "lib/features/auth/components/c_access_denied_screen.dart",
-          "line": 47,
+          "line": 49,
           "signature": "Text("
         },
         {
@@ -9963,7 +9879,7 @@
           "kind": "method",
           "class": "AccessDeniedScreen",
           "file": "lib/features/auth/components/c_access_denied_screen.dart",
-          "line": 52,
+          "line": 54,
           "signature": "const SizedBox(height: 32),"
         },
         {
@@ -9971,14 +9887,30 @@
           "kind": "method",
           "class": "AccessDeniedScreen",
           "file": "lib/features/auth/components/c_access_denied_screen.dart",
-          "line": 53,
+          "line": 56,
+          "signature": "SizedBox("
+        },
+        {
+          "name": "SizedBox",
+          "kind": "method",
+          "class": "AccessDeniedScreen",
+          "file": "lib/features/auth/components/c_access_denied_screen.dart",
+          "line": 64,
+          "signature": "const SizedBox(height: 12),"
+        },
+        {
+          "name": "SizedBox",
+          "kind": "method",
+          "class": "AccessDeniedScreen",
+          "file": "lib/features/auth/components/c_access_denied_screen.dart",
+          "line": 66,
           "signature": "SizedBox("
         }
       ]
     },
     "lib/features/auth/components/c_auth_whitelist_gate.dart": {
       "category": "Feature: Auth",
-      "lineCount": 102,
+      "lineCount": 113,
       "symbols": [
         {
           "name": "AuthWhitelistGate",
@@ -10041,15 +9973,31 @@
           "kind": "method",
           "class": "_AuthWhitelistGateState",
           "file": "lib/features/auth/components/c_auth_whitelist_gate.dart",
-          "line": 32,
+          "line": 33,
           "signature": "void initState()"
+        },
+        {
+          "name": "_retryCheck",
+          "kind": "method",
+          "class": "_AuthWhitelistGateState",
+          "file": "lib/features/auth/components/c_auth_whitelist_gate.dart",
+          "line": 38,
+          "signature": "void _retryCheck()"
+        },
+        {
+          "name": "setState",
+          "kind": "method",
+          "class": "_AuthWhitelistGateState",
+          "file": "lib/features/auth/components/c_auth_whitelist_gate.dart",
+          "line": 39,
+          "signature": "setState(()"
         },
         {
           "name": "_syncProfile",
           "kind": "method",
           "class": "_AuthWhitelistGateState",
           "file": "lib/features/auth/components/c_auth_whitelist_gate.dart",
-          "line": 37,
+          "line": 44,
           "signature": "void _syncProfile()"
         },
         {
@@ -10057,7 +10005,7 @@
           "kind": "method",
           "class": "_AuthWhitelistGateState",
           "file": "lib/features/auth/components/c_auth_whitelist_gate.dart",
-          "line": 42,
+          "line": 49,
           "signature": "try"
         },
         {
@@ -10065,7 +10013,7 @@
           "kind": "method",
           "class": "_AuthWhitelistGateState",
           "file": "lib/features/auth/components/c_auth_whitelist_gate.dart",
-          "line": 48,
+          "line": 55,
           "signature": "UserProfile("
         },
         {
@@ -10073,7 +10021,7 @@
           "kind": "method",
           "class": "_AuthWhitelistGateState",
           "file": "lib/features/auth/components/c_auth_whitelist_gate.dart",
-          "line": 59,
+          "line": 66,
           "signature": "Widget build(BuildContext context)"
         },
         {
@@ -10081,7 +10029,7 @@
           "kind": "method",
           "class": "_AuthWhitelistGateState",
           "file": "lib/features/auth/components/c_auth_whitelist_gate.dart",
-          "line": 76,
+          "line": 83,
           "signature": "CircularProgressIndicator(),"
         },
         {
@@ -10089,7 +10037,7 @@
           "kind": "method",
           "class": "_AuthWhitelistGateState",
           "file": "lib/features/auth/components/c_auth_whitelist_gate.dart",
-          "line": 77,
+          "line": 84,
           "signature": "SizedBox(height: 16),"
         },
         {
@@ -10097,7 +10045,7 @@
           "kind": "method",
           "class": "_AuthWhitelistGateState",
           "file": "lib/features/auth/components/c_auth_whitelist_gate.dart",
-          "line": 78,
+          "line": 85,
           "signature": "Text('Verifying trip authorization...'),"
         },
         {
@@ -10105,7 +10053,7 @@
           "kind": "method",
           "class": "_AuthWhitelistGateState",
           "file": "lib/features/auth/components/c_auth_whitelist_gate.dart",
-          "line": 86,
+          "line": 95,
           "signature": "_syncProfile()"
         },
         {
@@ -10113,7 +10061,7 @@
           "kind": "method",
           "class": "_AuthWhitelistGateState",
           "file": "lib/features/auth/components/c_auth_whitelist_gate.dart",
-          "line": 87,
+          "line": 97,
           "signature": "return HomeScreen("
         },
         {
@@ -10121,7 +10069,7 @@
           "kind": "method",
           "class": "_AuthWhitelistGateState",
           "file": "lib/features/auth/components/c_auth_whitelist_gate.dart",
-          "line": 95,
+          "line": 105,
           "signature": "return AccessDeniedScreen("
         }
       ]
@@ -10854,7 +10802,7 @@
     },
     "lib/features/settings/components/c_initial_balances_card.dart": {
       "category": "Feature: Settings Tab",
-      "lineCount": 92,
+      "lineCount": 102,
       "symbols": [
         {
           "name": "InitialBalancesCard",
@@ -12142,7 +12090,7 @@
     },
     "lib/features/settings/components/c_initial_balances_resolver.dart": {
       "category": "Feature: Settings Tab",
-      "lineCount": 92,
+      "lineCount": 98,
       "symbols": [
         {
           "name": "InitialBalancesData",
@@ -12201,11 +12149,19 @@
           "signature": "String? friendDisplayName"
         },
         {
+          "name": "friendUserId",
+          "kind": "field",
+          "class": "InitialBalancesData",
+          "file": "lib/features/settings/components/c_initial_balances_resolver.dart",
+          "line": 14,
+          "signature": "String? friendUserId"
+        },
+        {
           "name": "InitialBalancesData",
           "kind": "constructor",
           "class": "InitialBalancesData",
           "file": "lib/features/settings/components/c_initial_balances_resolver.dart",
-          "line": 15,
+          "line": 16,
           "signature": "const InitialBalancesData("
         },
         {
@@ -12213,7 +12169,7 @@
           "kind": "method",
           "class": "InitialBalancesData",
           "file": "lib/features/settings/components/c_initial_balances_resolver.dart",
-          "line": 24,
+          "line": 26,
           "signature": "static InitialBalancesData resolve("
         },
         {
@@ -12221,14 +12177,14 @@
           "kind": "method",
           "class": "InitialBalancesData",
           "file": "lib/features/settings/components/c_initial_balances_resolver.dart",
-          "line": 83,
+          "line": 88,
           "signature": "return InitialBalancesData("
         }
       ]
     },
     "lib/features/settings/components/c_friend_balance_item.dart": {
       "category": "Feature: Settings Tab",
-      "lineCount": 71,
+      "lineCount": 73,
       "symbols": [
         {
           "name": "FriendBalanceItem",
@@ -12271,11 +12227,19 @@
           "signature": "InitialBalance? friendBalance"
         },
         {
+          "name": "onEdit",
+          "kind": "field",
+          "class": "FriendBalanceItem",
+          "file": "lib/features/settings/components/c_friend_balance_item.dart",
+          "line": 13,
+          "signature": "VoidCallback? onEdit"
+        },
+        {
           "name": "FriendBalanceItem",
           "kind": "constructor",
           "class": "FriendBalanceItem",
           "file": "lib/features/settings/components/c_friend_balance_item.dart",
-          "line": 14,
+          "line": 15,
           "signature": "const FriendBalanceItem("
         },
         {
@@ -12283,7 +12247,7 @@
           "kind": "method",
           "class": "FriendBalanceItem",
           "file": "lib/features/settings/components/c_friend_balance_item.dart",
-          "line": 23,
+          "line": 25,
           "signature": "Widget build(BuildContext context)"
         },
         {
@@ -12291,7 +12255,7 @@
           "kind": "method",
           "class": "FriendBalanceItem",
           "file": "lib/features/settings/components/c_friend_balance_item.dart",
-          "line": 29,
+          "line": 31,
           "signature": "return BalanceUserCard("
         },
         {
@@ -12299,7 +12263,7 @@
           "kind": "method",
           "class": "FriendBalanceItem",
           "file": "lib/features/settings/components/c_friend_balance_item.dart",
-          "line": 40,
+          "line": 42,
           "signature": "return Container("
         },
         {
@@ -12307,7 +12271,7 @@
           "kind": "method",
           "class": "FriendBalanceItem",
           "file": "lib/features/settings/components/c_friend_balance_item.dart",
-          "line": 55,
+          "line": 57,
           "signature": "Icon("
         },
         {
@@ -12315,7 +12279,7 @@
           "kind": "method",
           "class": "FriendBalanceItem",
           "file": "lib/features/settings/components/c_friend_balance_item.dart",
-          "line": 60,
+          "line": 62,
           "signature": "const SizedBox(width: 12),"
         },
         {
@@ -12323,7 +12287,7 @@
           "kind": "method",
           "class": "FriendBalanceItem",
           "file": "lib/features/settings/components/c_friend_balance_item.dart",
-          "line": 61,
+          "line": 63,
           "signature": "Expanded("
         }
       ]
@@ -13138,14 +13102,14 @@
     },
     "lib/features/home/s_home.dart": {
       "category": "Feature: Home Tab",
-      "lineCount": 96,
+      "lineCount": 100,
       "symbols": [
         {
           "name": "HomeScreen",
           "kind": "class",
           "class": null,
           "file": "lib/features/home/s_home.dart",
-          "line": 13,
+          "line": 14,
           "signature": "class HomeScreen extends StatefulWidget"
         },
         {
@@ -13153,7 +13117,7 @@
           "kind": "field",
           "class": "HomeScreen",
           "file": "lib/features/home/s_home.dart",
-          "line": 14,
+          "line": 15,
           "signature": "User user"
         },
         {
@@ -13161,7 +13125,7 @@
           "kind": "field",
           "class": "HomeScreen",
           "file": "lib/features/home/s_home.dart",
-          "line": 15,
+          "line": 16,
           "signature": "AuthService authService"
         },
         {
@@ -13169,7 +13133,7 @@
           "kind": "field",
           "class": "HomeScreen",
           "file": "lib/features/home/s_home.dart",
-          "line": 16,
+          "line": 17,
           "signature": "FirestoreService firestoreService"
         },
         {
@@ -13177,7 +13141,7 @@
           "kind": "field",
           "class": "HomeScreen",
           "file": "lib/features/home/s_home.dart",
-          "line": 17,
+          "line": 18,
           "signature": "HomeViewModel? viewModel"
         },
         {
@@ -13185,7 +13149,7 @@
           "kind": "field",
           "class": "HomeScreen",
           "file": "lib/features/home/s_home.dart",
-          "line": 18,
+          "line": 19,
           "signature": "HomeFeedViewModel? feedViewModel"
         },
         {
@@ -13193,7 +13157,7 @@
           "kind": "constructor",
           "class": "HomeScreen",
           "file": "lib/features/home/s_home.dart",
-          "line": 20,
+          "line": 21,
           "signature": "const HomeScreen("
         },
         {
@@ -13201,7 +13165,7 @@
           "kind": "method",
           "class": "HomeScreen",
           "file": "lib/features/home/s_home.dart",
-          "line": 30,
+          "line": 31,
           "signature": "State<HomeScreen> createState() => _HomeScreenState()"
         },
         {
@@ -13209,7 +13173,7 @@
           "kind": "class",
           "class": null,
           "file": "lib/features/home/s_home.dart",
-          "line": 33,
+          "line": 34,
           "signature": "class _HomeScreenState extends State<HomeScreen>"
         },
         {
@@ -13217,7 +13181,7 @@
           "kind": "method",
           "class": "_HomeScreenState",
           "file": "lib/features/home/s_home.dart",
-          "line": 40,
+          "line": 41,
           "signature": "void initState()"
         },
         {
@@ -13225,7 +13189,7 @@
           "kind": "method",
           "class": "_HomeScreenState",
           "file": "lib/features/home/s_home.dart",
-          "line": 61,
+          "line": 62,
           "signature": "void dispose()"
         },
         {
@@ -13233,7 +13197,7 @@
           "kind": "method",
           "class": "_HomeScreenState",
           "file": "lib/features/home/s_home.dart",
-          "line": 68,
+          "line": 69,
           "signature": "Widget build(BuildContext context)"
         },
         {
@@ -13241,7 +13205,7 @@
           "kind": "method",
           "class": "_HomeScreenState",
           "file": "lib/features/home/s_home.dart",
-          "line": 69,
+          "line": 70,
           "signature": "return ListenableBuilder("
         },
         {
@@ -13249,14 +13213,14 @@
           "kind": "method",
           "class": "_HomeScreenState",
           "file": "lib/features/home/s_home.dart",
-          "line": 74,
+          "line": 75,
           "signature": "return Scaffold("
         }
       ]
     },
     "lib/features/home/vm_home_feed.dart": {
       "category": "Feature: Home Tab",
-      "lineCount": 113,
+      "lineCount": 114,
       "symbols": [
         {
           "name": "HomeFeedViewModel",
@@ -13547,11 +13511,19 @@
           "signature": "get isProcessing"
         },
         {
-          "name": "errorMessage",
+          "name": "isLoading",
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
           "line": 98,
+          "signature": "get isLoading"
+        },
+        {
+          "name": "errorMessage",
+          "kind": "getter",
+          "class": "HomeFeedViewModel",
+          "file": "lib/features/home/vm_home_feed.dart",
+          "line": 99,
           "signature": "get errorMessage"
         },
         {
@@ -13559,7 +13531,7 @@
           "kind": "method",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 100,
+          "line": 101,
           "signature": "Future<void> refresh() async"
         },
         {
@@ -13567,7 +13539,7 @@
           "kind": "method",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 101,
+          "line": 102,
           "signature": "_recalculate()"
         },
         {
@@ -13575,7 +13547,7 @@
           "kind": "method",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 102,
+          "line": 103,
           "signature": "notifyListeners()"
         },
         {
@@ -13583,7 +13555,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 106,
+          "line": 107,
           "signature": "get mutations"
         },
         {
@@ -13591,14 +13563,14 @@
           "kind": "method",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 109,
+          "line": 110,
           "signature": "void dispose()"
         }
       ]
     },
     "lib/features/home/s_home_tab.dart": {
       "category": "Feature: Home Tab",
-      "lineCount": 89,
+      "lineCount": 119,
       "symbols": [
         {
           "name": "HomeTabScreen",
@@ -13657,19 +13629,51 @@
           "signature": "return RefreshIndicator("
         },
         {
-          "name": "Padding",
+          "name": "SliverToBoxAdapter",
           "kind": "method",
           "class": "HomeTabScreen",
           "file": "lib/features/home/s_home_tab.dart",
-          "line": 43,
-          "signature": "Padding("
+          "line": 44,
+          "signature": "SliverToBoxAdapter("
+        },
+        {
+          "name": "Container",
+          "kind": "method",
+          "class": "HomeTabScreen",
+          "file": "lib/features/home/s_home_tab.dart",
+          "line": 51,
+          "signature": "Container("
+        },
+        {
+          "name": "Icon",
+          "kind": "method",
+          "class": "HomeTabScreen",
+          "file": "lib/features/home/s_home_tab.dart",
+          "line": 60,
+          "signature": "Icon(Icons.error_outline,"
+        },
+        {
+          "name": "SizedBox",
+          "kind": "method",
+          "class": "HomeTabScreen",
+          "file": "lib/features/home/s_home_tab.dart",
+          "line": 63,
+          "signature": "const SizedBox(width: 8),"
+        },
+        {
+          "name": "Expanded",
+          "kind": "method",
+          "class": "HomeTabScreen",
+          "file": "lib/features/home/s_home_tab.dart",
+          "line": 64,
+          "signature": "Expanded("
         },
         {
           "name": "HomeBalancesCard",
           "kind": "method",
           "class": "HomeTabScreen",
           "file": "lib/features/home/s_home_tab.dart",
-          "line": 48,
+          "line": 79,
           "signature": "HomeBalancesCard("
         },
         {
@@ -13677,7 +13681,7 @@
           "kind": "method",
           "class": "HomeTabScreen",
           "file": "lib/features/home/s_home_tab.dart",
-          "line": 60,
+          "line": 91,
           "signature": "const SizedBox(height: 10),"
         },
         {
@@ -13685,7 +13689,7 @@
           "kind": "method",
           "class": "HomeTabScreen",
           "file": "lib/features/home/s_home_tab.dart",
-          "line": 65,
+          "line": 96,
           "signature": "SegmentedPillItem(value: HomeFeedFilter.all, label: 'All', count: viewModel.allActivities.length),"
         },
         {
@@ -13693,7 +13697,7 @@
           "kind": "method",
           "class": "HomeTabScreen",
           "file": "lib/features/home/s_home_tab.dart",
-          "line": 66,
+          "line": 97,
           "signature": "SegmentedPillItem(value: HomeFeedFilter.friend, label: 'Friend', count: viewModel.friendActivities.length),"
         },
         {
@@ -13701,7 +13705,7 @@
           "kind": "method",
           "class": "HomeTabScreen",
           "file": "lib/features/home/s_home_tab.dart",
-          "line": 67,
+          "line": 98,
           "signature": "SegmentedPillItem(value: HomeFeedFilter.split, label: 'Split', count: viewModel.splitActivities.length),"
         },
         {
@@ -13709,16 +13713,16 @@
           "kind": "method",
           "class": "HomeTabScreen",
           "file": "lib/features/home/s_home_tab.dart",
-          "line": 70,
+          "line": 101,
           "signature": "const SizedBox(height: 10),"
         },
         {
-          "name": "Expanded",
+          "name": "HomeActivitiesList",
           "kind": "method",
           "class": "HomeTabScreen",
           "file": "lib/features/home/s_home_tab.dart",
-          "line": 74,
-          "signature": "Expanded("
+          "line": 106,
+          "signature": "HomeActivitiesList("
         }
       ]
     },
@@ -13877,39 +13881,9 @@
         }
       ]
     },
-    "lib/features/home/components/c_activity_tile.dart": {
-      "category": "Feature: Home Tab",
-      "lineCount": 1,
-      "symbols": []
-    },
-    "lib/features/home/components/c_add_action_sheet.dart": {
-      "category": "Feature: Home Tab",
-      "lineCount": 1,
-      "symbols": []
-    },
-    "lib/features/home/components/c_add_expense_dialog.dart": {
-      "category": "Feature: Home Tab",
-      "lineCount": 1,
-      "symbols": []
-    },
-    "lib/features/home/components/c_add_exchange_dialog.dart": {
-      "category": "Feature: Home Tab",
-      "lineCount": 1,
-      "symbols": []
-    },
-    "lib/features/home/components/c_borrow_dialog.dart": {
-      "category": "Feature: Home Tab",
-      "lineCount": 1,
-      "symbols": []
-    },
-    "lib/features/home/components/c_delete_activity_dialog.dart": {
-      "category": "Feature: Home Tab",
-      "lineCount": 1,
-      "symbols": []
-    },
     "lib/features/home/components/c_home_action_handler.dart": {
       "category": "Feature: Home Tab",
-      "lineCount": 75,
+      "lineCount": 77,
       "symbols": [
         {
           "name": "HomeActionHandler",
@@ -13964,14 +13938,14 @@
           "kind": "method",
           "class": "HomeActionHandler",
           "file": "lib/features/home/components/c_home_action_handler.dart",
-          "line": 59,
+          "line": 60,
           "signature": "showBorrowDialog("
         }
       ]
     },
     "lib/features/home/components/c_home_tab_actions.dart": {
       "category": "Feature: Home Tab",
-      "lineCount": 83,
+      "lineCount": 85,
       "symbols": [
         {
           "name": "HomeTabActions",
@@ -14002,7 +13976,7 @@
           "kind": "method",
           "class": "HomeTabActions",
           "file": "lib/features/home/components/c_home_tab_actions.dart",
-          "line": 37,
+          "line": 38,
           "signature": "showAddExchangeDialog("
         },
         {
@@ -14010,7 +13984,7 @@
           "kind": "method",
           "class": "HomeTabActions",
           "file": "lib/features/home/components/c_home_tab_actions.dart",
-          "line": 47,
+          "line": 48,
           "signature": "showBorrowDialog("
         },
         {
@@ -14018,7 +13992,7 @@
           "kind": "method",
           "class": "HomeTabActions",
           "file": "lib/features/home/components/c_home_tab_actions.dart",
-          "line": 64,
+          "line": 66,
           "signature": "static void confirmDelete("
         },
         {
@@ -14026,21 +14000,21 @@
           "kind": "method",
           "class": "HomeTabActions",
           "file": "lib/features/home/components/c_home_tab_actions.dart",
-          "line": 69,
+          "line": 71,
           "signature": "showDeleteActivityDialog("
         }
       ]
     },
     "lib/features/home/components/c_home_activities_list.dart": {
       "category": "Feature: Home Tab",
-      "lineCount": 81,
+      "lineCount": 126,
       "symbols": [
         {
           "name": "HomeActivitiesList",
           "kind": "class",
           "class": null,
           "file": "lib/features/home/components/c_home_activities_list.dart",
-          "line": 11,
+          "line": 12,
           "signature": "class HomeActivitiesList extends StatelessWidget"
         },
         {
@@ -14048,7 +14022,7 @@
           "kind": "field",
           "class": "HomeActivitiesList",
           "file": "lib/features/home/components/c_home_activities_list.dart",
-          "line": 12,
+          "line": 13,
           "signature": "List<ActivityItem> activities"
         },
         {
@@ -14056,7 +14030,7 @@
           "kind": "field",
           "class": "HomeActivitiesList",
           "file": "lib/features/home/components/c_home_activities_list.dart",
-          "line": 13,
+          "line": 14,
           "signature": "HomeFeedFilter filter"
         },
         {
@@ -14064,7 +14038,7 @@
           "kind": "field",
           "class": "HomeActivitiesList",
           "file": "lib/features/home/components/c_home_activities_list.dart",
-          "line": 14,
+          "line": 15,
           "signature": "User user"
         },
         {
@@ -14072,7 +14046,7 @@
           "kind": "field",
           "class": "HomeActivitiesList",
           "file": "lib/features/home/components/c_home_activities_list.dart",
-          "line": 15,
+          "line": 16,
           "signature": "String? friendName"
         },
         {
@@ -14080,7 +14054,7 @@
           "kind": "field",
           "class": "HomeActivitiesList",
           "file": "lib/features/home/components/c_home_activities_list.dart",
-          "line": 16,
+          "line": 17,
           "signature": "HomeFeedViewModel viewModel"
         },
         {
@@ -14088,7 +14062,7 @@
           "kind": "constructor",
           "class": "HomeActivitiesList",
           "file": "lib/features/home/components/c_home_activities_list.dart",
-          "line": 18,
+          "line": 19,
           "signature": "const HomeActivitiesList("
         },
         {
@@ -14096,24 +14070,72 @@
           "kind": "method",
           "class": "HomeActivitiesList",
           "file": "lib/features/home/components/c_home_activities_list.dart",
-          "line": 28,
+          "line": 29,
           "signature": "Widget build(BuildContext context)"
         },
         {
-          "name": "SingleChildScrollView",
+          "name": "SliverFillRemaining",
           "kind": "method",
           "class": "HomeActivitiesList",
           "file": "lib/features/home/components/c_home_activities_list.dart",
-          "line": 30,
-          "signature": "return SingleChildScrollView("
+          "line": 35,
+          "signature": "return SliverFillRemaining("
+        },
+        {
+          "name": "SliverPadding",
+          "kind": "method",
+          "class": "HomeActivitiesList",
+          "file": "lib/features/home/components/c_home_activities_list.dart",
+          "line": 56,
+          "signature": "return SliverPadding("
         },
         {
           "name": "StaggeredItem",
           "kind": "method",
           "class": "HomeActivitiesList",
           "file": "lib/features/home/components/c_home_activities_list.dart",
-          "line": 55,
+          "line": 62,
           "signature": "return StaggeredItem("
+        },
+        {
+          "name": "_ActivityListSkeleton",
+          "kind": "class",
+          "class": null,
+          "file": "lib/features/home/components/c_home_activities_list.dart",
+          "line": 93,
+          "signature": "class _ActivityListSkeleton extends StatelessWidget"
+        },
+        {
+          "name": "_ActivityListSkeleton",
+          "kind": "constructor",
+          "class": "_ActivityListSkeleton",
+          "file": "lib/features/home/components/c_home_activities_list.dart",
+          "line": 94,
+          "signature": "const _ActivityListSkeleton()"
+        },
+        {
+          "name": "build",
+          "kind": "method",
+          "class": "_ActivityListSkeleton",
+          "file": "lib/features/home/components/c_home_activities_list.dart",
+          "line": 97,
+          "signature": "Widget build(BuildContext context)"
+        },
+        {
+          "name": "SliverPadding",
+          "kind": "method",
+          "class": "_ActivityListSkeleton",
+          "file": "lib/features/home/components/c_home_activities_list.dart",
+          "line": 103,
+          "signature": "return SliverPadding("
+        },
+        {
+          "name": "Padding",
+          "kind": "method",
+          "class": "_ActivityListSkeleton",
+          "file": "lib/features/home/components/c_home_activities_list.dart",
+          "line": 108,
+          "signature": "return Padding("
         }
       ]
     },
@@ -14469,7 +14491,7 @@
     },
     "lib/features/home/feed/vm_home_feed_mutations.dart": {
       "category": "Feature: Home Tab",
-      "lineCount": 45,
+      "lineCount": 48,
       "symbols": [
         {
           "name": "HomeFeedMutations",
@@ -14492,15 +14514,15 @@
           "kind": "constructor",
           "class": "HomeFeedMutations",
           "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-          "line": 10,
-          "signature": "const HomeFeedMutations("
+          "line": 11,
+          "signature": "HomeFeedMutations("
         },
         {
           "name": "_run",
           "kind": "method",
           "class": "HomeFeedMutations",
           "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-          "line": 12,
+          "line": 13,
           "signature": "Future<bool> _run(Future<void> Function() action) async"
         },
         {
@@ -14508,7 +14530,7 @@
           "kind": "method",
           "class": "HomeFeedMutations",
           "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-          "line": 13,
+          "line": 14,
           "signature": "try"
         },
         {
@@ -14516,7 +14538,7 @@
           "kind": "method",
           "class": "HomeFeedMutations",
           "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-          "line": 14,
+          "line": 16,
           "signature": "await action()"
         },
         {
@@ -14524,7 +14546,7 @@
           "kind": "method",
           "class": "HomeFeedMutations",
           "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-          "line": 21,
+          "line": 24,
           "signature": "Future<bool> addExpense(Expense expense) => _run(() => firestoreService.addExpense(expense))"
         },
         {
@@ -14532,7 +14554,7 @@
           "kind": "method",
           "class": "HomeFeedMutations",
           "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-          "line": 22,
+          "line": 25,
           "signature": "Future<bool> updateExpense(Expense expense) => _run(() => firestoreService.addExpense(expense))"
         },
         {
@@ -14540,7 +14562,7 @@
           "kind": "method",
           "class": "HomeFeedMutations",
           "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-          "line": 23,
+          "line": 26,
           "signature": "Future<bool> deleteExpense(String id) => _run(() => firestoreService.deleteExpense(id))"
         },
         {
@@ -14548,7 +14570,7 @@
           "kind": "method",
           "class": "HomeFeedMutations",
           "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-          "line": 24,
+          "line": 27,
           "signature": "Future<bool> addExchange(Exchange exchange) => _run(() => firestoreService.addExchange(exchange))"
         },
         {
@@ -14556,7 +14578,7 @@
           "kind": "method",
           "class": "HomeFeedMutations",
           "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-          "line": 25,
+          "line": 28,
           "signature": "Future<bool> updateExchange(Exchange exchange) => _run(() => firestoreService.addExchange(exchange))"
         },
         {
@@ -14564,7 +14586,7 @@
           "kind": "method",
           "class": "HomeFeedMutations",
           "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-          "line": 26,
+          "line": 29,
           "signature": "Future<bool> deleteExchange(String id) => _run(() => firestoreService.deleteExchange(id))"
         },
         {
@@ -14572,7 +14594,7 @@
           "kind": "method",
           "class": "HomeFeedMutations",
           "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-          "line": 27,
+          "line": 30,
           "signature": "Future<bool> addBorrow(Borrow borrow) => _run(() => firestoreService.addBorrow(borrow))"
         },
         {
@@ -14580,7 +14602,7 @@
           "kind": "method",
           "class": "HomeFeedMutations",
           "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-          "line": 28,
+          "line": 31,
           "signature": "Future<bool> updateBorrow(Borrow borrow) => _run(() => firestoreService.addBorrow(borrow))"
         },
         {
@@ -14588,7 +14610,7 @@
           "kind": "method",
           "class": "HomeFeedMutations",
           "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-          "line": 29,
+          "line": 32,
           "signature": "Future<bool> deleteBorrow(String id) => _run(() => firestoreService.deleteBorrow(id))"
         },
         {
@@ -14596,7 +14618,7 @@
           "kind": "mixin",
           "class": null,
           "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-          "line": 33,
+          "line": 36,
           "signature": "mixin HomeFeedMutationsMixin"
         },
         {
@@ -14604,7 +14626,7 @@
           "kind": "method",
           "class": "HomeFeedMutationsMixin",
           "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-          "line": 36,
+          "line": 39,
           "signature": "Future<bool> addExpense(Expense e) => mutations.addExpense(e)"
         },
         {
@@ -14612,7 +14634,7 @@
           "kind": "method",
           "class": "HomeFeedMutationsMixin",
           "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-          "line": 37,
+          "line": 40,
           "signature": "Future<bool> updateExpense(Expense e) => mutations.updateExpense(e)"
         },
         {
@@ -14620,7 +14642,7 @@
           "kind": "method",
           "class": "HomeFeedMutationsMixin",
           "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-          "line": 38,
+          "line": 41,
           "signature": "Future<bool> deleteExpense(String id) => mutations.deleteExpense(id)"
         },
         {
@@ -14628,7 +14650,7 @@
           "kind": "method",
           "class": "HomeFeedMutationsMixin",
           "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-          "line": 39,
+          "line": 42,
           "signature": "Future<bool> addExchange(Exchange e) => mutations.addExchange(e)"
         },
         {
@@ -14636,7 +14658,7 @@
           "kind": "method",
           "class": "HomeFeedMutationsMixin",
           "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-          "line": 40,
+          "line": 43,
           "signature": "Future<bool> updateExchange(Exchange e) => mutations.updateExchange(e)"
         },
         {
@@ -14644,7 +14666,7 @@
           "kind": "method",
           "class": "HomeFeedMutationsMixin",
           "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-          "line": 41,
+          "line": 44,
           "signature": "Future<bool> deleteExchange(String id) => mutations.deleteExchange(id)"
         },
         {
@@ -14652,7 +14674,7 @@
           "kind": "method",
           "class": "HomeFeedMutationsMixin",
           "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-          "line": 42,
+          "line": 45,
           "signature": "Future<bool> addBorrow(Borrow b) => mutations.addBorrow(b)"
         },
         {
@@ -14660,7 +14682,7 @@
           "kind": "method",
           "class": "HomeFeedMutationsMixin",
           "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-          "line": 43,
+          "line": 46,
           "signature": "Future<bool> updateBorrow(Borrow b) => mutations.updateBorrow(b)"
         },
         {
@@ -14668,14 +14690,14 @@
           "kind": "method",
           "class": "HomeFeedMutationsMixin",
           "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-          "line": 44,
+          "line": 47,
           "signature": "Future<bool> deleteBorrow(String id) => mutations.deleteBorrow(id)"
         }
       ]
     },
     "lib/features/home/feed/vm_home_feed_state.dart": {
       "category": "Feature: Home Tab",
-      "lineCount": 66,
+      "lineCount": 77,
       "symbols": [
         {
           "name": "HomeFeedState",
@@ -14694,75 +14716,99 @@
           "signature": "FirestoreService firestoreService"
         },
         {
+          "name": "_loadedStreams",
+          "kind": "field",
+          "class": "HomeFeedState",
+          "file": "lib/features/home/feed/vm_home_feed_state.dart",
+          "line": 30,
+          "signature": "Set<String> _loadedStreams"
+        },
+        {
           "name": "HomeFeedState",
           "kind": "constructor",
           "class": "HomeFeedState",
           "file": "lib/features/home/feed/vm_home_feed_state.dart",
-          "line": 29,
+          "line": 32,
           "signature": "HomeFeedState("
+        },
+        {
+          "name": "_markLoaded",
+          "kind": "method",
+          "class": "HomeFeedState",
+          "file": "lib/features/home/feed/vm_home_feed_state.dart",
+          "line": 34,
+          "signature": "void _markLoaded(String streamName, VoidCallback onUpdate)"
+        },
+        {
+          "name": "onUpdate",
+          "kind": "method",
+          "class": "HomeFeedState",
+          "file": "lib/features/home/feed/vm_home_feed_state.dart",
+          "line": 39,
+          "signature": "onUpdate()"
         },
         {
           "name": "initSubscriptions",
           "kind": "method",
           "class": "HomeFeedState",
           "file": "lib/features/home/feed/vm_home_feed_state.dart",
-          "line": 31,
+          "line": 42,
           "signature": "void initSubscriptions(VoidCallback onUpdate)"
         },
         {
-          "name": "onUpdate",
+          "name": "_markLoaded",
           "kind": "method",
           "class": "HomeFeedState",
           "file": "lib/features/home/feed/vm_home_feed_state.dart",
-          "line": 34,
-          "signature": "onUpdate()"
+          "line": 45,
+          "signature": "_markLoaded('expenses', onUpdate)"
         },
         {
-          "name": "onUpdate",
+          "name": "_markLoaded",
           "kind": "method",
           "class": "HomeFeedState",
           "file": "lib/features/home/feed/vm_home_feed_state.dart",
-          "line": 38,
-          "signature": "onUpdate()"
+          "line": 49,
+          "signature": "_markLoaded('exchanges', onUpdate)"
         },
         {
-          "name": "onUpdate",
+          "name": "_markLoaded",
           "kind": "method",
           "class": "HomeFeedState",
           "file": "lib/features/home/feed/vm_home_feed_state.dart",
-          "line": 42,
-          "signature": "onUpdate()"
+          "line": 53,
+          "signature": "_markLoaded('borrows', onUpdate)"
         },
         {
-          "name": "onUpdate",
+          "name": "_markLoaded",
           "kind": "method",
           "class": "HomeFeedState",
           "file": "lib/features/home/feed/vm_home_feed_state.dart",
-          "line": 46,
-          "signature": "onUpdate()"
+          "line": 57,
+          "signature": "_markLoaded('balances', onUpdate)"
         },
         {
-          "name": "onUpdate",
+          "name": "_markLoaded",
           "kind": "method",
           "class": "HomeFeedState",
           "file": "lib/features/home/feed/vm_home_feed_state.dart",
-          "line": 50,
-          "signature": "onUpdate()"
+          "line": 61,
+          "signature": "_markLoaded('users', onUpdate)"
         },
         {
-          "name": "onUpdate",
+          "name": "_markLoaded",
           "kind": "method",
           "class": "HomeFeedState",
           "file": "lib/features/home/feed/vm_home_feed_state.dart",
-          "line": 54,
-          "signature": "onUpdate()"
+          "line": 65,
+          "signature": "_markLoaded('emails', onUpdate)"
         },
         {
           "name": "dispose",
           "kind": "method",
           "class": "HomeFeedState",
           "file": "lib/features/home/feed/vm_home_feed_state.dart",
-          "line": 58,
+          "line": 69,
           "signature": "void dispose()"
         }
       ]
@@ -15051,7 +15097,7 @@
     },
     "lib/features/my_tracker/tracker/vm_my_tracker_filter.dart": {
       "category": "Feature: My Tracker Tab",
-      "lineCount": 6,
+      "lineCount": 7,
       "symbols": [
         {
           "name": "MyTrackerFilter",
@@ -15447,7 +15493,7 @@
     },
     "lib/features/my_tracker/tracker/vm_my_tracker_getters.dart": {
       "category": "Feature: My Tracker Tab",
-      "lineCount": 82,
+      "lineCount": 99,
       "symbols": [
         {
           "name": "MyTrackerGettersMixin",
@@ -15634,11 +15680,27 @@
           "signature": "get allPersonalExpenses"
         },
         {
-          "name": "totalMyExpensesUsd",
+          "name": "filteredExpenses",
           "kind": "getter",
           "class": "MyTrackerGettersMixin",
           "file": "lib/features/my_tracker/tracker/vm_my_tracker_getters.dart",
           "line": 70,
+          "signature": "get filteredExpenses"
+        },
+        {
+          "name": "myExchanges",
+          "kind": "getter",
+          "class": "MyTrackerGettersMixin",
+          "file": "lib/features/my_tracker/tracker/vm_my_tracker_getters.dart",
+          "line": 82,
+          "signature": "get myExchanges"
+        },
+        {
+          "name": "totalMyExpensesUsd",
+          "kind": "getter",
+          "class": "MyTrackerGettersMixin",
+          "file": "lib/features/my_tracker/tracker/vm_my_tracker_getters.dart",
+          "line": 87,
           "signature": "get totalMyExpensesUsd"
         },
         {
@@ -15646,7 +15708,7 @@
           "kind": "getter",
           "class": "MyTrackerGettersMixin",
           "file": "lib/features/my_tracker/tracker/vm_my_tracker_getters.dart",
-          "line": 71,
+          "line": 88,
           "signature": "get totalMyExpensesEgp"
         },
         {
@@ -15654,7 +15716,7 @@
           "kind": "getter",
           "class": "MyTrackerGettersMixin",
           "file": "lib/features/my_tracker/tracker/vm_my_tracker_getters.dart",
-          "line": 72,
+          "line": 89,
           "signature": "get totalSharedExpensesUsd"
         },
         {
@@ -15662,7 +15724,7 @@
           "kind": "getter",
           "class": "MyTrackerGettersMixin",
           "file": "lib/features/my_tracker/tracker/vm_my_tracker_getters.dart",
-          "line": 73,
+          "line": 90,
           "signature": "get totalSharedExpensesEgp"
         },
         {
@@ -15670,7 +15732,7 @@
           "kind": "method",
           "class": "MyTrackerGettersMixin",
           "file": "lib/features/my_tracker/tracker/vm_my_tracker_getters.dart",
-          "line": 75,
+          "line": 92,
           "signature": "double _tot(List<Expense> l, String c) =>"
         },
         {
@@ -15678,7 +15740,7 @@
           "kind": "getter",
           "class": "MyTrackerGettersMixin",
           "file": "lib/features/my_tracker/tracker/vm_my_tracker_getters.dart",
-          "line": 78,
+          "line": 95,
           "signature": "get totalPersonalSpendingUsd"
         },
         {
@@ -15686,14 +15748,14 @@
           "kind": "getter",
           "class": "MyTrackerGettersMixin",
           "file": "lib/features/my_tracker/tracker/vm_my_tracker_getters.dart",
-          "line": 80,
+          "line": 97,
           "signature": "get totalPersonalSpendingEgp"
         }
       ]
     },
     "lib/features/my_tracker/components/c_my_tracker_actions.dart": {
       "category": "Feature: My Tracker Tab",
-      "lineCount": 48,
+      "lineCount": 50,
       "symbols": [
         {
           "name": "MyTrackerActions",
@@ -15716,7 +15778,7 @@
           "kind": "method",
           "class": "MyTrackerActions",
           "file": "lib/features/my_tracker/components/c_my_tracker_actions.dart",
-          "line": 21,
+          "line": 22,
           "signature": "showAddExpenseDialog("
         },
         {
@@ -15724,7 +15786,7 @@
           "kind": "method",
           "class": "MyTrackerActions",
           "file": "lib/features/my_tracker/components/c_my_tracker_actions.dart",
-          "line": 37,
+          "line": 39,
           "signature": "static void openDeleteExpenseDialog("
         },
         {
@@ -15732,14 +15794,14 @@
           "kind": "method",
           "class": "MyTrackerActions",
           "file": "lib/features/my_tracker/components/c_my_tracker_actions.dart",
-          "line": 42,
+          "line": 44,
           "signature": "showDeleteActivityDialog("
         }
       ]
     },
     "lib/features/my_tracker/components/c_my_tracker_list.dart": {
       "category": "Feature: My Tracker Tab",
-      "lineCount": 74,
+      "lineCount": 93,
       "symbols": [
         {
           "name": "MyTrackerExpenseList",
@@ -15802,21 +15864,77 @@
           "kind": "method",
           "class": "MyTrackerExpenseList",
           "file": "lib/features/my_tracker/components/c_my_tracker_list.dart",
-          "line": 47,
+          "line": 51,
+          "signature": "return StaggeredItem("
+        },
+        {
+          "name": "StaggeredItem",
+          "kind": "method",
+          "class": "MyTrackerExpenseList",
+          "file": "lib/features/my_tracker/components/c_my_tracker_list.dart",
+          "line": 78,
           "signature": "return StaggeredItem("
         }
       ]
     },
     "test/widget_test.dart": {
       "category": "Tests",
-      "lineCount": 10,
+      "lineCount": 37,
       "symbols": [
+        {
+          "name": "_FakeAuthService",
+          "kind": "class",
+          "class": null,
+          "file": "test/widget_test.dart",
+          "line": 9,
+          "signature": "class _FakeAuthService extends AuthService"
+        },
+        {
+          "name": "_FakeAuthService",
+          "kind": "constructor",
+          "class": "_FakeAuthService",
+          "file": "test/widget_test.dart",
+          "line": 10,
+          "signature": "_FakeAuthService() : super(initializeGoogleSignIn: false)"
+        },
+        {
+          "name": "_FakeFirestoreService",
+          "kind": "class",
+          "class": null,
+          "file": "test/widget_test.dart",
+          "line": 13,
+          "signature": "class _FakeFirestoreService extends FirestoreService"
+        },
+        {
+          "name": "getAllowedEmailsStream",
+          "kind": "method",
+          "class": "_FakeFirestoreService",
+          "file": "test/widget_test.dart",
+          "line": 15,
+          "signature": "Stream<List<AllowedEmail>> getAllowedEmailsStream() => Stream.value([])"
+        },
+        {
+          "name": "getInitialBalancesStream",
+          "kind": "method",
+          "class": "_FakeFirestoreService",
+          "file": "test/widget_test.dart",
+          "line": 17,
+          "signature": "Stream<List<InitialBalance>> getInitialBalancesStream() => Stream.value([])"
+        },
+        {
+          "name": "getUsersStream",
+          "kind": "method",
+          "class": "_FakeFirestoreService",
+          "file": "test/widget_test.dart",
+          "line": 19,
+          "signature": "Stream<List<UserProfile>> getUsersStream() => Stream.value([])"
+        },
         {
           "name": "main",
           "kind": "function",
           "class": null,
           "file": "test/widget_test.dart",
-          "line": 5,
+          "line": 22,
           "signature": "main()"
         },
         {
@@ -15824,8 +15942,8 @@
           "kind": "function",
           "class": null,
           "file": "test/widget_test.dart",
-          "line": 6,
-          "signature": "testWidgets('App smoke test', (WidgetTester tester)"
+          "line": 23,
+          "signature": "testWidgets('App smoke test initializes MyApp and AuthGate', (WidgetTester tester)"
         }
       ]
     },
@@ -16525,7 +16643,7 @@
     },
     "test/utils_test.dart": {
       "category": "Tests",
-      "lineCount": 341,
+      "lineCount": 373,
       "symbols": [
         {
           "name": "main",
@@ -16636,7 +16754,7 @@
           "kind": "function",
           "class": null,
           "file": "test/utils_test.dart",
-          "line": 294,
+          "line": 326,
           "signature": "group('Auth Helpers Unit Tests', ()"
         },
         {
@@ -16644,7 +16762,7 @@
           "kind": "function",
           "class": null,
           "file": "test/utils_test.dart",
-          "line": 295,
+          "line": 327,
           "signature": "test('resolveUserPhoto returns photoURL when present', ()"
         },
         {
@@ -16652,7 +16770,7 @@
           "kind": "function",
           "class": null,
           "file": "test/utils_test.dart",
-          "line": 305,
+          "line": 337,
           "signature": "test('resolveUserPhoto uses fallbackUrl when user photoURL is null', ()"
         },
         {
@@ -16660,7 +16778,7 @@
           "kind": "function",
           "class": null,
           "file": "test/utils_test.dart",
-          "line": 313,
+          "line": 345,
           "signature": "test('resolveUserPhoto returns null when neither user nor fallback has photo', ()"
         },
         {
@@ -16668,7 +16786,7 @@
           "kind": "function",
           "class": null,
           "file": "test/utils_test.dart",
-          "line": 319,
+          "line": 351,
           "signature": "test('resolveUserName returns displayName when present', ()"
         },
         {
@@ -16676,7 +16794,7 @@
           "kind": "function",
           "class": null,
           "file": "test/utils_test.dart",
-          "line": 324,
+          "line": 356,
           "signature": "test('resolveUserName falls back to email prefix when displayName is null', ()"
         },
         {
@@ -16684,7 +16802,7 @@
           "kind": "function",
           "class": null,
           "file": "test/utils_test.dart",
-          "line": 332,
+          "line": 364,
           "signature": "test('resolveUserName defaults to Traveler when everything is null', ()"
         }
       ]
@@ -17392,7 +17510,7 @@
       "kind": "class",
       "class": null,
       "file": "lib/main.dart",
-      "line": 28,
+      "line": 29,
       "signature": "class MyApp extends StatelessWidget"
     },
     "MyApp.authService": {
@@ -17400,23 +17518,23 @@
       "kind": "field",
       "class": "MyApp",
       "file": "lib/main.dart",
-      "line": 29,
-      "signature": "AuthService? authService"
+      "line": 30,
+      "signature": "AuthService authService"
     },
     "MyApp.firestoreService": {
       "name": "firestoreService",
       "kind": "field",
       "class": "MyApp",
       "file": "lib/main.dart",
-      "line": 30,
-      "signature": "FirestoreService? firestoreService"
+      "line": 31,
+      "signature": "FirestoreService firestoreService"
     },
     "MyApp.MyApp": {
       "name": "MyApp",
       "kind": "constructor",
       "class": "MyApp",
       "file": "lib/main.dart",
-      "line": 32,
+      "line": 33,
       "signature": "const MyApp("
     },
     "MyApp.build": {
@@ -17424,7 +17542,7 @@
       "kind": "method",
       "class": "MyApp",
       "file": "lib/main.dart",
-      "line": 39,
+      "line": 40,
       "signature": "Widget build(BuildContext context)"
     },
     "MyApp.MaterialApp": {
@@ -17432,16 +17550,8 @@
       "kind": "method",
       "class": "MyApp",
       "file": "lib/main.dart",
-      "line": 43,
+      "line": 44,
       "signature": "return MaterialApp("
-    },
-    "MyApp.AuthGate": {
-      "name": "AuthGate",
-      "kind": "method",
-      "class": "MyApp",
-      "file": "lib/main.dart",
-      "line": 50,
-      "signature": "? AuthGate("
     },
     "DefaultFirebaseOptions": {
       "name": "DefaultFirebaseOptions",
@@ -17472,7 +17582,7 @@
       "kind": "class",
       "class": null,
       "file": "lib/core/theme/t_app_theme.dart",
-      "line": 12,
+      "line": 13,
       "signature": "class AppTheme"
     },
     "AppTheme.AppTheme._": {
@@ -17480,15 +17590,31 @@
       "kind": "constructor",
       "class": "AppTheme",
       "file": "lib/core/theme/t_app_theme.dart",
-      "line": 13,
+      "line": 14,
       "signature": "AppTheme._()"
+    },
+    "AppTheme.initTheme": {
+      "name": "initTheme",
+      "kind": "method",
+      "class": "AppTheme",
+      "file": "lib/core/theme/t_app_theme.dart",
+      "line": 22,
+      "signature": "static Future<void> initTheme([SharedPreferences? prefs]) async"
+    },
+    "AppTheme.try": {
+      "name": "try",
+      "kind": "method",
+      "class": "AppTheme",
+      "file": "lib/core/theme/t_app_theme.dart",
+      "line": 23,
+      "signature": "try"
     },
     "AppTheme.setThemeMode": {
       "name": "setThemeMode",
       "kind": "method",
       "class": "AppTheme",
       "file": "lib/core/theme/t_app_theme.dart",
-      "line": 18,
+      "line": 35,
       "signature": "static void setThemeMode(ThemeMode mode)"
     },
     "AppTheme.lightTheme": {
@@ -17496,7 +17622,7 @@
       "kind": "getter",
       "class": "AppTheme",
       "file": "lib/core/theme/t_app_theme.dart",
-      "line": 37,
+      "line": 55,
       "signature": "get lightTheme"
     },
     "AppTheme.darkTheme": {
@@ -17504,7 +17630,7 @@
       "kind": "getter",
       "class": "AppTheme",
       "file": "lib/core/theme/t_app_theme.dart",
-      "line": 65,
+      "line": 83,
       "signature": "get darkTheme"
     },
     "buildFilledButtonTheme": {
@@ -17520,7 +17646,7 @@
       "kind": "class",
       "class": null,
       "file": "lib/core/models/mod_user_profile.dart",
-      "line": 1,
+      "line": 3,
       "signature": "class UserProfile"
     },
     "UserProfile.id": {
@@ -17528,7 +17654,7 @@
       "kind": "field",
       "class": "UserProfile",
       "file": "lib/core/models/mod_user_profile.dart",
-      "line": 2,
+      "line": 4,
       "signature": "String id"
     },
     "UserProfile.name": {
@@ -17536,7 +17662,7 @@
       "kind": "field",
       "class": "UserProfile",
       "file": "lib/core/models/mod_user_profile.dart",
-      "line": 3,
+      "line": 5,
       "signature": "String name"
     },
     "UserProfile.email": {
@@ -17544,7 +17670,7 @@
       "kind": "field",
       "class": "UserProfile",
       "file": "lib/core/models/mod_user_profile.dart",
-      "line": 4,
+      "line": 6,
       "signature": "String email"
     },
     "UserProfile.photoUrl": {
@@ -17552,7 +17678,7 @@
       "kind": "field",
       "class": "UserProfile",
       "file": "lib/core/models/mod_user_profile.dart",
-      "line": 5,
+      "line": 7,
       "signature": "String? photoUrl"
     },
     "UserProfile.createdAt": {
@@ -17560,7 +17686,7 @@
       "kind": "field",
       "class": "UserProfile",
       "file": "lib/core/models/mod_user_profile.dart",
-      "line": 6,
+      "line": 8,
       "signature": "DateTime createdAt"
     },
     "UserProfile.UserProfile": {
@@ -17568,7 +17694,7 @@
       "kind": "method",
       "class": "UserProfile",
       "file": "lib/core/models/mod_user_profile.dart",
-      "line": 28,
+      "line": 30,
       "signature": "return UserProfile("
     },
     "Expense": {
@@ -17576,7 +17702,7 @@
       "kind": "class",
       "class": null,
       "file": "lib/core/models/mod_expense.dart",
-      "line": 1,
+      "line": 3,
       "signature": "class Expense"
     },
     "Expense.id": {
@@ -17584,7 +17710,7 @@
       "kind": "field",
       "class": "Expense",
       "file": "lib/core/models/mod_expense.dart",
-      "line": 2,
+      "line": 4,
       "signature": "String id"
     },
     "Expense.title": {
@@ -17592,7 +17718,7 @@
       "kind": "field",
       "class": "Expense",
       "file": "lib/core/models/mod_expense.dart",
-      "line": 3,
+      "line": 5,
       "signature": "String title"
     },
     "Expense.amount": {
@@ -17600,7 +17726,7 @@
       "kind": "field",
       "class": "Expense",
       "file": "lib/core/models/mod_expense.dart",
-      "line": 4,
+      "line": 6,
       "signature": "double amount"
     },
     "Expense.currency": {
@@ -17608,7 +17734,7 @@
       "kind": "field",
       "class": "Expense",
       "file": "lib/core/models/mod_expense.dart",
-      "line": 5,
+      "line": 7,
       "signature": "String currency"
     },
     "Expense.paidBy": {
@@ -17616,7 +17742,7 @@
       "kind": "field",
       "class": "Expense",
       "file": "lib/core/models/mod_expense.dart",
-      "line": 6,
+      "line": 8,
       "signature": "String paidBy"
     },
     "Expense.splitType": {
@@ -17624,7 +17750,7 @@
       "kind": "field",
       "class": "Expense",
       "file": "lib/core/models/mod_expense.dart",
-      "line": 7,
+      "line": 9,
       "signature": "String splitType"
     },
     "Expense.mePercentage": {
@@ -17632,7 +17758,7 @@
       "kind": "field",
       "class": "Expense",
       "file": "lib/core/models/mod_expense.dart",
-      "line": 8,
+      "line": 10,
       "signature": "double mePercentage"
     },
     "Expense.friendPercentage": {
@@ -17640,7 +17766,7 @@
       "kind": "field",
       "class": "Expense",
       "file": "lib/core/models/mod_expense.dart",
-      "line": 9,
+      "line": 11,
       "signature": "double friendPercentage"
     },
     "Expense.date": {
@@ -17648,7 +17774,7 @@
       "kind": "field",
       "class": "Expense",
       "file": "lib/core/models/mod_expense.dart",
-      "line": 10,
+      "line": 12,
       "signature": "DateTime date"
     },
     "Expense.createdAt": {
@@ -17656,7 +17782,7 @@
       "kind": "field",
       "class": "Expense",
       "file": "lib/core/models/mod_expense.dart",
-      "line": 11,
+      "line": 13,
       "signature": "DateTime createdAt"
     },
     "Expense.createdBy": {
@@ -17664,7 +17790,7 @@
       "kind": "field",
       "class": "Expense",
       "file": "lib/core/models/mod_expense.dart",
-      "line": 12,
+      "line": 14,
       "signature": "String createdBy"
     },
     "Expense.Expense": {
@@ -17672,7 +17798,7 @@
       "kind": "method",
       "class": "Expense",
       "file": "lib/core/models/mod_expense.dart",
-      "line": 46,
+      "line": 48,
       "signature": "return Expense("
     },
     "Exchange": {
@@ -17680,7 +17806,7 @@
       "kind": "class",
       "class": null,
       "file": "lib/core/models/mod_exchange.dart",
-      "line": 1,
+      "line": 3,
       "signature": "class Exchange"
     },
     "Exchange.id": {
@@ -17688,7 +17814,7 @@
       "kind": "field",
       "class": "Exchange",
       "file": "lib/core/models/mod_exchange.dart",
-      "line": 2,
+      "line": 4,
       "signature": "String id"
     },
     "Exchange.userId": {
@@ -17696,7 +17822,7 @@
       "kind": "field",
       "class": "Exchange",
       "file": "lib/core/models/mod_exchange.dart",
-      "line": 3,
+      "line": 5,
       "signature": "String userId"
     },
     "Exchange.fromCurrency": {
@@ -17704,7 +17830,7 @@
       "kind": "field",
       "class": "Exchange",
       "file": "lib/core/models/mod_exchange.dart",
-      "line": 4,
+      "line": 6,
       "signature": "String fromCurrency"
     },
     "Exchange.fromAmount": {
@@ -17712,7 +17838,7 @@
       "kind": "field",
       "class": "Exchange",
       "file": "lib/core/models/mod_exchange.dart",
-      "line": 5,
+      "line": 7,
       "signature": "double fromAmount"
     },
     "Exchange.toCurrency": {
@@ -17720,7 +17846,7 @@
       "kind": "field",
       "class": "Exchange",
       "file": "lib/core/models/mod_exchange.dart",
-      "line": 6,
+      "line": 8,
       "signature": "String toCurrency"
     },
     "Exchange.toAmount": {
@@ -17728,7 +17854,7 @@
       "kind": "field",
       "class": "Exchange",
       "file": "lib/core/models/mod_exchange.dart",
-      "line": 7,
+      "line": 9,
       "signature": "double toAmount"
     },
     "Exchange.exchangeRate": {
@@ -17736,7 +17862,7 @@
       "kind": "field",
       "class": "Exchange",
       "file": "lib/core/models/mod_exchange.dart",
-      "line": 8,
+      "line": 10,
       "signature": "double exchangeRate"
     },
     "Exchange.date": {
@@ -17744,7 +17870,7 @@
       "kind": "field",
       "class": "Exchange",
       "file": "lib/core/models/mod_exchange.dart",
-      "line": 9,
+      "line": 11,
       "signature": "DateTime date"
     },
     "Exchange.createdAt": {
@@ -17752,7 +17878,7 @@
       "kind": "field",
       "class": "Exchange",
       "file": "lib/core/models/mod_exchange.dart",
-      "line": 10,
+      "line": 12,
       "signature": "DateTime createdAt"
     },
     "Exchange.Exchange": {
@@ -17760,7 +17886,7 @@
       "kind": "method",
       "class": "Exchange",
       "file": "lib/core/models/mod_exchange.dart",
-      "line": 41,
+      "line": 43,
       "signature": "return Exchange("
     },
     "InitialBalance": {
@@ -17768,7 +17894,7 @@
       "kind": "class",
       "class": null,
       "file": "lib/core/models/mod_initial_balance.dart",
-      "line": 1,
+      "line": 3,
       "signature": "class InitialBalance"
     },
     "InitialBalance.userId": {
@@ -17776,7 +17902,7 @@
       "kind": "field",
       "class": "InitialBalance",
       "file": "lib/core/models/mod_initial_balance.dart",
-      "line": 2,
+      "line": 4,
       "signature": "String userId"
     },
     "InitialBalance.usdAmount": {
@@ -17784,7 +17910,7 @@
       "kind": "field",
       "class": "InitialBalance",
       "file": "lib/core/models/mod_initial_balance.dart",
-      "line": 3,
+      "line": 5,
       "signature": "double usdAmount"
     },
     "InitialBalance.egpAmount": {
@@ -17792,7 +17918,7 @@
       "kind": "field",
       "class": "InitialBalance",
       "file": "lib/core/models/mod_initial_balance.dart",
-      "line": 4,
+      "line": 6,
       "signature": "double egpAmount"
     },
     "InitialBalance.updatedAt": {
@@ -17800,7 +17926,7 @@
       "kind": "field",
       "class": "InitialBalance",
       "file": "lib/core/models/mod_initial_balance.dart",
-      "line": 5,
+      "line": 7,
       "signature": "DateTime updatedAt"
     },
     "InitialBalance.InitialBalance": {
@@ -17808,7 +17934,7 @@
       "kind": "method",
       "class": "InitialBalance",
       "file": "lib/core/models/mod_initial_balance.dart",
-      "line": 25,
+      "line": 27,
       "signature": "return InitialBalance("
     },
     "AllowedEmail": {
@@ -17816,7 +17942,7 @@
       "kind": "class",
       "class": null,
       "file": "lib/core/models/mod_allowed_email.dart",
-      "line": 1,
+      "line": 3,
       "signature": "class AllowedEmail"
     },
     "AllowedEmail.id": {
@@ -17824,7 +17950,7 @@
       "kind": "field",
       "class": "AllowedEmail",
       "file": "lib/core/models/mod_allowed_email.dart",
-      "line": 2,
+      "line": 4,
       "signature": "String id"
     },
     "AllowedEmail.email": {
@@ -17832,7 +17958,7 @@
       "kind": "field",
       "class": "AllowedEmail",
       "file": "lib/core/models/mod_allowed_email.dart",
-      "line": 3,
+      "line": 5,
       "signature": "String email"
     },
     "AllowedEmail.createdAt": {
@@ -17840,7 +17966,7 @@
       "kind": "field",
       "class": "AllowedEmail",
       "file": "lib/core/models/mod_allowed_email.dart",
-      "line": 4,
+      "line": 6,
       "signature": "DateTime createdAt"
     },
     "AllowedEmail.AllowedEmail": {
@@ -17848,7 +17974,7 @@
       "kind": "method",
       "class": "AllowedEmail",
       "file": "lib/core/models/mod_allowed_email.dart",
-      "line": 22,
+      "line": 24,
       "signature": "return AllowedEmail("
     },
     "Borrow": {
@@ -17856,7 +17982,7 @@
       "kind": "class",
       "class": null,
       "file": "lib/core/models/mod_borrow.dart",
-      "line": 4,
+      "line": 6,
       "signature": "class Borrow"
     },
     "Borrow.id": {
@@ -17864,7 +17990,7 @@
       "kind": "field",
       "class": "Borrow",
       "file": "lib/core/models/mod_borrow.dart",
-      "line": 5,
+      "line": 7,
       "signature": "String id"
     },
     "Borrow.borrowerId": {
@@ -17872,7 +17998,7 @@
       "kind": "field",
       "class": "Borrow",
       "file": "lib/core/models/mod_borrow.dart",
-      "line": 6,
+      "line": 8,
       "signature": "String borrowerId"
     },
     "Borrow.lenderId": {
@@ -17880,7 +18006,7 @@
       "kind": "field",
       "class": "Borrow",
       "file": "lib/core/models/mod_borrow.dart",
-      "line": 7,
+      "line": 9,
       "signature": "String lenderId"
     },
     "Borrow.usdAmount": {
@@ -17888,7 +18014,7 @@
       "kind": "field",
       "class": "Borrow",
       "file": "lib/core/models/mod_borrow.dart",
-      "line": 8,
+      "line": 10,
       "signature": "double usdAmount"
     },
     "Borrow.egpAmount": {
@@ -17896,7 +18022,7 @@
       "kind": "field",
       "class": "Borrow",
       "file": "lib/core/models/mod_borrow.dart",
-      "line": 9,
+      "line": 11,
       "signature": "double egpAmount"
     },
     "Borrow.date": {
@@ -17904,7 +18030,7 @@
       "kind": "field",
       "class": "Borrow",
       "file": "lib/core/models/mod_borrow.dart",
-      "line": 10,
+      "line": 12,
       "signature": "DateTime date"
     },
     "Borrow.createdAt": {
@@ -17912,7 +18038,7 @@
       "kind": "field",
       "class": "Borrow",
       "file": "lib/core/models/mod_borrow.dart",
-      "line": 11,
+      "line": 13,
       "signature": "DateTime createdAt"
     },
     "Borrow.Borrow": {
@@ -17920,7 +18046,7 @@
       "kind": "method",
       "class": "Borrow",
       "file": "lib/core/models/mod_borrow.dart",
-      "line": 61,
+      "line": 59,
       "signature": "return Borrow("
     },
     "Borrow.copyWith": {
@@ -17928,7 +18054,7 @@
       "kind": "method",
       "class": "Borrow",
       "file": "lib/core/models/mod_borrow.dart",
-      "line": 52,
+      "line": 50,
       "signature": "Borrow copyWith("
     },
     "ActivityItem": {
@@ -18051,12 +18177,20 @@
       "line": 15,
       "signature": "FirebaseAuth? auth"
     },
+    "AuthService._authController": {
+      "name": "_authController",
+      "kind": "field",
+      "class": "AuthService",
+      "file": "lib/core/services/f_auth.dart",
+      "line": 17,
+      "signature": "StreamController<User?> _authController"
+    },
     "AuthService.AuthService": {
       "name": "AuthService",
       "kind": "constructor",
       "class": "AuthService",
       "file": "lib/core/services/f_auth.dart",
-      "line": 22,
+      "line": 23,
       "signature": "AuthService("
     },
     "AuthService.try": {
@@ -18064,7 +18198,7 @@
       "kind": "method",
       "class": "AuthService",
       "file": "lib/core/services/f_auth.dart",
-      "line": 53,
+      "line": 54,
       "signature": "try"
     },
     "AuthService._firebaseAuth": {
@@ -18072,7 +18206,7 @@
       "kind": "getter",
       "class": "AuthService",
       "file": "lib/core/services/f_auth.dart",
-      "line": 36,
+      "line": 37,
       "signature": "get _firebaseAuth"
     },
     "AuthService._safeAuth": {
@@ -18080,7 +18214,7 @@
       "kind": "getter",
       "class": "AuthService",
       "file": "lib/core/services/f_auth.dart",
-      "line": 38,
+      "line": 39,
       "signature": "get _safeAuth"
     },
     "AuthService.currentUser": {
@@ -18088,7 +18222,7 @@
       "kind": "getter",
       "class": "AuthService",
       "file": "lib/core/services/f_auth.dart",
-      "line": 51,
+      "line": 52,
       "signature": "get currentUser"
     },
     "AuthService.signInAsDevUser": {
@@ -18096,7 +18230,7 @@
       "kind": "method",
       "class": "AuthService",
       "file": "lib/core/services/f_auth.dart",
-      "line": 60,
+      "line": 61,
       "signature": "Future<User> signInAsDevUser([String email = AppConfig.adminEmail]) async"
     },
     "AuthService.tryRestoreSession": {
@@ -18104,7 +18238,7 @@
       "kind": "method",
       "class": "AuthService",
       "file": "lib/core/services/f_auth.dart",
-      "line": 66,
+      "line": 67,
       "signature": "Future<void> tryRestoreSession() => AuthOperations.tryRestoreSession(_firebaseAuth)"
     },
     "AuthService.signInWithGoogle": {
@@ -18112,7 +18246,7 @@
       "kind": "method",
       "class": "AuthService",
       "file": "lib/core/services/f_auth.dart",
-      "line": 68,
+      "line": 69,
       "signature": "Future<UserCredential?> signInWithGoogle() => AuthOperations.signInWithGoogle(_firebaseAuth)"
     },
     "AuthService.signOut": {
@@ -18120,15 +18254,23 @@
       "kind": "method",
       "class": "AuthService",
       "file": "lib/core/services/f_auth.dart",
-      "line": 70,
+      "line": 71,
       "signature": "Future<void> signOut() async"
+    },
+    "AuthService.dispose": {
+      "name": "dispose",
+      "kind": "method",
+      "class": "AuthService",
+      "file": "lib/core/services/f_auth.dart",
+      "line": 78,
+      "signature": "void dispose()"
     },
     "FirestoreServiceBase": {
       "name": "FirestoreServiceBase",
       "kind": "class",
       "class": null,
       "file": "lib/core/services/f_firestore.dart",
-      "line": 16,
+      "line": 17,
       "signature": "abstract class FirestoreServiceBase"
     },
     "FirestoreService": {
@@ -18136,7 +18278,7 @@
       "kind": "class",
       "class": null,
       "file": "lib/core/services/f_firestore.dart",
-      "line": 26,
+      "line": 27,
       "signature": "class FirestoreService extends FirestoreServiceBase"
     },
     "FirestoreService.FirestorePurgeMixin": {
@@ -18144,7 +18286,7 @@
       "kind": "method",
       "class": "FirestoreService",
       "file": "lib/core/services/f_firestore.dart",
-      "line": 32,
+      "line": 33,
       "signature": "FirestorePurgeMixin"
     },
     "FirestoreService._customFirestore": {
@@ -18152,7 +18294,7 @@
       "kind": "field",
       "class": "FirestoreService",
       "file": "lib/core/services/f_firestore.dart",
-      "line": 33,
+      "line": 34,
       "signature": "FirebaseFirestore? _customFirestore"
     },
     "FirestoreService.FirestoreService": {
@@ -18160,15 +18302,23 @@
       "kind": "constructor",
       "class": "FirestoreService",
       "file": "lib/core/services/f_firestore.dart",
-      "line": 35,
+      "line": 36,
       "signature": "FirestoreService("
+    },
+    "FirestoreService.try": {
+      "name": "try",
+      "kind": "method",
+      "class": "FirestoreService",
+      "file": "lib/core/services/f_firestore.dart",
+      "line": 37,
+      "signature": "try"
     },
     "FirestoreService._firestore": {
       "name": "_firestore",
       "kind": "getter",
       "class": "FirestoreService",
       "file": "lib/core/services/f_firestore.dart",
-      "line": 38,
+      "line": 46,
       "signature": "get _firestore"
     },
     "DevUser": {
@@ -18347,12 +18497,20 @@
       "line": 4,
       "signature": "Stream<List<UserProfile>> getUsersStream()"
     },
+    "FirestoreUsersBalancesMixin.debugPrint": {
+      "name": "debugPrint",
+      "kind": "method",
+      "class": "FirestoreUsersBalancesMixin",
+      "file": "lib/core/services/f_firestore_users_balances.dart",
+      "line": 31,
+      "signature": "debugPrint('Firestore initial balances stream error: $error')"
+    },
     "FirestoreUsersBalancesMixin.saveUserProfile": {
       "name": "saveUserProfile",
       "kind": "method",
       "class": "FirestoreUsersBalancesMixin",
       "file": "lib/core/services/f_firestore_users_balances.dart",
-      "line": 10,
+      "line": 16,
       "signature": "Future<void> saveUserProfile(UserProfile user) async"
     },
     "FirestoreUsersBalancesMixin.getInitialBalancesStream": {
@@ -18360,7 +18518,7 @@
       "kind": "method",
       "class": "FirestoreUsersBalancesMixin",
       "file": "lib/core/services/f_firestore_users_balances.dart",
-      "line": 18,
+      "line": 24,
       "signature": "Stream<List<InitialBalance>> getInitialBalancesStream()"
     },
     "FirestoreUsersBalancesMixin.setInitialBalances": {
@@ -18368,7 +18526,7 @@
       "kind": "method",
       "class": "FirestoreUsersBalancesMixin",
       "file": "lib/core/services/f_firestore_users_balances.dart",
-      "line": 24,
+      "line": 36,
       "signature": "Future<void> setInitialBalances("
     },
     "FirestoreEmailsMixin": {
@@ -18387,12 +18545,20 @@
       "line": 4,
       "signature": "Stream<List<AllowedEmail>> getAllowedEmailsStream()"
     },
+    "FirestoreEmailsMixin.debugPrint": {
+      "name": "debugPrint",
+      "kind": "method",
+      "class": "FirestoreEmailsMixin",
+      "file": "lib/core/services/f_firestore_emails.dart",
+      "line": 20,
+      "signature": "debugPrint('Firestore allowed emails stream error: $error')"
+    },
     "FirestoreEmailsMixin.isEmailAllowed": {
       "name": "isEmailAllowed",
       "kind": "method",
       "class": "FirestoreEmailsMixin",
       "file": "lib/core/services/f_firestore_emails.dart",
-      "line": 22,
+      "line": 25,
       "signature": "Future<bool> isEmailAllowed(String email) async"
     },
     "FirestoreEmailsMixin.addAllowedEmail": {
@@ -18400,7 +18566,7 @@
       "kind": "method",
       "class": "FirestoreEmailsMixin",
       "file": "lib/core/services/f_firestore_emails.dart",
-      "line": 41,
+      "line": 42,
       "signature": "Future<void> addAllowedEmail(String email) async"
     },
     "FirestoreEmailsMixin.updateAllowedEmail": {
@@ -18408,7 +18574,7 @@
       "kind": "method",
       "class": "FirestoreEmailsMixin",
       "file": "lib/core/services/f_firestore_emails.dart",
-      "line": 61,
+      "line": 62,
       "signature": "Future<void> updateAllowedEmail(String id, String newEmail) async"
     },
     "FirestoreEmailsMixin.deleteAllowedEmail": {
@@ -18416,7 +18582,7 @@
       "kind": "method",
       "class": "FirestoreEmailsMixin",
       "file": "lib/core/services/f_firestore_emails.dart",
-      "line": 68,
+      "line": 69,
       "signature": "Future<void> deleteAllowedEmail(String id) async"
     },
     "FirestorePurgeMixin": {
@@ -18443,13 +18609,21 @@
       "line": 16,
       "signature": "Future<void> deleteTripData("
     },
-    "FirestorePurgeMixin.safeDelete": {
-      "name": "safeDelete",
+    "FirestorePurgeMixin.try": {
+      "name": "try",
       "kind": "method",
       "class": "FirestorePurgeMixin",
       "file": "lib/core/services/f_firestore_purge.dart",
-      "line": 87,
-      "signature": "await safeDelete(doc.reference)"
+      "line": 88,
+      "signature": "try"
+    },
+    "FirestorePurgeMixin.debugPrint": {
+      "name": "debugPrint",
+      "kind": "method",
+      "class": "FirestorePurgeMixin",
+      "file": "lib/core/services/f_firestore_purge.dart",
+      "line": 91,
+      "signature": "debugPrint('Firestore delete batch chunk failed: $e')"
     },
     "FirestoreExpensesMixin": {
       "name": "FirestoreExpensesMixin",
@@ -18475,12 +18649,20 @@
       "line": 5,
       "signature": "try"
     },
+    "FirestoreExpensesMixin.debugPrint": {
+      "name": "debugPrint",
+      "kind": "method",
+      "class": "FirestoreExpensesMixin",
+      "file": "lib/core/services/f_firestore_expenses.dart",
+      "line": 13,
+      "signature": "debugPrint('Firestore expenses stream error: $error')"
+    },
     "FirestoreExpensesMixin.addExpense": {
       "name": "addExpense",
       "kind": "method",
       "class": "FirestoreExpensesMixin",
       "file": "lib/core/services/f_firestore_expenses.dart",
-      "line": 18,
+      "line": 21,
       "signature": "Future<void> addExpense(Expense expense) async"
     },
     "FirestoreExpensesMixin.deleteExpense": {
@@ -18488,7 +18670,7 @@
       "kind": "method",
       "class": "FirestoreExpensesMixin",
       "file": "lib/core/services/f_firestore_expenses.dart",
-      "line": 35,
+      "line": 38,
       "signature": "Future<void> deleteExpense(String id) async"
     },
     "FirestoreTransfersMixin": {
@@ -18512,15 +18694,23 @@
       "kind": "method",
       "class": "FirestoreTransfersMixin",
       "file": "lib/core/services/f_firestore_transfers.dart",
-      "line": 41,
+      "line": 44,
       "signature": "try"
+    },
+    "FirestoreTransfersMixin.debugPrint": {
+      "name": "debugPrint",
+      "kind": "method",
+      "class": "FirestoreTransfersMixin",
+      "file": "lib/core/services/f_firestore_transfers.dart",
+      "line": 52,
+      "signature": "debugPrint('Firestore borrows stream error: $error')"
     },
     "FirestoreTransfersMixin.addExchange": {
       "name": "addExchange",
       "kind": "method",
       "class": "FirestoreTransfersMixin",
       "file": "lib/core/services/f_firestore_transfers.dart",
-      "line": 19,
+      "line": 22,
       "signature": "Future<void> addExchange(Exchange exchange) async"
     },
     "FirestoreTransfersMixin.deleteExchange": {
@@ -18528,7 +18718,7 @@
       "kind": "method",
       "class": "FirestoreTransfersMixin",
       "file": "lib/core/services/f_firestore_transfers.dart",
-      "line": 35,
+      "line": 38,
       "signature": "Future<void> deleteExchange(String id) async"
     },
     "FirestoreTransfersMixin.getBorrowsStream": {
@@ -18536,7 +18726,7 @@
       "kind": "method",
       "class": "FirestoreTransfersMixin",
       "file": "lib/core/services/f_firestore_transfers.dart",
-      "line": 40,
+      "line": 43,
       "signature": "Stream<List<Borrow>> getBorrowsStream()"
     },
     "FirestoreTransfersMixin.addBorrow": {
@@ -18544,7 +18734,7 @@
       "kind": "method",
       "class": "FirestoreTransfersMixin",
       "file": "lib/core/services/f_firestore_transfers.dart",
-      "line": 54,
+      "line": 60,
       "signature": "Future<void> addBorrow(Borrow borrow) async"
     },
     "FirestoreTransfersMixin.deleteBorrow": {
@@ -18552,7 +18742,7 @@
       "kind": "method",
       "class": "FirestoreTransfersMixin",
       "file": "lib/core/services/f_firestore_transfers.dart",
-      "line": 68,
+      "line": 74,
       "signature": "Future<void> deleteBorrow(String id) async"
     },
     "AuthOperations": {
@@ -18752,7 +18942,7 @@
       "kind": "class",
       "class": null,
       "file": "lib/core/utils/m_formatters.dart",
-      "line": 2,
+      "line": 4,
       "signature": "class Formatters"
     },
     "Formatters.Formatters._": {
@@ -18760,7 +18950,7 @@
       "kind": "constructor",
       "class": "Formatters",
       "file": "lib/core/utils/m_formatters.dart",
-      "line": 3,
+      "line": 5,
       "signature": "Formatters._()"
     },
     "Formatters.formatAmount": {
@@ -18768,7 +18958,7 @@
       "kind": "method",
       "class": "Formatters",
       "file": "lib/core/utils/m_formatters.dart",
-      "line": 6,
+      "line": 8,
       "signature": "static String formatAmount(double amount)"
     },
     "Formatters.formatUsd": {
@@ -18776,7 +18966,7 @@
       "kind": "method",
       "class": "Formatters",
       "file": "lib/core/utils/m_formatters.dart",
-      "line": 41,
+      "line": 43,
       "signature": "return formatUsd(amount)"
     },
     "Formatters.formatEgp": {
@@ -18784,7 +18974,7 @@
       "kind": "method",
       "class": "Formatters",
       "file": "lib/core/utils/m_formatters.dart",
-      "line": 43,
+      "line": 45,
       "signature": "return formatEgp(amount)"
     },
     "Formatters.formatCurrency": {
@@ -18792,7 +18982,7 @@
       "kind": "method",
       "class": "Formatters",
       "file": "lib/core/utils/m_formatters.dart",
-      "line": 39,
+      "line": 41,
       "signature": "static String formatCurrency(double amount, String currency)"
     },
     "Formatters.formatDate": {
@@ -18800,8 +18990,32 @@
       "kind": "method",
       "class": "Formatters",
       "file": "lib/core/utils/m_formatters.dart",
-      "line": 47,
+      "line": 49,
       "signature": "static String formatDate(DateTime dt)"
+    },
+    "Formatters.parseDate": {
+      "name": "parseDate",
+      "kind": "method",
+      "class": "Formatters",
+      "file": "lib/core/utils/m_formatters.dart",
+      "line": 62,
+      "signature": "static DateTime parseDate(dynamic val, [DateTime? fallback])"
+    },
+    "Formatters.debugPrint": {
+      "name": "debugPrint",
+      "kind": "method",
+      "class": "Formatters",
+      "file": "lib/core/utils/m_formatters.dart",
+      "line": 80,
+      "signature": "debugPrint('Formatters.parseDate warning: Invalid date value \"$val\""
+    },
+    "Formatters.try": {
+      "name": "try",
+      "kind": "method",
+      "class": "Formatters",
+      "file": "lib/core/utils/m_formatters.dart",
+      "line": 73,
+      "signature": "try"
     },
     "resolveUserPhoto": {
       "name": "resolveUserPhoto",
@@ -22288,7 +22502,7 @@
       "kind": "method",
       "class": "ExpenseDialogFields",
       "file": "lib/core/components/expense_dialog/c_expense_dialog_fields.dart",
-      "line": 69,
+      "line": 70,
       "signature": "const SizedBox(width: 8),"
     },
     "ExpenseDialogFields.Row": {
@@ -22296,7 +22510,7 @@
       "kind": "method",
       "class": "ExpenseDialogFields",
       "file": "lib/core/components/expense_dialog/c_expense_dialog_fields.dart",
-      "line": 44,
+      "line": 45,
       "signature": "Row("
     },
     "ExpenseDialogFields.Expanded": {
@@ -22304,7 +22518,7 @@
       "kind": "method",
       "class": "ExpenseDialogFields",
       "file": "lib/core/components/expense_dialog/c_expense_dialog_fields.dart",
-      "line": 70,
+      "line": 71,
       "signature": "Expanded("
     },
     "ExpenseDialogFields.buildCurrencyOption": {
@@ -22312,7 +22526,7 @@
       "kind": "method",
       "class": "ExpenseDialogFields",
       "file": "lib/core/components/expense_dialog/c_expense_dialog_fields.dart",
-      "line": 90,
+      "line": 91,
       "signature": "buildCurrencyOption("
     },
     "ExpensePayerSelector": {
@@ -22504,7 +22718,7 @@
       "kind": "class",
       "class": null,
       "file": "lib/core/components/expense_dialog/c_expense_dialog_submit.dart",
-      "line": 7,
+      "line": 8,
       "signature": "class ExpenseSubmitHandler"
     },
     "ExpenseSubmitHandler.submit": {
@@ -22512,7 +22726,7 @@
       "kind": "method",
       "class": "ExpenseSubmitHandler",
       "file": "lib/core/components/expense_dialog/c_expense_dialog_submit.dart",
-      "line": 8,
+      "line": 9,
       "signature": "static Future<void> submit("
     },
     "ExpenseSubmitHandler.setSubmitting": {
@@ -22520,7 +22734,7 @@
       "kind": "method",
       "class": "ExpenseSubmitHandler",
       "file": "lib/core/components/expense_dialog/c_expense_dialog_submit.dart",
-      "line": 64,
+      "line": 83,
       "signature": "setSubmitting(false)"
     },
     "ExpenseSubmitHandler.SnackBar": {
@@ -22528,7 +22742,7 @@
       "kind": "method",
       "class": "ExpenseSubmitHandler",
       "file": "lib/core/components/expense_dialog/c_expense_dialog_submit.dart",
-      "line": 56,
+      "line": 77,
       "signature": "SnackBar("
     },
     "ExpenseDialogBody": {
@@ -22688,7 +22902,7 @@
       "kind": "method",
       "class": "ExpenseDialogBody",
       "file": "lib/core/components/expense_dialog/c_expense_dialog_body.dart",
-      "line": 60,
+      "line": 63,
       "signature": "ExpenseDialogFields("
     },
     "ExpenseDialogBody.ExpenseCashWarning": {
@@ -22696,7 +22910,7 @@
       "kind": "method",
       "class": "ExpenseDialogBody",
       "file": "lib/core/components/expense_dialog/c_expense_dialog_body.dart",
-      "line": 69,
+      "line": 72,
       "signature": "ExpenseCashWarning("
     },
     "ExpenseDialogBody.SizedBox": {
@@ -22704,7 +22918,7 @@
       "kind": "method",
       "class": "ExpenseDialogBody",
       "file": "lib/core/components/expense_dialog/c_expense_dialog_body.dart",
-      "line": 96,
+      "line": 99,
       "signature": "const SizedBox(height: 16),"
     },
     "ExpenseDialogBody.ExpensePayerSelector": {
@@ -22712,7 +22926,7 @@
       "kind": "method",
       "class": "ExpenseDialogBody",
       "file": "lib/core/components/expense_dialog/c_expense_dialog_body.dart",
-      "line": 80,
+      "line": 83,
       "signature": "ExpensePayerSelector("
     },
     "ExpenseDialogBody.ExpenseSplitSelector": {
@@ -22720,7 +22934,7 @@
       "kind": "method",
       "class": "ExpenseDialogBody",
       "file": "lib/core/components/expense_dialog/c_expense_dialog_body.dart",
-      "line": 87,
+      "line": 90,
       "signature": "ExpenseSplitSelector("
     },
     "ExpenseDialogBody.ExpenseDatePicker": {
@@ -22728,7 +22942,7 @@
       "kind": "method",
       "class": "ExpenseDialogBody",
       "file": "lib/core/components/expense_dialog/c_expense_dialog_body.dart",
-      "line": 97,
+      "line": 100,
       "signature": "ExpenseDatePicker("
     },
     "ExpenseCustomSplitSlider": {
@@ -23105,14 +23319,14 @@
       "class": "_ExpenseDialogViewState",
       "file": "lib/core/components/expense_dialog/c_expense_dialog_view.dart",
       "line": 42,
-      "signature": "void _submit() => ExpenseSubmitHandler.submit("
+      "signature": "void _submit()"
     },
     "_ExpenseDialogViewState.build": {
       "name": "build",
       "kind": "method",
       "class": "_ExpenseDialogViewState",
       "file": "lib/core/components/expense_dialog/c_expense_dialog_view.dart",
-      "line": 50,
+      "line": 59,
       "signature": "Widget build(BuildContext context)"
     },
     "_ExpenseDialogViewState.AppDialog": {
@@ -23120,7 +23334,7 @@
       "kind": "method",
       "class": "_ExpenseDialogViewState",
       "file": "lib/core/components/expense_dialog/c_expense_dialog_view.dart",
-      "line": 68,
+      "line": 77,
       "signature": "return AppDialog("
     },
     "ExpenseSplitCalculator": {
@@ -24384,7 +24598,7 @@
       "kind": "method",
       "class": "ExchangeSubmitHandler",
       "file": "lib/core/components/exchange_dialog/c_exchange_submit_handler.dart",
-      "line": 60,
+      "line": 62,
       "signature": "setSubmitting(false)"
     },
     "ExchangeSubmitHandler.SnackBar": {
@@ -24392,7 +24606,7 @@
       "kind": "method",
       "class": "ExchangeSubmitHandler",
       "file": "lib/core/components/exchange_dialog/c_exchange_submit_handler.dart",
-      "line": 50,
+      "line": 52,
       "signature": "SnackBar("
     },
     "ExchangeSaveButton": {
@@ -24907,94 +25121,6 @@
       "line": 78,
       "signature": "return SlideTransition("
     },
-    "AnimatedAmount": {
-      "name": "AnimatedAmount",
-      "kind": "class",
-      "class": null,
-      "file": "lib/core/animations/a_animated_amount.dart",
-      "line": 4,
-      "signature": "class AnimatedAmount extends StatelessWidget"
-    },
-    "AnimatedAmount.amount": {
-      "name": "amount",
-      "kind": "field",
-      "class": "AnimatedAmount",
-      "file": "lib/core/animations/a_animated_amount.dart",
-      "line": 5,
-      "signature": "double amount"
-    },
-    "AnimatedAmount.prefix": {
-      "name": "prefix",
-      "kind": "field",
-      "class": "AnimatedAmount",
-      "file": "lib/core/animations/a_animated_amount.dart",
-      "line": 6,
-      "signature": "String prefix"
-    },
-    "AnimatedAmount.suffix": {
-      "name": "suffix",
-      "kind": "field",
-      "class": "AnimatedAmount",
-      "file": "lib/core/animations/a_animated_amount.dart",
-      "line": 7,
-      "signature": "String suffix"
-    },
-    "AnimatedAmount.style": {
-      "name": "style",
-      "kind": "field",
-      "class": "AnimatedAmount",
-      "file": "lib/core/animations/a_animated_amount.dart",
-      "line": 8,
-      "signature": "TextStyle? style"
-    },
-    "AnimatedAmount.duration": {
-      "name": "duration",
-      "kind": "field",
-      "class": "AnimatedAmount",
-      "file": "lib/core/animations/a_animated_amount.dart",
-      "line": 9,
-      "signature": "Duration duration"
-    },
-    "AnimatedAmount.curve": {
-      "name": "curve",
-      "kind": "field",
-      "class": "AnimatedAmount",
-      "file": "lib/core/animations/a_animated_amount.dart",
-      "line": 10,
-      "signature": "Curve curve"
-    },
-    "AnimatedAmount.fractionDigits": {
-      "name": "fractionDigits",
-      "kind": "field",
-      "class": "AnimatedAmount",
-      "file": "lib/core/animations/a_animated_amount.dart",
-      "line": 11,
-      "signature": "int fractionDigits"
-    },
-    "AnimatedAmount.AnimatedAmount": {
-      "name": "AnimatedAmount",
-      "kind": "constructor",
-      "class": "AnimatedAmount",
-      "file": "lib/core/animations/a_animated_amount.dart",
-      "line": 13,
-      "signature": "const AnimatedAmount("
-    },
-    "AnimatedAmount.build": {
-      "name": "build",
-      "kind": "method",
-      "class": "AnimatedAmount",
-      "file": "lib/core/animations/a_animated_amount.dart",
-      "line": 25,
-      "signature": "Widget build(BuildContext context)"
-    },
-    "AnimatedAmount.Text": {
-      "name": "Text",
-      "kind": "method",
-      "class": "AnimatedAmount",
-      "file": "lib/core/animations/a_animated_amount.dart",
-      "line": 35,
-      "signature": "return Text("
-    },
     "Shimmer": {
       "name": "Shimmer",
       "kind": "class",
@@ -25146,70 +25272,6 @@
       "file": "lib/core/animations/a_shimmer.dart",
       "line": 79,
       "signature": "Matrix4? transform(Rect bounds,"
-    },
-    "AnimatedExpandable": {
-      "name": "AnimatedExpandable",
-      "kind": "class",
-      "class": null,
-      "file": "lib/core/animations/a_expandable.dart",
-      "line": 4,
-      "signature": "class AnimatedExpandable extends StatelessWidget"
-    },
-    "AnimatedExpandable.isExpanded": {
-      "name": "isExpanded",
-      "kind": "field",
-      "class": "AnimatedExpandable",
-      "file": "lib/core/animations/a_expandable.dart",
-      "line": 5,
-      "signature": "bool isExpanded"
-    },
-    "AnimatedExpandable.child": {
-      "name": "child",
-      "kind": "field",
-      "class": "AnimatedExpandable",
-      "file": "lib/core/animations/a_expandable.dart",
-      "line": 6,
-      "signature": "Widget child"
-    },
-    "AnimatedExpandable.duration": {
-      "name": "duration",
-      "kind": "field",
-      "class": "AnimatedExpandable",
-      "file": "lib/core/animations/a_expandable.dart",
-      "line": 7,
-      "signature": "Duration duration"
-    },
-    "AnimatedExpandable.curve": {
-      "name": "curve",
-      "kind": "field",
-      "class": "AnimatedExpandable",
-      "file": "lib/core/animations/a_expandable.dart",
-      "line": 8,
-      "signature": "Curve curve"
-    },
-    "AnimatedExpandable.AnimatedExpandable": {
-      "name": "AnimatedExpandable",
-      "kind": "constructor",
-      "class": "AnimatedExpandable",
-      "file": "lib/core/animations/a_expandable.dart",
-      "line": 10,
-      "signature": "const AnimatedExpandable("
-    },
-    "AnimatedExpandable.build": {
-      "name": "build",
-      "kind": "method",
-      "class": "AnimatedExpandable",
-      "file": "lib/core/animations/a_expandable.dart",
-      "line": 19,
-      "signature": "Widget build(BuildContext context)"
-    },
-    "AnimatedExpandable.AnimatedCrossFade": {
-      "name": "AnimatedCrossFade",
-      "kind": "method",
-      "class": "AnimatedExpandable",
-      "file": "lib/core/animations/a_expandable.dart",
-      "line": 20,
-      "signature": "return AnimatedCrossFade("
     },
     "DialogLifecycleWrapper": {
       "name": "DialogLifecycleWrapper",
@@ -25771,12 +25833,20 @@
       "line": 6,
       "signature": "VoidCallback onSignOut"
     },
+    "AccessDeniedScreen.onRetry": {
+      "name": "onRetry",
+      "kind": "field",
+      "class": "AccessDeniedScreen",
+      "file": "lib/features/auth/components/c_access_denied_screen.dart",
+      "line": 7,
+      "signature": "VoidCallback? onRetry"
+    },
     "AccessDeniedScreen.AccessDeniedScreen": {
       "name": "AccessDeniedScreen",
       "kind": "constructor",
       "class": "AccessDeniedScreen",
       "file": "lib/features/auth/components/c_access_denied_screen.dart",
-      "line": 8,
+      "line": 9,
       "signature": "const AccessDeniedScreen("
     },
     "AccessDeniedScreen.build": {
@@ -25784,7 +25854,7 @@
       "kind": "method",
       "class": "AccessDeniedScreen",
       "file": "lib/features/auth/components/c_access_denied_screen.dart",
-      "line": 15,
+      "line": 17,
       "signature": "Widget build(BuildContext context)"
     },
     "AccessDeniedScreen.Scaffold": {
@@ -25792,7 +25862,7 @@
       "kind": "method",
       "class": "AccessDeniedScreen",
       "file": "lib/features/auth/components/c_access_denied_screen.dart",
-      "line": 18,
+      "line": 20,
       "signature": "return Scaffold("
     },
     "AccessDeniedScreen.Container": {
@@ -25800,7 +25870,7 @@
       "kind": "method",
       "class": "AccessDeniedScreen",
       "file": "lib/features/auth/components/c_access_denied_screen.dart",
-      "line": 28,
+      "line": 30,
       "signature": "Container("
     },
     "AccessDeniedScreen.SizedBox": {
@@ -25808,7 +25878,7 @@
       "kind": "method",
       "class": "AccessDeniedScreen",
       "file": "lib/features/auth/components/c_access_denied_screen.dart",
-      "line": 53,
+      "line": 66,
       "signature": "SizedBox("
     },
     "AccessDeniedScreen.Text": {
@@ -25816,7 +25886,7 @@
       "kind": "method",
       "class": "AccessDeniedScreen",
       "file": "lib/features/auth/components/c_access_denied_screen.dart",
-      "line": 47,
+      "line": 49,
       "signature": "Text("
     },
     "AuthWhitelistGate": {
@@ -25880,15 +25950,31 @@
       "kind": "method",
       "class": "_AuthWhitelistGateState",
       "file": "lib/features/auth/components/c_auth_whitelist_gate.dart",
-      "line": 32,
+      "line": 33,
       "signature": "void initState()"
+    },
+    "_AuthWhitelistGateState._retryCheck": {
+      "name": "_retryCheck",
+      "kind": "method",
+      "class": "_AuthWhitelistGateState",
+      "file": "lib/features/auth/components/c_auth_whitelist_gate.dart",
+      "line": 38,
+      "signature": "void _retryCheck()"
+    },
+    "_AuthWhitelistGateState.setState": {
+      "name": "setState",
+      "kind": "method",
+      "class": "_AuthWhitelistGateState",
+      "file": "lib/features/auth/components/c_auth_whitelist_gate.dart",
+      "line": 39,
+      "signature": "setState(()"
     },
     "_AuthWhitelistGateState._syncProfile": {
       "name": "_syncProfile",
       "kind": "method",
       "class": "_AuthWhitelistGateState",
       "file": "lib/features/auth/components/c_auth_whitelist_gate.dart",
-      "line": 86,
+      "line": 95,
       "signature": "_syncProfile()"
     },
     "_AuthWhitelistGateState.try": {
@@ -25896,7 +25982,7 @@
       "kind": "method",
       "class": "_AuthWhitelistGateState",
       "file": "lib/features/auth/components/c_auth_whitelist_gate.dart",
-      "line": 42,
+      "line": 49,
       "signature": "try"
     },
     "_AuthWhitelistGateState.UserProfile": {
@@ -25904,7 +25990,7 @@
       "kind": "method",
       "class": "_AuthWhitelistGateState",
       "file": "lib/features/auth/components/c_auth_whitelist_gate.dart",
-      "line": 48,
+      "line": 55,
       "signature": "UserProfile("
     },
     "_AuthWhitelistGateState.build": {
@@ -25912,7 +25998,7 @@
       "kind": "method",
       "class": "_AuthWhitelistGateState",
       "file": "lib/features/auth/components/c_auth_whitelist_gate.dart",
-      "line": 59,
+      "line": 66,
       "signature": "Widget build(BuildContext context)"
     },
     "_AuthWhitelistGateState.CircularProgressIndicator": {
@@ -25920,7 +26006,7 @@
       "kind": "method",
       "class": "_AuthWhitelistGateState",
       "file": "lib/features/auth/components/c_auth_whitelist_gate.dart",
-      "line": 76,
+      "line": 83,
       "signature": "CircularProgressIndicator(),"
     },
     "_AuthWhitelistGateState.SizedBox": {
@@ -25928,7 +26014,7 @@
       "kind": "method",
       "class": "_AuthWhitelistGateState",
       "file": "lib/features/auth/components/c_auth_whitelist_gate.dart",
-      "line": 77,
+      "line": 84,
       "signature": "SizedBox(height: 16),"
     },
     "_AuthWhitelistGateState.Text": {
@@ -25936,7 +26022,7 @@
       "kind": "method",
       "class": "_AuthWhitelistGateState",
       "file": "lib/features/auth/components/c_auth_whitelist_gate.dart",
-      "line": 78,
+      "line": 85,
       "signature": "Text('Verifying trip authorization...'),"
     },
     "_AuthWhitelistGateState.HomeScreen": {
@@ -25944,7 +26030,7 @@
       "kind": "method",
       "class": "_AuthWhitelistGateState",
       "file": "lib/features/auth/components/c_auth_whitelist_gate.dart",
-      "line": 87,
+      "line": 97,
       "signature": "return HomeScreen("
     },
     "_AuthWhitelistGateState.AccessDeniedScreen": {
@@ -25952,7 +26038,7 @@
       "kind": "method",
       "class": "_AuthWhitelistGateState",
       "file": "lib/features/auth/components/c_auth_whitelist_gate.dart",
-      "line": 95,
+      "line": 105,
       "signature": "return AccessDeniedScreen("
     },
     "SettingsViewModel": {
@@ -27675,12 +27761,20 @@
       "line": 13,
       "signature": "String? friendDisplayName"
     },
+    "InitialBalancesData.friendUserId": {
+      "name": "friendUserId",
+      "kind": "field",
+      "class": "InitialBalancesData",
+      "file": "lib/features/settings/components/c_initial_balances_resolver.dart",
+      "line": 14,
+      "signature": "String? friendUserId"
+    },
     "InitialBalancesData.InitialBalancesData": {
       "name": "InitialBalancesData",
       "kind": "method",
       "class": "InitialBalancesData",
       "file": "lib/features/settings/components/c_initial_balances_resolver.dart",
-      "line": 83,
+      "line": 88,
       "signature": "return InitialBalancesData("
     },
     "InitialBalancesData.resolve": {
@@ -27688,7 +27782,7 @@
       "kind": "method",
       "class": "InitialBalancesData",
       "file": "lib/features/settings/components/c_initial_balances_resolver.dart",
-      "line": 24,
+      "line": 26,
       "signature": "static InitialBalancesData resolve("
     },
     "FriendBalanceItem": {
@@ -27731,12 +27825,20 @@
       "line": 12,
       "signature": "InitialBalance? friendBalance"
     },
+    "FriendBalanceItem.onEdit": {
+      "name": "onEdit",
+      "kind": "field",
+      "class": "FriendBalanceItem",
+      "file": "lib/features/settings/components/c_friend_balance_item.dart",
+      "line": 13,
+      "signature": "VoidCallback? onEdit"
+    },
     "FriendBalanceItem.FriendBalanceItem": {
       "name": "FriendBalanceItem",
       "kind": "constructor",
       "class": "FriendBalanceItem",
       "file": "lib/features/settings/components/c_friend_balance_item.dart",
-      "line": 14,
+      "line": 15,
       "signature": "const FriendBalanceItem("
     },
     "FriendBalanceItem.build": {
@@ -27744,7 +27846,7 @@
       "kind": "method",
       "class": "FriendBalanceItem",
       "file": "lib/features/settings/components/c_friend_balance_item.dart",
-      "line": 23,
+      "line": 25,
       "signature": "Widget build(BuildContext context)"
     },
     "FriendBalanceItem.BalanceUserCard": {
@@ -27752,7 +27854,7 @@
       "kind": "method",
       "class": "FriendBalanceItem",
       "file": "lib/features/settings/components/c_friend_balance_item.dart",
-      "line": 29,
+      "line": 31,
       "signature": "return BalanceUserCard("
     },
     "FriendBalanceItem.Container": {
@@ -27760,7 +27862,7 @@
       "kind": "method",
       "class": "FriendBalanceItem",
       "file": "lib/features/settings/components/c_friend_balance_item.dart",
-      "line": 40,
+      "line": 42,
       "signature": "return Container("
     },
     "FriendBalanceItem.Icon": {
@@ -27768,7 +27870,7 @@
       "kind": "method",
       "class": "FriendBalanceItem",
       "file": "lib/features/settings/components/c_friend_balance_item.dart",
-      "line": 55,
+      "line": 57,
       "signature": "Icon("
     },
     "FriendBalanceItem.SizedBox": {
@@ -27776,7 +27878,7 @@
       "kind": "method",
       "class": "FriendBalanceItem",
       "file": "lib/features/settings/components/c_friend_balance_item.dart",
-      "line": 60,
+      "line": 62,
       "signature": "const SizedBox(width: 12),"
     },
     "FriendBalanceItem.Expanded": {
@@ -27784,7 +27886,7 @@
       "kind": "method",
       "class": "FriendBalanceItem",
       "file": "lib/features/settings/components/c_friend_balance_item.dart",
-      "line": 61,
+      "line": 63,
       "signature": "Expanded("
     },
     "InitialBalanceInputField": {
@@ -28360,7 +28462,7 @@
       "kind": "class",
       "class": null,
       "file": "lib/features/home/s_home.dart",
-      "line": 13,
+      "line": 14,
       "signature": "class HomeScreen extends StatefulWidget"
     },
     "HomeScreen.user": {
@@ -28368,7 +28470,7 @@
       "kind": "field",
       "class": "HomeScreen",
       "file": "lib/features/home/s_home.dart",
-      "line": 14,
+      "line": 15,
       "signature": "User user"
     },
     "HomeScreen.authService": {
@@ -28376,7 +28478,7 @@
       "kind": "field",
       "class": "HomeScreen",
       "file": "lib/features/home/s_home.dart",
-      "line": 15,
+      "line": 16,
       "signature": "AuthService authService"
     },
     "HomeScreen.firestoreService": {
@@ -28384,7 +28486,7 @@
       "kind": "field",
       "class": "HomeScreen",
       "file": "lib/features/home/s_home.dart",
-      "line": 16,
+      "line": 17,
       "signature": "FirestoreService firestoreService"
     },
     "HomeScreen.viewModel": {
@@ -28392,7 +28494,7 @@
       "kind": "field",
       "class": "HomeScreen",
       "file": "lib/features/home/s_home.dart",
-      "line": 17,
+      "line": 18,
       "signature": "HomeViewModel? viewModel"
     },
     "HomeScreen.feedViewModel": {
@@ -28400,7 +28502,7 @@
       "kind": "field",
       "class": "HomeScreen",
       "file": "lib/features/home/s_home.dart",
-      "line": 18,
+      "line": 19,
       "signature": "HomeFeedViewModel? feedViewModel"
     },
     "HomeScreen.HomeScreen": {
@@ -28408,7 +28510,7 @@
       "kind": "constructor",
       "class": "HomeScreen",
       "file": "lib/features/home/s_home.dart",
-      "line": 20,
+      "line": 21,
       "signature": "const HomeScreen("
     },
     "HomeScreen.createState": {
@@ -28416,7 +28518,7 @@
       "kind": "method",
       "class": "HomeScreen",
       "file": "lib/features/home/s_home.dart",
-      "line": 30,
+      "line": 31,
       "signature": "State<HomeScreen> createState() => _HomeScreenState()"
     },
     "_HomeScreenState": {
@@ -28424,7 +28526,7 @@
       "kind": "class",
       "class": null,
       "file": "lib/features/home/s_home.dart",
-      "line": 33,
+      "line": 34,
       "signature": "class _HomeScreenState extends State<HomeScreen>"
     },
     "_HomeScreenState.initState": {
@@ -28432,7 +28534,7 @@
       "kind": "method",
       "class": "_HomeScreenState",
       "file": "lib/features/home/s_home.dart",
-      "line": 40,
+      "line": 41,
       "signature": "void initState()"
     },
     "_HomeScreenState.dispose": {
@@ -28440,7 +28542,7 @@
       "kind": "method",
       "class": "_HomeScreenState",
       "file": "lib/features/home/s_home.dart",
-      "line": 61,
+      "line": 62,
       "signature": "void dispose()"
     },
     "_HomeScreenState.build": {
@@ -28448,7 +28550,7 @@
       "kind": "method",
       "class": "_HomeScreenState",
       "file": "lib/features/home/s_home.dart",
-      "line": 68,
+      "line": 69,
       "signature": "Widget build(BuildContext context)"
     },
     "_HomeScreenState.ListenableBuilder": {
@@ -28456,7 +28558,7 @@
       "kind": "method",
       "class": "_HomeScreenState",
       "file": "lib/features/home/s_home.dart",
-      "line": 69,
+      "line": 70,
       "signature": "return ListenableBuilder("
     },
     "_HomeScreenState.Scaffold": {
@@ -28464,7 +28566,7 @@
       "kind": "method",
       "class": "_HomeScreenState",
       "file": "lib/features/home/s_home.dart",
-      "line": 74,
+      "line": 75,
       "signature": "return Scaffold("
     },
     "HomeFeedViewModel": {
@@ -28504,7 +28606,7 @@
       "kind": "method",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 101,
+      "line": 102,
       "signature": "_recalculate()"
     },
     "HomeFeedViewModel._scheduleNotify": {
@@ -28520,7 +28622,7 @@
       "kind": "method",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 102,
+      "line": 103,
       "signature": "notifyListeners()"
     },
     "HomeFeedViewModel.expenses": {
@@ -28739,12 +28841,20 @@
       "line": 97,
       "signature": "get isProcessing"
     },
+    "HomeFeedViewModel.isLoading": {
+      "name": "isLoading",
+      "kind": "getter",
+      "class": "HomeFeedViewModel",
+      "file": "lib/features/home/vm_home_feed.dart",
+      "line": 98,
+      "signature": "get isLoading"
+    },
     "HomeFeedViewModel.errorMessage": {
       "name": "errorMessage",
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 98,
+      "line": 99,
       "signature": "get errorMessage"
     },
     "HomeFeedViewModel.refresh": {
@@ -28752,7 +28862,7 @@
       "kind": "method",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 100,
+      "line": 101,
       "signature": "Future<void> refresh() async"
     },
     "HomeFeedViewModel.mutations": {
@@ -28760,7 +28870,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 106,
+      "line": 107,
       "signature": "get mutations"
     },
     "HomeFeedViewModel.dispose": {
@@ -28768,7 +28878,7 @@
       "kind": "method",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 109,
+      "line": 110,
       "signature": "void dispose()"
     },
     "HomeTabScreen": {
@@ -28827,45 +28937,69 @@
       "line": 39,
       "signature": "return RefreshIndicator("
     },
-    "HomeTabScreen.Padding": {
-      "name": "Padding",
+    "HomeTabScreen.SliverToBoxAdapter": {
+      "name": "SliverToBoxAdapter",
       "kind": "method",
       "class": "HomeTabScreen",
       "file": "lib/features/home/s_home_tab.dart",
-      "line": 43,
-      "signature": "Padding("
+      "line": 44,
+      "signature": "SliverToBoxAdapter("
     },
-    "HomeTabScreen.HomeBalancesCard": {
-      "name": "HomeBalancesCard",
+    "HomeTabScreen.Container": {
+      "name": "Container",
       "kind": "method",
       "class": "HomeTabScreen",
       "file": "lib/features/home/s_home_tab.dart",
-      "line": 48,
-      "signature": "HomeBalancesCard("
+      "line": 51,
+      "signature": "Container("
+    },
+    "HomeTabScreen.Icon": {
+      "name": "Icon",
+      "kind": "method",
+      "class": "HomeTabScreen",
+      "file": "lib/features/home/s_home_tab.dart",
+      "line": 60,
+      "signature": "Icon(Icons.error_outline,"
     },
     "HomeTabScreen.SizedBox": {
       "name": "SizedBox",
       "kind": "method",
       "class": "HomeTabScreen",
       "file": "lib/features/home/s_home_tab.dart",
-      "line": 70,
+      "line": 101,
       "signature": "const SizedBox(height: 10),"
-    },
-    "HomeTabScreen.SegmentedPillItem": {
-      "name": "SegmentedPillItem",
-      "kind": "method",
-      "class": "HomeTabScreen",
-      "file": "lib/features/home/s_home_tab.dart",
-      "line": 67,
-      "signature": "SegmentedPillItem(value: HomeFeedFilter.split, label: 'Split', count: viewModel.splitActivities.length),"
     },
     "HomeTabScreen.Expanded": {
       "name": "Expanded",
       "kind": "method",
       "class": "HomeTabScreen",
       "file": "lib/features/home/s_home_tab.dart",
-      "line": 74,
+      "line": 64,
       "signature": "Expanded("
+    },
+    "HomeTabScreen.HomeBalancesCard": {
+      "name": "HomeBalancesCard",
+      "kind": "method",
+      "class": "HomeTabScreen",
+      "file": "lib/features/home/s_home_tab.dart",
+      "line": 79,
+      "signature": "HomeBalancesCard("
+    },
+    "HomeTabScreen.SegmentedPillItem": {
+      "name": "SegmentedPillItem",
+      "kind": "method",
+      "class": "HomeTabScreen",
+      "file": "lib/features/home/s_home_tab.dart",
+      "line": 98,
+      "signature": "SegmentedPillItem(value: HomeFeedFilter.split, label: 'Split', count: viewModel.splitActivities.length),"
+    },
+    "HomeTabScreen.HomeActivitiesList": {
+      "name": "HomeActivitiesList",
+      "kind": "method",
+      "class": "HomeTabScreen",
+      "file": "lib/features/home/s_home_tab.dart",
+      "line": 106,
+      "signature": "HomeActivitiesList("
     },
     "HomeBalancesCard": {
       "name": "HomeBalancesCard",
@@ -29056,7 +29190,7 @@
       "kind": "method",
       "class": "HomeActionHandler",
       "file": "lib/features/home/components/c_home_action_handler.dart",
-      "line": 59,
+      "line": 60,
       "signature": "showBorrowDialog("
     },
     "HomeTabActions": {
@@ -29088,7 +29222,7 @@
       "kind": "method",
       "class": "HomeTabActions",
       "file": "lib/features/home/components/c_home_tab_actions.dart",
-      "line": 37,
+      "line": 38,
       "signature": "showAddExchangeDialog("
     },
     "HomeTabActions.showBorrowDialog": {
@@ -29096,7 +29230,7 @@
       "kind": "method",
       "class": "HomeTabActions",
       "file": "lib/features/home/components/c_home_tab_actions.dart",
-      "line": 47,
+      "line": 48,
       "signature": "showBorrowDialog("
     },
     "HomeTabActions.confirmDelete": {
@@ -29104,7 +29238,7 @@
       "kind": "method",
       "class": "HomeTabActions",
       "file": "lib/features/home/components/c_home_tab_actions.dart",
-      "line": 64,
+      "line": 66,
       "signature": "static void confirmDelete("
     },
     "HomeTabActions.showDeleteActivityDialog": {
@@ -29112,7 +29246,7 @@
       "kind": "method",
       "class": "HomeTabActions",
       "file": "lib/features/home/components/c_home_tab_actions.dart",
-      "line": 69,
+      "line": 71,
       "signature": "showDeleteActivityDialog("
     },
     "HomeActivitiesList": {
@@ -29120,7 +29254,7 @@
       "kind": "class",
       "class": null,
       "file": "lib/features/home/components/c_home_activities_list.dart",
-      "line": 11,
+      "line": 12,
       "signature": "class HomeActivitiesList extends StatelessWidget"
     },
     "HomeActivitiesList.activities": {
@@ -29128,7 +29262,7 @@
       "kind": "field",
       "class": "HomeActivitiesList",
       "file": "lib/features/home/components/c_home_activities_list.dart",
-      "line": 12,
+      "line": 13,
       "signature": "List<ActivityItem> activities"
     },
     "HomeActivitiesList.filter": {
@@ -29136,7 +29270,7 @@
       "kind": "field",
       "class": "HomeActivitiesList",
       "file": "lib/features/home/components/c_home_activities_list.dart",
-      "line": 13,
+      "line": 14,
       "signature": "HomeFeedFilter filter"
     },
     "HomeActivitiesList.user": {
@@ -29144,7 +29278,7 @@
       "kind": "field",
       "class": "HomeActivitiesList",
       "file": "lib/features/home/components/c_home_activities_list.dart",
-      "line": 14,
+      "line": 15,
       "signature": "User user"
     },
     "HomeActivitiesList.friendName": {
@@ -29152,7 +29286,7 @@
       "kind": "field",
       "class": "HomeActivitiesList",
       "file": "lib/features/home/components/c_home_activities_list.dart",
-      "line": 15,
+      "line": 16,
       "signature": "String? friendName"
     },
     "HomeActivitiesList.viewModel": {
@@ -29160,7 +29294,7 @@
       "kind": "field",
       "class": "HomeActivitiesList",
       "file": "lib/features/home/components/c_home_activities_list.dart",
-      "line": 16,
+      "line": 17,
       "signature": "HomeFeedViewModel viewModel"
     },
     "HomeActivitiesList.HomeActivitiesList": {
@@ -29168,7 +29302,7 @@
       "kind": "constructor",
       "class": "HomeActivitiesList",
       "file": "lib/features/home/components/c_home_activities_list.dart",
-      "line": 18,
+      "line": 19,
       "signature": "const HomeActivitiesList("
     },
     "HomeActivitiesList.build": {
@@ -29176,24 +29310,72 @@
       "kind": "method",
       "class": "HomeActivitiesList",
       "file": "lib/features/home/components/c_home_activities_list.dart",
-      "line": 28,
+      "line": 29,
       "signature": "Widget build(BuildContext context)"
     },
-    "HomeActivitiesList.SingleChildScrollView": {
-      "name": "SingleChildScrollView",
+    "HomeActivitiesList.SliverFillRemaining": {
+      "name": "SliverFillRemaining",
       "kind": "method",
       "class": "HomeActivitiesList",
       "file": "lib/features/home/components/c_home_activities_list.dart",
-      "line": 30,
-      "signature": "return SingleChildScrollView("
+      "line": 35,
+      "signature": "return SliverFillRemaining("
+    },
+    "HomeActivitiesList.SliverPadding": {
+      "name": "SliverPadding",
+      "kind": "method",
+      "class": "HomeActivitiesList",
+      "file": "lib/features/home/components/c_home_activities_list.dart",
+      "line": 56,
+      "signature": "return SliverPadding("
     },
     "HomeActivitiesList.StaggeredItem": {
       "name": "StaggeredItem",
       "kind": "method",
       "class": "HomeActivitiesList",
       "file": "lib/features/home/components/c_home_activities_list.dart",
-      "line": 55,
+      "line": 62,
       "signature": "return StaggeredItem("
+    },
+    "_ActivityListSkeleton": {
+      "name": "_ActivityListSkeleton",
+      "kind": "class",
+      "class": null,
+      "file": "lib/features/home/components/c_home_activities_list.dart",
+      "line": 93,
+      "signature": "class _ActivityListSkeleton extends StatelessWidget"
+    },
+    "_ActivityListSkeleton._ActivityListSkeleton": {
+      "name": "_ActivityListSkeleton",
+      "kind": "constructor",
+      "class": "_ActivityListSkeleton",
+      "file": "lib/features/home/components/c_home_activities_list.dart",
+      "line": 94,
+      "signature": "const _ActivityListSkeleton()"
+    },
+    "_ActivityListSkeleton.build": {
+      "name": "build",
+      "kind": "method",
+      "class": "_ActivityListSkeleton",
+      "file": "lib/features/home/components/c_home_activities_list.dart",
+      "line": 97,
+      "signature": "Widget build(BuildContext context)"
+    },
+    "_ActivityListSkeleton.SliverPadding": {
+      "name": "SliverPadding",
+      "kind": "method",
+      "class": "_ActivityListSkeleton",
+      "file": "lib/features/home/components/c_home_activities_list.dart",
+      "line": 103,
+      "signature": "return SliverPadding("
+    },
+    "_ActivityListSkeleton.Padding": {
+      "name": "Padding",
+      "kind": "method",
+      "class": "_ActivityListSkeleton",
+      "file": "lib/features/home/components/c_home_activities_list.dart",
+      "line": 108,
+      "signature": "return Padding("
     },
     "HomeNavBar": {
       "name": "HomeNavBar",
@@ -29512,15 +29694,15 @@
       "kind": "constructor",
       "class": "HomeFeedMutations",
       "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-      "line": 10,
-      "signature": "const HomeFeedMutations("
+      "line": 11,
+      "signature": "HomeFeedMutations("
     },
     "HomeFeedMutations._run": {
       "name": "_run",
       "kind": "method",
       "class": "HomeFeedMutations",
       "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-      "line": 12,
+      "line": 13,
       "signature": "Future<bool> _run(Future<void> Function() action) async"
     },
     "HomeFeedMutations.try": {
@@ -29528,7 +29710,7 @@
       "kind": "method",
       "class": "HomeFeedMutations",
       "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-      "line": 13,
+      "line": 14,
       "signature": "try"
     },
     "HomeFeedMutations.action": {
@@ -29536,7 +29718,7 @@
       "kind": "method",
       "class": "HomeFeedMutations",
       "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-      "line": 14,
+      "line": 16,
       "signature": "await action()"
     },
     "HomeFeedMutations.addExpense": {
@@ -29544,7 +29726,7 @@
       "kind": "method",
       "class": "HomeFeedMutations",
       "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-      "line": 21,
+      "line": 24,
       "signature": "Future<bool> addExpense(Expense expense) => _run(() => firestoreService.addExpense(expense))"
     },
     "HomeFeedMutations.updateExpense": {
@@ -29552,7 +29734,7 @@
       "kind": "method",
       "class": "HomeFeedMutations",
       "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-      "line": 22,
+      "line": 25,
       "signature": "Future<bool> updateExpense(Expense expense) => _run(() => firestoreService.addExpense(expense))"
     },
     "HomeFeedMutations.deleteExpense": {
@@ -29560,7 +29742,7 @@
       "kind": "method",
       "class": "HomeFeedMutations",
       "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-      "line": 23,
+      "line": 26,
       "signature": "Future<bool> deleteExpense(String id) => _run(() => firestoreService.deleteExpense(id))"
     },
     "HomeFeedMutations.addExchange": {
@@ -29568,7 +29750,7 @@
       "kind": "method",
       "class": "HomeFeedMutations",
       "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-      "line": 24,
+      "line": 27,
       "signature": "Future<bool> addExchange(Exchange exchange) => _run(() => firestoreService.addExchange(exchange))"
     },
     "HomeFeedMutations.updateExchange": {
@@ -29576,7 +29758,7 @@
       "kind": "method",
       "class": "HomeFeedMutations",
       "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-      "line": 25,
+      "line": 28,
       "signature": "Future<bool> updateExchange(Exchange exchange) => _run(() => firestoreService.addExchange(exchange))"
     },
     "HomeFeedMutations.deleteExchange": {
@@ -29584,7 +29766,7 @@
       "kind": "method",
       "class": "HomeFeedMutations",
       "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-      "line": 26,
+      "line": 29,
       "signature": "Future<bool> deleteExchange(String id) => _run(() => firestoreService.deleteExchange(id))"
     },
     "HomeFeedMutations.addBorrow": {
@@ -29592,7 +29774,7 @@
       "kind": "method",
       "class": "HomeFeedMutations",
       "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-      "line": 27,
+      "line": 30,
       "signature": "Future<bool> addBorrow(Borrow borrow) => _run(() => firestoreService.addBorrow(borrow))"
     },
     "HomeFeedMutations.updateBorrow": {
@@ -29600,7 +29782,7 @@
       "kind": "method",
       "class": "HomeFeedMutations",
       "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-      "line": 28,
+      "line": 31,
       "signature": "Future<bool> updateBorrow(Borrow borrow) => _run(() => firestoreService.addBorrow(borrow))"
     },
     "HomeFeedMutations.deleteBorrow": {
@@ -29608,7 +29790,7 @@
       "kind": "method",
       "class": "HomeFeedMutations",
       "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-      "line": 29,
+      "line": 32,
       "signature": "Future<bool> deleteBorrow(String id) => _run(() => firestoreService.deleteBorrow(id))"
     },
     "HomeFeedMutationsMixin": {
@@ -29616,7 +29798,7 @@
       "kind": "mixin",
       "class": null,
       "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-      "line": 33,
+      "line": 36,
       "signature": "mixin HomeFeedMutationsMixin"
     },
     "HomeFeedMutationsMixin.addExpense": {
@@ -29624,7 +29806,7 @@
       "kind": "method",
       "class": "HomeFeedMutationsMixin",
       "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-      "line": 36,
+      "line": 39,
       "signature": "Future<bool> addExpense(Expense e) => mutations.addExpense(e)"
     },
     "HomeFeedMutationsMixin.updateExpense": {
@@ -29632,7 +29814,7 @@
       "kind": "method",
       "class": "HomeFeedMutationsMixin",
       "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-      "line": 37,
+      "line": 40,
       "signature": "Future<bool> updateExpense(Expense e) => mutations.updateExpense(e)"
     },
     "HomeFeedMutationsMixin.deleteExpense": {
@@ -29640,7 +29822,7 @@
       "kind": "method",
       "class": "HomeFeedMutationsMixin",
       "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-      "line": 38,
+      "line": 41,
       "signature": "Future<bool> deleteExpense(String id) => mutations.deleteExpense(id)"
     },
     "HomeFeedMutationsMixin.addExchange": {
@@ -29648,7 +29830,7 @@
       "kind": "method",
       "class": "HomeFeedMutationsMixin",
       "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-      "line": 39,
+      "line": 42,
       "signature": "Future<bool> addExchange(Exchange e) => mutations.addExchange(e)"
     },
     "HomeFeedMutationsMixin.updateExchange": {
@@ -29656,7 +29838,7 @@
       "kind": "method",
       "class": "HomeFeedMutationsMixin",
       "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-      "line": 40,
+      "line": 43,
       "signature": "Future<bool> updateExchange(Exchange e) => mutations.updateExchange(e)"
     },
     "HomeFeedMutationsMixin.deleteExchange": {
@@ -29664,7 +29846,7 @@
       "kind": "method",
       "class": "HomeFeedMutationsMixin",
       "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-      "line": 41,
+      "line": 44,
       "signature": "Future<bool> deleteExchange(String id) => mutations.deleteExchange(id)"
     },
     "HomeFeedMutationsMixin.addBorrow": {
@@ -29672,7 +29854,7 @@
       "kind": "method",
       "class": "HomeFeedMutationsMixin",
       "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-      "line": 42,
+      "line": 45,
       "signature": "Future<bool> addBorrow(Borrow b) => mutations.addBorrow(b)"
     },
     "HomeFeedMutationsMixin.updateBorrow": {
@@ -29680,7 +29862,7 @@
       "kind": "method",
       "class": "HomeFeedMutationsMixin",
       "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-      "line": 43,
+      "line": 46,
       "signature": "Future<bool> updateBorrow(Borrow b) => mutations.updateBorrow(b)"
     },
     "HomeFeedMutationsMixin.deleteBorrow": {
@@ -29688,7 +29870,7 @@
       "kind": "method",
       "class": "HomeFeedMutationsMixin",
       "file": "lib/features/home/feed/vm_home_feed_mutations.dart",
-      "line": 44,
+      "line": 47,
       "signature": "Future<bool> deleteBorrow(String id) => mutations.deleteBorrow(id)"
     },
     "HomeFeedState": {
@@ -29707,36 +29889,52 @@
       "line": 13,
       "signature": "FirestoreService firestoreService"
     },
+    "HomeFeedState._loadedStreams": {
+      "name": "_loadedStreams",
+      "kind": "field",
+      "class": "HomeFeedState",
+      "file": "lib/features/home/feed/vm_home_feed_state.dart",
+      "line": 30,
+      "signature": "Set<String> _loadedStreams"
+    },
     "HomeFeedState.HomeFeedState": {
       "name": "HomeFeedState",
       "kind": "constructor",
       "class": "HomeFeedState",
       "file": "lib/features/home/feed/vm_home_feed_state.dart",
-      "line": 29,
+      "line": 32,
       "signature": "HomeFeedState("
     },
-    "HomeFeedState.initSubscriptions": {
-      "name": "initSubscriptions",
+    "HomeFeedState._markLoaded": {
+      "name": "_markLoaded",
       "kind": "method",
       "class": "HomeFeedState",
       "file": "lib/features/home/feed/vm_home_feed_state.dart",
-      "line": 31,
-      "signature": "void initSubscriptions(VoidCallback onUpdate)"
+      "line": 65,
+      "signature": "_markLoaded('emails', onUpdate)"
     },
     "HomeFeedState.onUpdate": {
       "name": "onUpdate",
       "kind": "method",
       "class": "HomeFeedState",
       "file": "lib/features/home/feed/vm_home_feed_state.dart",
-      "line": 54,
+      "line": 39,
       "signature": "onUpdate()"
+    },
+    "HomeFeedState.initSubscriptions": {
+      "name": "initSubscriptions",
+      "kind": "method",
+      "class": "HomeFeedState",
+      "file": "lib/features/home/feed/vm_home_feed_state.dart",
+      "line": 42,
+      "signature": "void initSubscriptions(VoidCallback onUpdate)"
     },
     "HomeFeedState.dispose": {
       "name": "dispose",
       "kind": "method",
       "class": "HomeFeedState",
       "file": "lib/features/home/feed/vm_home_feed_state.dart",
-      "line": 58,
+      "line": 69,
       "signature": "void dispose()"
     },
     "HomeFeedProfiles": {
@@ -30507,12 +30705,28 @@
       "line": 67,
       "signature": "get allPersonalExpenses"
     },
+    "MyTrackerGettersMixin.filteredExpenses": {
+      "name": "filteredExpenses",
+      "kind": "getter",
+      "class": "MyTrackerGettersMixin",
+      "file": "lib/features/my_tracker/tracker/vm_my_tracker_getters.dart",
+      "line": 70,
+      "signature": "get filteredExpenses"
+    },
+    "MyTrackerGettersMixin.myExchanges": {
+      "name": "myExchanges",
+      "kind": "getter",
+      "class": "MyTrackerGettersMixin",
+      "file": "lib/features/my_tracker/tracker/vm_my_tracker_getters.dart",
+      "line": 82,
+      "signature": "get myExchanges"
+    },
     "MyTrackerGettersMixin.totalMyExpensesUsd": {
       "name": "totalMyExpensesUsd",
       "kind": "getter",
       "class": "MyTrackerGettersMixin",
       "file": "lib/features/my_tracker/tracker/vm_my_tracker_getters.dart",
-      "line": 70,
+      "line": 87,
       "signature": "get totalMyExpensesUsd"
     },
     "MyTrackerGettersMixin.totalMyExpensesEgp": {
@@ -30520,7 +30734,7 @@
       "kind": "getter",
       "class": "MyTrackerGettersMixin",
       "file": "lib/features/my_tracker/tracker/vm_my_tracker_getters.dart",
-      "line": 71,
+      "line": 88,
       "signature": "get totalMyExpensesEgp"
     },
     "MyTrackerGettersMixin.totalSharedExpensesUsd": {
@@ -30528,7 +30742,7 @@
       "kind": "getter",
       "class": "MyTrackerGettersMixin",
       "file": "lib/features/my_tracker/tracker/vm_my_tracker_getters.dart",
-      "line": 72,
+      "line": 89,
       "signature": "get totalSharedExpensesUsd"
     },
     "MyTrackerGettersMixin.totalSharedExpensesEgp": {
@@ -30536,7 +30750,7 @@
       "kind": "getter",
       "class": "MyTrackerGettersMixin",
       "file": "lib/features/my_tracker/tracker/vm_my_tracker_getters.dart",
-      "line": 73,
+      "line": 90,
       "signature": "get totalSharedExpensesEgp"
     },
     "MyTrackerGettersMixin._tot": {
@@ -30544,7 +30758,7 @@
       "kind": "method",
       "class": "MyTrackerGettersMixin",
       "file": "lib/features/my_tracker/tracker/vm_my_tracker_getters.dart",
-      "line": 75,
+      "line": 92,
       "signature": "double _tot(List<Expense> l, String c) =>"
     },
     "MyTrackerGettersMixin.totalPersonalSpendingUsd": {
@@ -30552,7 +30766,7 @@
       "kind": "getter",
       "class": "MyTrackerGettersMixin",
       "file": "lib/features/my_tracker/tracker/vm_my_tracker_getters.dart",
-      "line": 78,
+      "line": 95,
       "signature": "get totalPersonalSpendingUsd"
     },
     "MyTrackerGettersMixin.totalPersonalSpendingEgp": {
@@ -30560,7 +30774,7 @@
       "kind": "getter",
       "class": "MyTrackerGettersMixin",
       "file": "lib/features/my_tracker/tracker/vm_my_tracker_getters.dart",
-      "line": 80,
+      "line": 97,
       "signature": "get totalPersonalSpendingEgp"
     },
     "MyTrackerActions": {
@@ -30584,7 +30798,7 @@
       "kind": "method",
       "class": "MyTrackerActions",
       "file": "lib/features/my_tracker/components/c_my_tracker_actions.dart",
-      "line": 21,
+      "line": 22,
       "signature": "showAddExpenseDialog("
     },
     "MyTrackerActions.openDeleteExpenseDialog": {
@@ -30592,7 +30806,7 @@
       "kind": "method",
       "class": "MyTrackerActions",
       "file": "lib/features/my_tracker/components/c_my_tracker_actions.dart",
-      "line": 37,
+      "line": 39,
       "signature": "static void openDeleteExpenseDialog("
     },
     "MyTrackerActions.showDeleteActivityDialog": {
@@ -30600,7 +30814,7 @@
       "kind": "method",
       "class": "MyTrackerActions",
       "file": "lib/features/my_tracker/components/c_my_tracker_actions.dart",
-      "line": 42,
+      "line": 44,
       "signature": "showDeleteActivityDialog("
     },
     "MyTrackerExpenseList": {
@@ -30664,8 +30878,56 @@
       "kind": "method",
       "class": "MyTrackerExpenseList",
       "file": "lib/features/my_tracker/components/c_my_tracker_list.dart",
-      "line": 47,
+      "line": 78,
       "signature": "return StaggeredItem("
+    },
+    "_FakeAuthService": {
+      "name": "_FakeAuthService",
+      "kind": "class",
+      "class": null,
+      "file": "test/widget_test.dart",
+      "line": 9,
+      "signature": "class _FakeAuthService extends AuthService"
+    },
+    "_FakeAuthService._FakeAuthService": {
+      "name": "_FakeAuthService",
+      "kind": "constructor",
+      "class": "_FakeAuthService",
+      "file": "test/widget_test.dart",
+      "line": 10,
+      "signature": "_FakeAuthService() : super(initializeGoogleSignIn: false)"
+    },
+    "_FakeFirestoreService": {
+      "name": "_FakeFirestoreService",
+      "kind": "class",
+      "class": null,
+      "file": "test/widget_test.dart",
+      "line": 13,
+      "signature": "class _FakeFirestoreService extends FirestoreService"
+    },
+    "_FakeFirestoreService.getAllowedEmailsStream": {
+      "name": "getAllowedEmailsStream",
+      "kind": "method",
+      "class": "_FakeFirestoreService",
+      "file": "test/widget_test.dart",
+      "line": 15,
+      "signature": "Stream<List<AllowedEmail>> getAllowedEmailsStream() => Stream.value([])"
+    },
+    "_FakeFirestoreService.getInitialBalancesStream": {
+      "name": "getInitialBalancesStream",
+      "kind": "method",
+      "class": "_FakeFirestoreService",
+      "file": "test/widget_test.dart",
+      "line": 17,
+      "signature": "Stream<List<InitialBalance>> getInitialBalancesStream() => Stream.value([])"
+    },
+    "_FakeFirestoreService.getUsersStream": {
+      "name": "getUsersStream",
+      "kind": "method",
+      "class": "_FakeFirestoreService",
+      "file": "test/widget_test.dart",
+      "line": 19,
+      "signature": "Stream<List<UserProfile>> getUsersStream() => Stream.value([])"
     },
     "testWidgets": {
       "name": "testWidgets",

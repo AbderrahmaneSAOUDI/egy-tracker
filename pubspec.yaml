@@ -5,17 +5,17 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.14.0-147.0.dev
+  sdk: '>=3.3.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.8
   firebase_core: ^4.14.0
   firebase_auth: ^6.6.1
   cloud_firestore: ^6.9.0
   google_sign_in: ^7.2.0
   flutter_svg: ^2.0.17
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:
@@ -28,4 +28,3 @@ flutter:
   assets:
     - assets/
     - assets/images/
-    - assets/fonts/

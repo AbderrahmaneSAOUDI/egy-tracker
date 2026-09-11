@@ -1,3 +1,5 @@
+import '../utils/m_formatters.dart';
+
 class InitialBalance {
   final String userId;
   final double usdAmount;
@@ -26,9 +28,7 @@ class InitialBalance {
       userId: map['user_id'] as String? ?? documentId,
       usdAmount: (map['usd_amount'] as num?)?.toDouble() ?? 0.0,
       egpAmount: (map['egp_amount'] as num?)?.toDouble() ?? 0.0,
-      updatedAt: map['updated_at'] != null
-          ? DateTime.tryParse(map['updated_at'] as String) ?? DateTime.now()
-          : DateTime.now(),
+      updatedAt: Formatters.parseDate(map['updated_at']),
     );
   }
 }

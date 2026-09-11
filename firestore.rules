@@ -50,12 +50,28 @@ service cloud.firestore {
 
     // ─── Exchanges ───
     match /exchanges/{exchangeId} {
-      allow read, write: if isAllowedUser();
+      allow read: if isAllowedUser();
+      allow create, update: if isAllowedUser()
+        && request.resource.data.from_amount is number
+        && request.resource.data.from_amount > 0
+        && request.resource.data.to_amount is number
+        && request.resource.data.to_amount > 0
+        && request.resource.data.from_currency in ['USD', 'EGP']
+        && request.resource.data.to_currency in ['USD', 'EGP']
+        && request.resource.data.from_currency != request.resource.data.to_currency;
+      allow delete: if isAllowedUser();
     }
 
     // ─── Borrows ───
     match /borrows/{borrowId} {
-      allow read, write: if isAllowedUser();
+      allow read: if isAllowedUser();
+      allow create, update: if isAllowedUser()
+        && request.resource.data.usd_amount is number
+        && request.resource.data.usd_amount >= 0
+        && request.resource.data.egp_amount is number
+        && request.resource.data.egp_amount >= 0
+        && (request.resource.data.usd_amount > 0 || request.resource.data.egp_amount > 0);
+      allow delete: if isAllowedUser();
     }
   }
 }

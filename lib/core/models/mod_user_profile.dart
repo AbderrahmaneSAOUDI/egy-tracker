@@ -1,3 +1,5 @@
+import '../utils/m_formatters.dart';
+
 class UserProfile {
   final String id;
   final String name;
@@ -30,9 +32,7 @@ class UserProfile {
       name: map['name'] as String? ?? '',
       email: (map['email'] as String? ?? '').toLowerCase().trim(),
       photoUrl: map['photo_url'] as String?,
-      createdAt: map['created_at'] != null
-          ? DateTime.tryParse(map['created_at'] as String) ?? DateTime.now()
-          : DateTime.now(),
+      createdAt: Formatters.parseDate(map['created_at']),
     );
   }
 }

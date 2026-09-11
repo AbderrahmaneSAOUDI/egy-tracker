@@ -16,22 +16,23 @@ mixin FirestoreEmailsMixin on FirestoreServiceBase {
         return a.createdAt.compareTo(b.createdAt);
       });
       return list;
+    }).handleError((error) {
+      debugPrint('Firestore allowed emails stream error: $error');
+      return <AllowedEmail>[];
     });
   }
 
   Future<bool> isEmailAllowed(String email) async {
     final normalized = email.toLowerCase().trim();
     if (normalized == AppConfig.adminEmail) {
+      final snapshot = await _allowedEmailsCollection.get();
+      if (snapshot.docs.isEmpty) {
+        await addAllowedEmail(AppConfig.adminEmail);
+      }
       return true;
     }
+
     final snapshot = await _allowedEmailsCollection.get();
-
-    // If whitelist is completely empty, allow initial user and auto-seed
-    if (snapshot.docs.isEmpty) {
-      await addAllowedEmail(normalized);
-      return true;
-    }
-
     return snapshot.docs.any((doc) {
       final docEmail = (doc.data()['email'] as String? ?? '').toLowerCase().trim();
       return docEmail == normalized;

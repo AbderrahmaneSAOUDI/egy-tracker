@@ -67,6 +67,23 @@ mixin MyTrackerGettersMixin {
   List<Expense> get allPersonalExpenses =>
       MyTrackerCalculator.filterAllPersonalExpenses(expenses, isPrimaryUser);
 
+  List<Expense> get filteredExpenses {
+    switch (filter) {
+      case MyTrackerFilter.myExpenses:
+        return myExpenses;
+      case MyTrackerFilter.sharedExpenses:
+        return sharedExpenses;
+      case MyTrackerFilter.all:
+      case MyTrackerFilter.exchanges:
+        return allPersonalExpenses;
+    }
+  }
+
+  List<Exchange> get myExchanges => exchanges.where((x) {
+        final email = (user.email ?? '').toLowerCase().trim();
+        return x.userId == user.uid || x.userId.toLowerCase().trim() == email;
+      }).toList();
+
   double get totalMyExpensesUsd => _tot(myExpenses, 'USD');
   double get totalMyExpensesEgp => _tot(myExpenses, 'EGP');
   double get totalSharedExpensesUsd => _tot(sharedExpenses, 'USD');

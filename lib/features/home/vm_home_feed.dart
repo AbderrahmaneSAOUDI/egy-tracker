@@ -95,7 +95,8 @@ class HomeFeedViewModel extends ChangeNotifier with HomeFeedMutationsMixin {
   double get friendEgpBalance => _balances.friendEgp;
 
   bool get isProcessing => false;
-  String? get errorMessage => null;
+  bool get isLoading => !_state.hasLoadedInitialData;
+  String? get errorMessage => _mutations.lastError;
 
   Future<void> refresh() async {
     _recalculate();

@@ -10,6 +10,7 @@ class FriendBalanceItem extends StatelessWidget {
   final String? friendDisplayName;
   final UserProfile? friendProfile;
   final InitialBalance? friendBalance;
+  final VoidCallback? onEdit;
 
   const FriendBalanceItem({
     super.key,
@@ -17,6 +18,7 @@ class FriendBalanceItem extends StatelessWidget {
     required this.friendDisplayName,
     required this.friendProfile,
     required this.friendBalance,
+    this.onEdit,
   });
 
   @override
@@ -33,7 +35,7 @@ class FriendBalanceItem extends StatelessWidget {
         photoUrl: friendProfile?.photoUrl,
         usdAmount: friendBalance?.usdAmount ?? 0.0,
         egpAmount: friendBalance?.egpAmount ?? 0.0,
-        onEdit: null,
+        onEdit: onEdit,
       );
     }
 

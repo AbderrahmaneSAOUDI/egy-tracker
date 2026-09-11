@@ -26,13 +26,15 @@ class ExchangeSubmitHandler {
     final fromAmt = double.tryParse(fromAmountController.text.trim()) ?? 0.0;
     final toAmt = double.tryParse(toAmountController.text.trim()) ?? 0.0;
     final rate = fromAmt > 0
-        ? (fromCurrency == 'USD' ? (toAmt / fromAmt) : (fromAmt / toAmt))
+        ? (fromCurrency == 'USD'
+            ? (toAmt / fromAmt)
+            : (toAmt > 0 ? fromAmt / toAmt : 1.0))
         : 1.0;
 
     setSubmitting(true);
 
     final exchange = Exchange(
-      id: initialExchange?.id ?? '',
+      id: initialExchange?.id.isNotEmpty == true ? initialExchange!.id : '',
       userId: currentUserId,
       fromCurrency: fromCurrency,
       fromAmount: fromAmt,

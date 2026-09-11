@@ -2,9 +2,15 @@ part of 'f_firestore.dart';
 
 mixin FirestoreUsersBalancesMixin on FirestoreServiceBase {
   Stream<List<UserProfile>> getUsersStream() {
-    return _usersCollection.snapshots().map((snapshot) => snapshot.docs
-        .map((doc) => UserProfile.fromMap(doc.data(), doc.id))
-        .toList());
+    return _usersCollection
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => UserProfile.fromMap(doc.data(), doc.id))
+            .toList())
+        .handleError((error) {
+      debugPrint('Firestore users stream error: $error');
+      return <UserProfile>[];
+    });
   }
 
   Future<void> saveUserProfile(UserProfile user) async {
@@ -16,9 +22,15 @@ mixin FirestoreUsersBalancesMixin on FirestoreServiceBase {
   }
 
   Stream<List<InitialBalance>> getInitialBalancesStream() {
-    return _initialBalancesCollection.snapshots().map((snapshot) => snapshot.docs
-        .map((doc) => InitialBalance.fromMap(doc.data(), doc.id))
-        .toList());
+    return _initialBalancesCollection
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => InitialBalance.fromMap(doc.data(), doc.id))
+            .toList())
+        .handleError((error) {
+      debugPrint('Firestore initial balances stream error: $error');
+      return <InitialBalance>[];
+    });
   }
 
   Future<void> setInitialBalances({

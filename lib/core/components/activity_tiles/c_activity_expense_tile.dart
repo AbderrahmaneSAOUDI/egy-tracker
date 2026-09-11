@@ -23,7 +23,10 @@ Widget buildExpenseTile({
   final payerId = expense.paidBy.toLowerCase().trim();
   final isPaidByMe = payerId == currentUserId.toLowerCase().trim() ||
       (currentUserEmail != null && payerId == currentUserEmail.toLowerCase().trim());
-  final payerLabel = isPaidByMe ? 'Paid by You' : 'Paid by ${friendName ?? "Friend"}';
+  final cleanFriendName = (friendName != null && friendName.trim().isNotEmpty)
+      ? (friendName.contains('@') ? friendName.split('@').first : friendName.trim())
+      : 'Friend';
+  final payerLabel = isPaidByMe ? 'Paid by You' : 'Paid by $cleanFriendName';
 
   final myPct = isPrimaryUser ? expense.mePercentage : expense.friendPercentage;
   final friendPct = isPrimaryUser ? expense.friendPercentage : expense.mePercentage;
@@ -32,7 +35,7 @@ Widget buildExpenseTile({
   if (myPct == 100.0) {
     splitLabel = '100% You';
   } else if (friendPct == 100.0) {
-    splitLabel = '100% ${friendName ?? "Friend"}';
+    splitLabel = '100% $cleanFriendName';
   } else if (expense.splitType == 'fifty_fifty' || (expense.mePercentage == 50.0 && expense.friendPercentage == 50.0)) {
     splitLabel = '50/50';
   } else {

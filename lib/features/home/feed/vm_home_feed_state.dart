@@ -26,32 +26,43 @@ class HomeFeedState {
   StreamSubscription? _usersSub;
   StreamSubscription? _emailsSub;
 
+  bool hasLoadedInitialData = false;
+  final Set<String> _loadedStreams = {};
+
   HomeFeedState({required this.firestoreService});
+
+  void _markLoaded(String streamName, VoidCallback onUpdate) {
+    _loadedStreams.add(streamName);
+    if (_loadedStreams.length >= 2 || expenses.isNotEmpty || balances.isNotEmpty) {
+      hasLoadedInitialData = true;
+    }
+    onUpdate();
+  }
 
   void initSubscriptions(VoidCallback onUpdate) {
     _expensesSub = firestoreService.getExpensesStream().listen((data) {
       expenses = data;
-      onUpdate();
+      _markLoaded('expenses', onUpdate);
     });
     _exchangesSub = firestoreService.getExchangesStream().listen((data) {
       exchanges = data;
-      onUpdate();
+      _markLoaded('exchanges', onUpdate);
     });
     _borrowsSub = firestoreService.getBorrowsStream().listen((data) {
       borrows = data;
-      onUpdate();
+      _markLoaded('borrows', onUpdate);
     });
     _balancesSub = firestoreService.getInitialBalancesStream().listen((data) {
       balances = data;
-      onUpdate();
+      _markLoaded('balances', onUpdate);
     });
     _usersSub = firestoreService.getUsersStream().listen((data) {
       users = data;
-      onUpdate();
+      _markLoaded('users', onUpdate);
     });
     _emailsSub = firestoreService.getAllowedEmailsStream().listen((data) {
       allowedEmails = data;
-      onUpdate();
+      _markLoaded('emails', onUpdate);
     });
   }
 

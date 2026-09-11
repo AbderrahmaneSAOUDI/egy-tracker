@@ -288,6 +288,38 @@ void main() {
       expect(Calculations.calculateUserExpenseShare(expense: expD, isPrimaryUser: true), equals(1400.0));
       expect(Calculations.getUserPercentage(expense: expD, isPrimaryUser: false), equals(30.0));
       expect(Calculations.calculateUserExpenseShare(expense: expD, isPrimaryUser: false), equals(600.0));
+
+      // Scenario E — Exchange: Cairo airport USD 200 -> EGP 10,000, rate 50.0
+      final exchangeE = Exchange(
+        id: 'e',
+        userId: 'user_me',
+        fromCurrency: 'USD',
+        fromAmount: 200.0,
+        toCurrency: 'EGP',
+        toAmount: 10000.0,
+        exchangeRate: 50.0,
+        date: DateTime.now(),
+        createdAt: DateTime.now(),
+      );
+      final now = DateTime.now();
+      final usdBalAfterExchange = Calculations.calculateCashBalance(
+        userId: 'user_me',
+        currency: 'USD',
+        initialBalance: InitialBalance(userId: 'user_me', usdAmount: 500.0, egpAmount: 0.0, updatedAt: now),
+        exchanges: [exchangeE],
+        expenses: [],
+      );
+      final egpBalAfterExchange = Calculations.calculateCashBalance(
+        userId: 'user_me',
+        currency: 'EGP',
+        initialBalance: InitialBalance(userId: 'user_me', usdAmount: 500.0, egpAmount: 0.0, updatedAt: now),
+        exchanges: [exchangeE],
+        expenses: [],
+      );
+      // USD decreases by 200 (500 - 200 = 300)
+      expect(usdBalAfterExchange, equals(300.0));
+      // EGP increases by 10,000 (0 + 10,000 = 10,000)
+      expect(egpBalAfterExchange, equals(10000.0));
     });
   });
 
