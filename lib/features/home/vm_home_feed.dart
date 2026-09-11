@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import '../../core/models/mod_activity_item.dart';
@@ -99,6 +100,8 @@ class HomeFeedViewModel extends ChangeNotifier with HomeFeedMutationsMixin {
   String? get errorMessage => _mutations.lastError;
 
   Future<void> refresh() async {
+    _state.dispose();
+    _state.initSubscriptions(_scheduleNotify);
     _recalculate();
     notifyListeners();
   }

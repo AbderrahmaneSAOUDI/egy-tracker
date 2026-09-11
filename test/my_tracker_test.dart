@@ -257,7 +257,7 @@ void main() {
       // Physical cash balances:
       // USD cash: 300 initial - 15 expA paid = 285 USD (expC was paid by Friend)
       expect(vm.myUsdBalance, equals(285.0));
-      // EGP cash: 5000 initial - 500 (50% expB) - 1400 (70% expD) = 3100 EGP
+      // EGP cash: 5000 initial - 500 expB share - 1400 expD share = 3100 EGP
       expect(vm.myEgpBalance, equals(3100.0));
 
       // Filter tests
@@ -438,7 +438,7 @@ void main() {
 
       // Check My Share text formatting
       expect(find.text('My share: 100%'), findsOneWidget);
-      expect(find.text('Total: 600.00 EGP'), findsOneWidget);
+      expect(find.text('My share: 50%'), findsOneWidget);
 
       // No segmented filter bar in My Tracker
       expect(find.byType(SegmentedPillBar<MyTrackerFilter>), findsNothing);

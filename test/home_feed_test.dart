@@ -257,14 +257,14 @@ void main() {
 
       await pumpEventQueue();
 
-      // Cash Balance formula: Initial + ExchangesIn - ExchangesOut - ExpensesPaid + BorrowsIn - BorrowsOut
+      // Cash Balance formula: Initial + ExchangesIn - ExchangesOut - Expenses (personal % if split, payer if not) + BorrowsIn - BorrowsOut
       // Me USD: 500 - 100 (exchange out) + 50 (borrow in) = 450.0
-      // Me EGP: 0 + 4900 (exchange in) - 450 (split expense 50%) + 500 (borrow in) = 4950.0
+      // Me EGP: 0 + 4900 (exchange in) - 450 (50% of 900) + 500 (borrow in) = 4950.0
       expect(vm.myUsdBalance, 450.0);
       expect(vm.myEgpBalance, 4950.0);
 
       // Friend USD: 300.0 - 50 (borrow out) = 250.0
-      // Friend EGP: 1000.0 - 450 (split expense 50%) - 500 (borrow out) = 50.0
+      // Friend EGP: 1000.0 - 450 (50% of 900) - 500 (borrow out) = 50.0
       expect(vm.friendUsdBalance, 250.0);
       expect(vm.friendEgpBalance, 50.0);
     });

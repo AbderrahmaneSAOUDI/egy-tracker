@@ -1,13 +1,13 @@
 # egy_tracker — High-Speed Codebase & Symbol Index
-*Generated automatically in 229.6ms for Gemini 3.8 Flash High.*
+*Generated automatically in 326.9ms for Gemini 3.8 Flash High.*
 
 > [!TIP]
 > **Surgical Navigation**: Check this index or use `python3 scripts/find_symbol.py <symbol>` to pinpoint file and line numbers without reading entire files.
 
 ## Summary Metrics
 - **Total Dart Files**: 195
-- **Total Dart Lines**: 16444
-- **Indexed Symbols**: 1748
+- **Total Dart Lines**: 16508
+- **Indexed Symbols**: 1753
 
 ---
 
@@ -26,7 +26,7 @@
 | File | Lines | Key Classes / Functions | Primary Purpose |
 | :--- | :---: | :--- | :--- |
 | [`lib/core/services/f_auth.dart`](lib/core/services/f_auth.dart) | 82 | AuthService | Core Services |
-| [`lib/core/services/f_auth_dev_user.dart`](lib/core/services/f_auth_dev_user.dart) | 83 | DevUser | Core Services |
+| [`lib/core/services/f_auth_dev_user.dart`](lib/core/services/f_auth_dev_user.dart) | 87 | DevUser | Core Services |
 | [`lib/core/services/f_auth_google.dart`](lib/core/services/f_auth_google.dart) | 39 | GoogleAuthHelper | Core Services |
 | [`lib/core/services/f_auth_operations.dart`](lib/core/services/f_auth_operations.dart) | 54 | AuthOperations | Core Services |
 | [`lib/core/services/f_auth_sync.dart`](lib/core/services/f_auth_sync.dart) | 36 | - | Core Services |
@@ -41,9 +41,9 @@
 | File | Lines | Key Classes / Functions | Primary Purpose |
 | :--- | :---: | :--- | :--- |
 | [`lib/core/utils/m_auth_helpers.dart`](lib/core/utils/m_auth_helpers.dart) | 62 | resolveUserPhoto, resolveUserName | Core Utilities & Math |
-| [`lib/core/utils/m_calculations.dart`](lib/core/utils/m_calculations.dart) | 70 | Calculations | Core Utilities & Math |
-| [`lib/core/utils/m_calculations_balances.dart`](lib/core/utils/m_calculations_balances.dart) | 91 | matchesUser | Core Utilities & Math |
-| [`lib/core/utils/m_calculations_shares.dart`](lib/core/utils/m_calculations_shares.dart) | 39 | - | Core Utilities & Math |
+| [`lib/core/utils/m_calculations.dart`](lib/core/utils/m_calculations.dart) | 74 | Calculations | Core Utilities & Math |
+| [`lib/core/utils/m_calculations_balances.dart`](lib/core/utils/m_calculations_balances.dart) | 88 | matchesUser | Core Utilities & Math |
+| [`lib/core/utils/m_calculations_shares.dart`](lib/core/utils/m_calculations_shares.dart) | 44 | - | Core Utilities & Math |
 | [`lib/core/utils/m_formatters.dart`](lib/core/utils/m_formatters.dart) | 83 | Formatters | Core Utilities & Math |
 | [`lib/core/utils/m_validators.dart`](lib/core/utils/m_validators.dart) | 85 | Validators | Core Utilities & Math |
 
@@ -66,7 +66,7 @@
 | [`lib/features/home/s_home.dart`](lib/features/home/s_home.dart) | 100 | HomeScreen, _HomeScreenState | Feature: Home Tab |
 | [`lib/features/home/s_home_tab.dart`](lib/features/home/s_home_tab.dart) | 119 | HomeTabScreen | Feature: Home Tab |
 | [`lib/features/home/vm_home.dart`](lib/features/home/vm_home.dart) | 24 | HomeViewModel | Feature: Home Tab |
-| [`lib/features/home/vm_home_feed.dart`](lib/features/home/vm_home_feed.dart) | 114 | HomeFeedViewModel | Feature: Home Tab |
+| [`lib/features/home/vm_home_feed.dart`](lib/features/home/vm_home_feed.dart) | 117 | HomeFeedViewModel | Feature: Home Tab |
 
 ## Feature: My Tracker Tab
 | File | Lines | Key Classes / Functions | Primary Purpose |
@@ -108,7 +108,7 @@
 | [`lib/features/settings/components/c_edit_initial_balances_form.dart`](lib/features/settings/components/c_edit_initial_balances_form.dart) | 63 | EditInitialBalancesForm | Feature: Settings Tab |
 | [`lib/features/settings/components/c_friend_balance_item.dart`](lib/features/settings/components/c_friend_balance_item.dart) | 73 | FriendBalanceItem | Feature: Settings Tab |
 | [`lib/features/settings/components/c_initial_balance_input_field.dart`](lib/features/settings/components/c_initial_balance_input_field.dart) | 73 | InitialBalanceInputField | Feature: Settings Tab |
-| [`lib/features/settings/components/c_initial_balances_card.dart`](lib/features/settings/components/c_initial_balances_card.dart) | 102 | InitialBalancesCard | Feature: Settings Tab |
+| [`lib/features/settings/components/c_initial_balances_card.dart`](lib/features/settings/components/c_initial_balances_card.dart) | 131 | InitialBalancesCard, _InitialBalancesCardState | Feature: Settings Tab |
 | [`lib/features/settings/components/c_initial_balances_resolver.dart`](lib/features/settings/components/c_initial_balances_resolver.dart) | 98 | InitialBalancesData | Feature: Settings Tab |
 | [`lib/features/settings/components/c_profile_card.dart`](lib/features/settings/components/c_profile_card.dart) | 99 | ProfileCard | Feature: Settings Tab |
 | [`lib/features/settings/components/c_profile_info.dart`](lib/features/settings/components/c_profile_info.dart) | 55 | ProfileInfoColumn | Feature: Settings Tab |
@@ -137,7 +137,7 @@
 | [`lib/core/components/activity_tiles/c_activity_amount.dart`](lib/core/components/activity_tiles/c_activity_amount.dart) | 49 | - | Core UI Components |
 | [`lib/core/components/activity_tiles/c_activity_borrow_tile.dart`](lib/core/components/activity_tiles/c_activity_borrow_tile.dart) | 103 | - | Core UI Components |
 | [`lib/core/components/activity_tiles/c_activity_exchange_tile.dart`](lib/core/components/activity_tiles/c_activity_exchange_tile.dart) | 86 | - | Core UI Components |
-| [`lib/core/components/activity_tiles/c_activity_expense_tile.dart`](lib/core/components/activity_tiles/c_activity_expense_tile.dart) | 108 | - | Core UI Components |
+| [`lib/core/components/activity_tiles/c_activity_expense_tile.dart`](lib/core/components/activity_tiles/c_activity_expense_tile.dart) | 114 | - | Core UI Components |
 | [`lib/core/components/balance/c_balance_card_decoration.dart`](lib/core/components/balance/c_balance_card_decoration.dart) | 37 | - | Core UI Components |
 | [`lib/core/components/balance/c_balance_currency_section.dart`](lib/core/components/balance/c_balance_currency_section.dart) | 77 | - | Core UI Components |
 | [`lib/core/components/balance/c_empty_traveler_card.dart`](lib/core/components/balance/c_empty_traveler_card.dart) | 72 | EmptyTravelerCard | Core UI Components |
@@ -251,5 +251,5 @@
 | [`test/settings_screen_test.dart`](test/settings_screen_test.dart) | 512 | FakeAuthService, FakeFirestoreService, main, group, setUp | Tests |
 | [`test/slide_action_card_test.dart`](test/slide_action_card_test.dart) | 198 | main, group, testWidgets | Tests |
 | [`test/theme_and_ui_test.dart`](test/theme_and_ui_test.dart) | 73 | main, group, test | Tests |
-| [`test/utils_test.dart`](test/utils_test.dart) | 373 | main, group, test | Tests |
+| [`test/utils_test.dart`](test/utils_test.dart) | 389 | main, group, test | Tests |
 | [`test/widget_test.dart`](test/widget_test.dart) | 37 | _FakeAuthService, _FakeFirestoreService, main, testWidgets | Tests |

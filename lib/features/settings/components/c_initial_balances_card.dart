@@ -13,7 +13,7 @@ import 'c_friend_balance_item.dart';
 import 'c_initial_balances_resolver.dart';
 
 /// Card containing starting cash configurations for You and Friend.
-class InitialBalancesCard extends StatelessWidget {
+class InitialBalancesCard extends StatefulWidget {
   final User user;
   final SettingsViewModel viewModel;
 
@@ -22,6 +22,35 @@ class InitialBalancesCard extends StatelessWidget {
     required this.user,
     required this.viewModel,
   });
+
+  @override
+  State<InitialBalancesCard> createState() => _InitialBalancesCardState();
+}
+
+class _InitialBalancesCardState extends State<InitialBalancesCard> {
+  late Stream<List<InitialBalance>> _initialBalancesStream;
+  late Stream<List<AllowedEmail>> _allowedEmailsStream;
+  late Stream<List<UserProfile>> _usersStream;
+
+  @override
+  void initState() {
+    super.initState();
+    _initStreams();
+  }
+
+  @override
+  void didUpdateWidget(covariant InitialBalancesCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.viewModel != widget.viewModel) {
+      _initStreams();
+    }
+  }
+
+  void _initStreams() {
+    _initialBalancesStream = widget.viewModel.initialBalancesStream;
+    _allowedEmailsStream = widget.viewModel.allowedEmailsStream;
+    _usersStream = widget.viewModel.usersStream;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,42 +63,42 @@ class InitialBalancesCard extends StatelessWidget {
       isCollapsible: true,
       initiallyExpanded: false,
       child: StreamBuilder<List<InitialBalance>>(
-        stream: viewModel.initialBalancesStream,
+        stream: _initialBalancesStream,
         builder: (context, balancesSnap) {
           return StreamBuilder<List<AllowedEmail>>(
-            stream: viewModel.allowedEmailsStream,
+            stream: _allowedEmailsStream,
             builder: (context, emailsSnap) {
               return StreamBuilder<List<UserProfile>>(
-                stream: viewModel.usersStream,
+                stream: _usersStream,
                 builder: (context, usersSnap) {
                   final data = InitialBalancesData.resolve(
                     balances: balancesSnap.data ?? [],
                     emails: emailsSnap.data ?? [],
                     users: usersSnap.data ?? [],
-                    user: user,
+                    user: widget.user,
                   );
 
                   final myDisplayName =
-                      resolveUserName(user, data.myProfile?.name);
+                      resolveUserName(widget.user, data.myProfile?.name);
                   final myPhotoUrl =
-                      resolveUserPhoto(user, data.myProfile?.photoUrl);
+                      resolveUserPhoto(widget.user, data.myProfile?.photoUrl);
 
                   return Column(
                     children: [
                       BalanceUserCard(
                         isCurrentUser: true,
                         name: myDisplayName,
-                        email: user.email ?? '',
+                        email: widget.user.email ?? '',
                         photoUrl: myPhotoUrl,
                         usdAmount: data.myBalance?.usdAmount ?? 0.0,
                         egpAmount: data.myBalance?.egpAmount ?? 0.0,
                         onEdit: () => showEditInitialBalancesDialog(
                           context: context,
-                          userId: user.uid,
+                          userId: widget.user.uid,
                           userName: myDisplayName,
                           currentUsd: data.myBalance?.usdAmount ?? 0.0,
                           currentEgp: data.myBalance?.egpAmount ?? 0.0,
-                          onSave: viewModel.setInitialBalances,
+                          onSave: widget.viewModel.setInitialBalances,
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -85,7 +114,7 @@ class InitialBalancesCard extends StatelessWidget {
                                 userName: data.friendDisplayName ?? 'Friend',
                                 currentUsd: data.friendBalance?.usdAmount ?? 0.0,
                                 currentEgp: data.friendBalance?.egpAmount ?? 0.0,
-                                onSave: viewModel.setInitialBalances,
+                                onSave: widget.viewModel.setInitialBalances,
                               )
                             : null,
                       ),

@@ -10,6 +10,8 @@ Widget buildExpenseAmount({
   required double? personalShare,
 }) {
   if (isMyTrackerView && personalShare != null) {
+    final pct = amount > 0 ? (personalShare / amount * 100) : 0.0;
+    final pctStr = (pct % 1 == 0) ? '${pct.toInt()}%' : '${pct.toStringAsFixed(1)}%';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisSize: MainAxisSize.min,
@@ -25,9 +27,7 @@ Widget buildExpenseAmount({
         ),
         const SizedBox(height: 2),
         Text(
-          personalShare != amount
-              ? 'Total: ${Formatters.formatCurrency(amount, currency)}'
-              : 'My share: 100%',
+          'My share: $pctStr',
           style: TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.w500,
