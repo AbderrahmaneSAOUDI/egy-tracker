@@ -48,7 +48,7 @@ double calculateCashBalanceInternal({
     }
   }
 
-  // 3. Expenses: Physical cash subtracted strictly according to split percentage or single payer
+  // 3. Expenses: Reduce money depending on percentage of each user when split, or payer when not split
   for (final expense in expenses) {
     if (expense.currency.toUpperCase().trim() != normCurrency) continue;
     final isSplit = (expense.splitType == 'fifty_fifty') ||
@@ -57,16 +57,13 @@ double calculateCashBalanceInternal({
             expense.friendPercentage > 0);
 
     if (isSplit) {
-      if (expense.splitType == 'fifty_fifty') {
-        balance -= expense.amount * 0.5;
-      } else {
-        final pct = getUserPercentageInternal(
-          expense: expense,
-          isPrimaryUser: isPrimaryUser,
-          userId: userId,
-        );
-        balance -= expense.amount * (pct / 100.0);
-      }
+      final pct = getUserPercentageInternal(
+        expense: expense,
+        isPrimaryUser: isPrimaryUser,
+        userId: userId,
+        userEmail: userEmail,
+      );
+      balance -= expense.amount * (pct / 100.0);
     } else {
       if (matchesUser(expense.paidBy)) {
         balance -= expense.amount;

@@ -54,6 +54,10 @@ Future<User> signInAsDevUserHelper(
   StreamController<User?> authController, [
   String email = AppConfig.adminEmail,
 ]) async {
+  if (!kDebugMode) {
+    throw UnsupportedError('Dev login is disabled in release mode.');
+  }
+
   String? currentUid;
   String? currentDisplayName;
   String? currentPhotoURL;

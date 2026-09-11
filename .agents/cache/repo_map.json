@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-09-11T18:42:36Z",
+  "generatedAt": "2026-09-11T19:50:59Z",
   "totalFiles": 195,
-  "totalLines": 16444,
-  "totalSymbols": 1748,
+  "totalLines": 16508,
+  "totalSymbols": 1753,
   "files": {
     "lib/main.dart": {
       "category": "Root / Config",
@@ -1022,7 +1022,7 @@
     },
     "lib/core/services/f_auth_dev_user.dart": {
       "category": "Core Services",
-      "lineCount": 83,
+      "lineCount": 87,
       "symbols": [
         {
           "name": "DevUser",
@@ -1673,7 +1673,7 @@
     },
     "lib/core/utils/m_calculations.dart": {
       "category": "Core Utilities & Math",
-      "lineCount": 70,
+      "lineCount": 74,
       "symbols": [
         {
           "name": "Calculations",
@@ -1736,7 +1736,7 @@
           "kind": "method",
           "class": "Calculations",
           "file": "lib/core/utils/m_calculations.dart",
-          "line": 53,
+          "line": 54,
           "signature": "getUserPercentageInternal("
         },
         {
@@ -1744,7 +1744,7 @@
           "kind": "method",
           "class": "Calculations",
           "file": "lib/core/utils/m_calculations.dart",
-          "line": 60,
+          "line": 62,
           "signature": "static double calculateUserExpenseShare("
         },
         {
@@ -1752,7 +1752,7 @@
           "kind": "method",
           "class": "Calculations",
           "file": "lib/core/utils/m_calculations.dart",
-          "line": 65,
+          "line": 68,
           "signature": "calculateUserExpenseShareInternal("
         }
       ]
@@ -1891,7 +1891,7 @@
     },
     "lib/core/utils/m_calculations_balances.dart": {
       "category": "Core Utilities & Math",
-      "lineCount": 91,
+      "lineCount": 88,
       "symbols": [
         {
           "name": "matchesUser",
@@ -1905,7 +1905,7 @@
     },
     "lib/core/utils/m_calculations_shares.dart": {
       "category": "Core Utilities & Math",
-      "lineCount": 39,
+      "lineCount": 44,
       "symbols": []
     },
     "lib/core/components/c_user_avatar.dart": {
@@ -5378,7 +5378,7 @@
     },
     "lib/core/components/activity_tiles/c_activity_expense_tile.dart": {
       "category": "Core UI Components",
-      "lineCount": 108,
+      "lineCount": 114,
       "symbols": []
     },
     "lib/core/components/activity_tiles/c_activity_exchange_tile.dart": {
@@ -10802,7 +10802,7 @@
     },
     "lib/features/settings/components/c_initial_balances_card.dart": {
       "category": "Feature: Settings Tab",
-      "lineCount": 102,
+      "lineCount": 131,
       "symbols": [
         {
           "name": "InitialBalancesCard",
@@ -10810,7 +10810,7 @@
           "class": null,
           "file": "lib/features/settings/components/c_initial_balances_card.dart",
           "line": 16,
-          "signature": "class InitialBalancesCard extends StatelessWidget"
+          "signature": "class InitialBalancesCard extends StatefulWidget"
         },
         {
           "name": "user",
@@ -10837,67 +10837,123 @@
           "signature": "const InitialBalancesCard("
         },
         {
-          "name": "build",
+          "name": "createState",
           "kind": "method",
           "class": "InitialBalancesCard",
           "file": "lib/features/settings/components/c_initial_balances_card.dart",
           "line": 27,
+          "signature": "State<InitialBalancesCard> createState() => _InitialBalancesCardState()"
+        },
+        {
+          "name": "_InitialBalancesCardState",
+          "kind": "class",
+          "class": null,
+          "file": "lib/features/settings/components/c_initial_balances_card.dart",
+          "line": 30,
+          "signature": "class _InitialBalancesCardState extends State<InitialBalancesCard>"
+        },
+        {
+          "name": "initState",
+          "kind": "method",
+          "class": "_InitialBalancesCardState",
+          "file": "lib/features/settings/components/c_initial_balances_card.dart",
+          "line": 36,
+          "signature": "void initState()"
+        },
+        {
+          "name": "_initStreams",
+          "kind": "method",
+          "class": "_InitialBalancesCardState",
+          "file": "lib/features/settings/components/c_initial_balances_card.dart",
+          "line": 38,
+          "signature": "_initStreams()"
+        },
+        {
+          "name": "didUpdateWidget",
+          "kind": "method",
+          "class": "_InitialBalancesCardState",
+          "file": "lib/features/settings/components/c_initial_balances_card.dart",
+          "line": 42,
+          "signature": "void didUpdateWidget(covariant InitialBalancesCard oldWidget)"
+        },
+        {
+          "name": "_initStreams",
+          "kind": "method",
+          "class": "_InitialBalancesCardState",
+          "file": "lib/features/settings/components/c_initial_balances_card.dart",
+          "line": 45,
+          "signature": "_initStreams()"
+        },
+        {
+          "name": "_initStreams",
+          "kind": "method",
+          "class": "_InitialBalancesCardState",
+          "file": "lib/features/settings/components/c_initial_balances_card.dart",
+          "line": 49,
+          "signature": "void _initStreams()"
+        },
+        {
+          "name": "build",
+          "kind": "method",
+          "class": "_InitialBalancesCardState",
+          "file": "lib/features/settings/components/c_initial_balances_card.dart",
+          "line": 56,
           "signature": "Widget build(BuildContext context)"
         },
         {
           "name": "SectionCard",
           "kind": "method",
-          "class": "InitialBalancesCard",
+          "class": "_InitialBalancesCardState",
           "file": "lib/features/settings/components/c_initial_balances_card.dart",
-          "line": 30,
+          "line": 59,
           "signature": "return SectionCard("
         },
         {
           "name": "resolveUserName",
           "kind": "method",
-          "class": "InitialBalancesCard",
+          "class": "_InitialBalancesCardState",
           "file": "lib/features/settings/components/c_initial_balances_card.dart",
-          "line": 53,
-          "signature": "resolveUserName(user, data.myProfile?.name)"
+          "line": 82,
+          "signature": "resolveUserName(widget.user, data.myProfile?.name)"
         },
         {
           "name": "resolveUserPhoto",
           "kind": "method",
-          "class": "InitialBalancesCard",
+          "class": "_InitialBalancesCardState",
           "file": "lib/features/settings/components/c_initial_balances_card.dart",
-          "line": 55,
-          "signature": "resolveUserPhoto(user, data.myProfile?.photoUrl)"
+          "line": 84,
+          "signature": "resolveUserPhoto(widget.user, data.myProfile?.photoUrl)"
         },
         {
           "name": "Column",
           "kind": "method",
-          "class": "InitialBalancesCard",
+          "class": "_InitialBalancesCardState",
           "file": "lib/features/settings/components/c_initial_balances_card.dart",
-          "line": 57,
+          "line": 86,
           "signature": "return Column("
         },
         {
           "name": "BalanceUserCard",
           "kind": "method",
-          "class": "InitialBalancesCard",
+          "class": "_InitialBalancesCardState",
           "file": "lib/features/settings/components/c_initial_balances_card.dart",
-          "line": 59,
+          "line": 88,
           "signature": "BalanceUserCard("
         },
         {
           "name": "SizedBox",
           "kind": "method",
-          "class": "InitialBalancesCard",
+          "class": "_InitialBalancesCardState",
           "file": "lib/features/settings/components/c_initial_balances_card.dart",
-          "line": 75,
+          "line": 104,
           "signature": "const SizedBox(height: 10),"
         },
         {
           "name": "FriendBalanceItem",
           "kind": "method",
-          "class": "InitialBalancesCard",
+          "class": "_InitialBalancesCardState",
           "file": "lib/features/settings/components/c_initial_balances_card.dart",
-          "line": 76,
+          "line": 105,
           "signature": "FriendBalanceItem("
         }
       ]
@@ -13220,14 +13276,14 @@
     },
     "lib/features/home/vm_home_feed.dart": {
       "category": "Feature: Home Tab",
-      "lineCount": 114,
+      "lineCount": 117,
       "symbols": [
         {
           "name": "HomeFeedViewModel",
           "kind": "class",
           "class": null,
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 22,
+          "line": 23,
           "signature": "class HomeFeedViewModel extends ChangeNotifier with HomeFeedMutationsMixin"
         },
         {
@@ -13235,7 +13291,7 @@
           "kind": "field",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 23,
+          "line": 24,
           "signature": "User user"
         },
         {
@@ -13243,7 +13299,7 @@
           "kind": "field",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 24,
+          "line": 25,
           "signature": "FirestoreService firestoreService"
         },
         {
@@ -13251,7 +13307,7 @@
           "kind": "constructor",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 35,
+          "line": 36,
           "signature": "HomeFeedViewModel("
         },
         {
@@ -13259,7 +13315,7 @@
           "kind": "method",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 39,
+          "line": 40,
           "signature": "_recalculate()"
         },
         {
@@ -13267,7 +13323,7 @@
           "kind": "method",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 42,
+          "line": 43,
           "signature": "void _scheduleNotify()"
         },
         {
@@ -13275,7 +13331,7 @@
           "kind": "method",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 43,
+          "line": 44,
           "signature": "_recalculate()"
         },
         {
@@ -13283,7 +13339,7 @@
           "kind": "method",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 44,
+          "line": 45,
           "signature": "notifyListeners()"
         },
         {
@@ -13291,7 +13347,7 @@
           "kind": "method",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 47,
+          "line": 48,
           "signature": "void _recalculate()"
         },
         {
@@ -13299,7 +13355,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 60,
+          "line": 61,
           "signature": "get expenses"
         },
         {
@@ -13307,7 +13363,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 61,
+          "line": 62,
           "signature": "get exchanges"
         },
         {
@@ -13315,7 +13371,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 62,
+          "line": 63,
           "signature": "get borrows"
         },
         {
@@ -13323,7 +13379,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 63,
+          "line": 64,
           "signature": "get balances"
         },
         {
@@ -13331,7 +13387,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 64,
+          "line": 65,
           "signature": "get users"
         },
         {
@@ -13339,7 +13395,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 65,
+          "line": 66,
           "signature": "get allowedEmails"
         },
         {
@@ -13347,7 +13403,7 @@
           "kind": "method",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 67,
+          "line": 68,
           "signature": "double calculateUserPercentage(Expense e) => Calculations.getUserPercentage(expense: e, isPrimaryUser: isPrimaryUser, userId: user.uid)"
         },
         {
@@ -13355,7 +13411,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 69,
+          "line": 70,
           "signature": "get activities"
         },
         {
@@ -13363,7 +13419,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 70,
+          "line": 71,
           "signature": "get allActivities"
         },
         {
@@ -13371,7 +13427,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 71,
+          "line": 72,
           "signature": "get friendActivities"
         },
         {
@@ -13379,7 +13435,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 72,
+          "line": 73,
           "signature": "get splitActivities"
         },
         {
@@ -13387,7 +13443,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 73,
+          "line": 74,
           "signature": "get mineActivities"
         },
         {
@@ -13395,7 +13451,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 74,
+          "line": 75,
           "signature": "get sharedActivities"
         },
         {
@@ -13403,7 +13459,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 76,
+          "line": 77,
           "signature": "get filter"
         },
         {
@@ -13411,7 +13467,7 @@
           "kind": "method",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 77,
+          "line": 78,
           "signature": "void setFilter(HomeFeedFilter f)"
         },
         {
@@ -13419,7 +13475,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 79,
+          "line": 80,
           "signature": "get filteredActivities"
         },
         {
@@ -13427,7 +13483,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 85,
+          "line": 86,
           "signature": "get isPrimaryUser"
         },
         {
@@ -13435,7 +13491,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 86,
+          "line": 87,
           "signature": "get friendEmailDoc"
         },
         {
@@ -13443,7 +13499,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 87,
+          "line": 88,
           "signature": "get friendProfile"
         },
         {
@@ -13451,7 +13507,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 88,
+          "line": 89,
           "signature": "get myProfile"
         },
         {
@@ -13459,7 +13515,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 89,
+          "line": 90,
           "signature": "get myInitialBalance"
         },
         {
@@ -13467,7 +13523,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 90,
+          "line": 91,
           "signature": "get friendInitialBalance"
         },
         {
@@ -13475,7 +13531,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 92,
+          "line": 93,
           "signature": "get myUsdBalance"
         },
         {
@@ -13483,7 +13539,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 93,
+          "line": 94,
           "signature": "get myEgpBalance"
         },
         {
@@ -13491,7 +13547,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 94,
+          "line": 95,
           "signature": "get friendUsdBalance"
         },
         {
@@ -13499,7 +13555,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 95,
+          "line": 96,
           "signature": "get friendEgpBalance"
         },
         {
@@ -13507,7 +13563,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 97,
+          "line": 98,
           "signature": "get isProcessing"
         },
         {
@@ -13515,7 +13571,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 98,
+          "line": 99,
           "signature": "get isLoading"
         },
         {
@@ -13523,7 +13579,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 99,
+          "line": 100,
           "signature": "get errorMessage"
         },
         {
@@ -13531,7 +13587,7 @@
           "kind": "method",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 101,
+          "line": 102,
           "signature": "Future<void> refresh() async"
         },
         {
@@ -13539,7 +13595,7 @@
           "kind": "method",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 102,
+          "line": 105,
           "signature": "_recalculate()"
         },
         {
@@ -13547,7 +13603,7 @@
           "kind": "method",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 103,
+          "line": 106,
           "signature": "notifyListeners()"
         },
         {
@@ -13555,7 +13611,7 @@
           "kind": "getter",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 107,
+          "line": 110,
           "signature": "get mutations"
         },
         {
@@ -13563,7 +13619,7 @@
           "kind": "method",
           "class": "HomeFeedViewModel",
           "file": "lib/features/home/vm_home_feed.dart",
-          "line": 110,
+          "line": 113,
           "signature": "void dispose()"
         }
       ]
@@ -16643,7 +16699,7 @@
     },
     "test/utils_test.dart": {
       "category": "Tests",
-      "lineCount": 373,
+      "lineCount": 389,
       "symbols": [
         {
           "name": "main",
@@ -16730,7 +16786,7 @@
           "kind": "function",
           "class": null,
           "file": "test/utils_test.dart",
-          "line": 115,
+          "line": 131,
           "signature": "test('calculateCashBalance correctly adjusts balances for borrows and handles email aliases', ()"
         },
         {
@@ -16738,7 +16794,7 @@
           "kind": "function",
           "class": null,
           "file": "test/utils_test.dart",
-          "line": 205,
+          "line": 221,
           "signature": "test('Personal share calculates percentage properly', ()"
         },
         {
@@ -16746,7 +16802,7 @@
           "kind": "function",
           "class": null,
           "file": "test/utils_test.dart",
-          "line": 219,
+          "line": 235,
           "signature": "test('MVP Scenarios A through D User Percentage & Share calculations', ()"
         },
         {
@@ -16754,7 +16810,7 @@
           "kind": "function",
           "class": null,
           "file": "test/utils_test.dart",
-          "line": 326,
+          "line": 342,
           "signature": "group('Auth Helpers Unit Tests', ()"
         },
         {
@@ -16762,7 +16818,7 @@
           "kind": "function",
           "class": null,
           "file": "test/utils_test.dart",
-          "line": 327,
+          "line": 343,
           "signature": "test('resolveUserPhoto returns photoURL when present', ()"
         },
         {
@@ -16770,7 +16826,7 @@
           "kind": "function",
           "class": null,
           "file": "test/utils_test.dart",
-          "line": 337,
+          "line": 353,
           "signature": "test('resolveUserPhoto uses fallbackUrl when user photoURL is null', ()"
         },
         {
@@ -16778,7 +16834,7 @@
           "kind": "function",
           "class": null,
           "file": "test/utils_test.dart",
-          "line": 345,
+          "line": 361,
           "signature": "test('resolveUserPhoto returns null when neither user nor fallback has photo', ()"
         },
         {
@@ -16786,7 +16842,7 @@
           "kind": "function",
           "class": null,
           "file": "test/utils_test.dart",
-          "line": 351,
+          "line": 367,
           "signature": "test('resolveUserName returns displayName when present', ()"
         },
         {
@@ -16794,7 +16850,7 @@
           "kind": "function",
           "class": null,
           "file": "test/utils_test.dart",
-          "line": 356,
+          "line": 372,
           "signature": "test('resolveUserName falls back to email prefix when displayName is null', ()"
         },
         {
@@ -16802,7 +16858,7 @@
           "kind": "function",
           "class": null,
           "file": "test/utils_test.dart",
-          "line": 364,
+          "line": 380,
           "signature": "test('resolveUserName defaults to Traveler when everything is null', ()"
         }
       ]
@@ -18918,7 +18974,7 @@
       "kind": "method",
       "class": "Calculations",
       "file": "lib/core/utils/m_calculations.dart",
-      "line": 53,
+      "line": 54,
       "signature": "getUserPercentageInternal("
     },
     "Calculations.calculateUserExpenseShare": {
@@ -18926,7 +18982,7 @@
       "kind": "method",
       "class": "Calculations",
       "file": "lib/core/utils/m_calculations.dart",
-      "line": 60,
+      "line": 62,
       "signature": "static double calculateUserExpenseShare("
     },
     "Calculations.calculateUserExpenseShareInternal": {
@@ -18934,7 +18990,7 @@
       "kind": "method",
       "class": "Calculations",
       "file": "lib/core/utils/m_calculations.dart",
-      "line": 65,
+      "line": 68,
       "signature": "calculateUserExpenseShareInternal("
     },
     "Formatters": {
@@ -26599,7 +26655,7 @@
       "class": null,
       "file": "lib/features/settings/components/c_initial_balances_card.dart",
       "line": 16,
-      "signature": "class InitialBalancesCard extends StatelessWidget"
+      "signature": "class InitialBalancesCard extends StatefulWidget"
     },
     "InitialBalancesCard.user": {
       "name": "user",
@@ -26625,68 +26681,108 @@
       "line": 20,
       "signature": "const InitialBalancesCard("
     },
-    "InitialBalancesCard.build": {
-      "name": "build",
+    "InitialBalancesCard.createState": {
+      "name": "createState",
       "kind": "method",
       "class": "InitialBalancesCard",
       "file": "lib/features/settings/components/c_initial_balances_card.dart",
       "line": 27,
-      "signature": "Widget build(BuildContext context)"
+      "signature": "State<InitialBalancesCard> createState() => _InitialBalancesCardState()"
     },
-    "InitialBalancesCard.SectionCard": {
-      "name": "SectionCard",
-      "kind": "method",
-      "class": "InitialBalancesCard",
+    "_InitialBalancesCardState": {
+      "name": "_InitialBalancesCardState",
+      "kind": "class",
+      "class": null,
       "file": "lib/features/settings/components/c_initial_balances_card.dart",
       "line": 30,
-      "signature": "return SectionCard("
+      "signature": "class _InitialBalancesCardState extends State<InitialBalancesCard>"
     },
-    "InitialBalancesCard.resolveUserName": {
-      "name": "resolveUserName",
+    "_InitialBalancesCardState.initState": {
+      "name": "initState",
       "kind": "method",
-      "class": "InitialBalancesCard",
+      "class": "_InitialBalancesCardState",
       "file": "lib/features/settings/components/c_initial_balances_card.dart",
-      "line": 53,
-      "signature": "resolveUserName(user, data.myProfile?.name)"
+      "line": 36,
+      "signature": "void initState()"
     },
-    "InitialBalancesCard.resolveUserPhoto": {
-      "name": "resolveUserPhoto",
+    "_InitialBalancesCardState._initStreams": {
+      "name": "_initStreams",
       "kind": "method",
-      "class": "InitialBalancesCard",
+      "class": "_InitialBalancesCardState",
       "file": "lib/features/settings/components/c_initial_balances_card.dart",
-      "line": 55,
-      "signature": "resolveUserPhoto(user, data.myProfile?.photoUrl)"
+      "line": 49,
+      "signature": "void _initStreams()"
     },
-    "InitialBalancesCard.Column": {
-      "name": "Column",
+    "_InitialBalancesCardState.didUpdateWidget": {
+      "name": "didUpdateWidget",
       "kind": "method",
-      "class": "InitialBalancesCard",
+      "class": "_InitialBalancesCardState",
       "file": "lib/features/settings/components/c_initial_balances_card.dart",
-      "line": 57,
-      "signature": "return Column("
+      "line": 42,
+      "signature": "void didUpdateWidget(covariant InitialBalancesCard oldWidget)"
     },
-    "InitialBalancesCard.BalanceUserCard": {
-      "name": "BalanceUserCard",
+    "_InitialBalancesCardState.build": {
+      "name": "build",
       "kind": "method",
-      "class": "InitialBalancesCard",
+      "class": "_InitialBalancesCardState",
+      "file": "lib/features/settings/components/c_initial_balances_card.dart",
+      "line": 56,
+      "signature": "Widget build(BuildContext context)"
+    },
+    "_InitialBalancesCardState.SectionCard": {
+      "name": "SectionCard",
+      "kind": "method",
+      "class": "_InitialBalancesCardState",
       "file": "lib/features/settings/components/c_initial_balances_card.dart",
       "line": 59,
+      "signature": "return SectionCard("
+    },
+    "_InitialBalancesCardState.resolveUserName": {
+      "name": "resolveUserName",
+      "kind": "method",
+      "class": "_InitialBalancesCardState",
+      "file": "lib/features/settings/components/c_initial_balances_card.dart",
+      "line": 82,
+      "signature": "resolveUserName(widget.user, data.myProfile?.name)"
+    },
+    "_InitialBalancesCardState.resolveUserPhoto": {
+      "name": "resolveUserPhoto",
+      "kind": "method",
+      "class": "_InitialBalancesCardState",
+      "file": "lib/features/settings/components/c_initial_balances_card.dart",
+      "line": 84,
+      "signature": "resolveUserPhoto(widget.user, data.myProfile?.photoUrl)"
+    },
+    "_InitialBalancesCardState.Column": {
+      "name": "Column",
+      "kind": "method",
+      "class": "_InitialBalancesCardState",
+      "file": "lib/features/settings/components/c_initial_balances_card.dart",
+      "line": 86,
+      "signature": "return Column("
+    },
+    "_InitialBalancesCardState.BalanceUserCard": {
+      "name": "BalanceUserCard",
+      "kind": "method",
+      "class": "_InitialBalancesCardState",
+      "file": "lib/features/settings/components/c_initial_balances_card.dart",
+      "line": 88,
       "signature": "BalanceUserCard("
     },
-    "InitialBalancesCard.SizedBox": {
+    "_InitialBalancesCardState.SizedBox": {
       "name": "SizedBox",
       "kind": "method",
-      "class": "InitialBalancesCard",
+      "class": "_InitialBalancesCardState",
       "file": "lib/features/settings/components/c_initial_balances_card.dart",
-      "line": 75,
+      "line": 104,
       "signature": "const SizedBox(height: 10),"
     },
-    "InitialBalancesCard.FriendBalanceItem": {
+    "_InitialBalancesCardState.FriendBalanceItem": {
       "name": "FriendBalanceItem",
       "kind": "method",
-      "class": "InitialBalancesCard",
+      "class": "_InitialBalancesCardState",
       "file": "lib/features/settings/components/c_initial_balances_card.dart",
-      "line": 76,
+      "line": 105,
       "signature": "FriendBalanceItem("
     },
     "AllowedEmailsCard": {
@@ -28574,7 +28670,7 @@
       "kind": "class",
       "class": null,
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 22,
+      "line": 23,
       "signature": "class HomeFeedViewModel extends ChangeNotifier with HomeFeedMutationsMixin"
     },
     "HomeFeedViewModel.user": {
@@ -28582,7 +28678,7 @@
       "kind": "field",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 23,
+      "line": 24,
       "signature": "User user"
     },
     "HomeFeedViewModel.firestoreService": {
@@ -28590,7 +28686,7 @@
       "kind": "field",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 24,
+      "line": 25,
       "signature": "FirestoreService firestoreService"
     },
     "HomeFeedViewModel.HomeFeedViewModel": {
@@ -28598,7 +28694,7 @@
       "kind": "constructor",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 35,
+      "line": 36,
       "signature": "HomeFeedViewModel("
     },
     "HomeFeedViewModel._recalculate": {
@@ -28606,7 +28702,7 @@
       "kind": "method",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 102,
+      "line": 105,
       "signature": "_recalculate()"
     },
     "HomeFeedViewModel._scheduleNotify": {
@@ -28614,7 +28710,7 @@
       "kind": "method",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 42,
+      "line": 43,
       "signature": "void _scheduleNotify()"
     },
     "HomeFeedViewModel.notifyListeners": {
@@ -28622,7 +28718,7 @@
       "kind": "method",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 103,
+      "line": 106,
       "signature": "notifyListeners()"
     },
     "HomeFeedViewModel.expenses": {
@@ -28630,7 +28726,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 60,
+      "line": 61,
       "signature": "get expenses"
     },
     "HomeFeedViewModel.exchanges": {
@@ -28638,7 +28734,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 61,
+      "line": 62,
       "signature": "get exchanges"
     },
     "HomeFeedViewModel.borrows": {
@@ -28646,7 +28742,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 62,
+      "line": 63,
       "signature": "get borrows"
     },
     "HomeFeedViewModel.balances": {
@@ -28654,7 +28750,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 63,
+      "line": 64,
       "signature": "get balances"
     },
     "HomeFeedViewModel.users": {
@@ -28662,7 +28758,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 64,
+      "line": 65,
       "signature": "get users"
     },
     "HomeFeedViewModel.allowedEmails": {
@@ -28670,7 +28766,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 65,
+      "line": 66,
       "signature": "get allowedEmails"
     },
     "HomeFeedViewModel.calculateUserPercentage": {
@@ -28678,7 +28774,7 @@
       "kind": "method",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 67,
+      "line": 68,
       "signature": "double calculateUserPercentage(Expense e) => Calculations.getUserPercentage(expense: e, isPrimaryUser: isPrimaryUser, userId: user.uid)"
     },
     "HomeFeedViewModel.activities": {
@@ -28686,7 +28782,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 69,
+      "line": 70,
       "signature": "get activities"
     },
     "HomeFeedViewModel.allActivities": {
@@ -28694,7 +28790,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 70,
+      "line": 71,
       "signature": "get allActivities"
     },
     "HomeFeedViewModel.friendActivities": {
@@ -28702,7 +28798,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 71,
+      "line": 72,
       "signature": "get friendActivities"
     },
     "HomeFeedViewModel.splitActivities": {
@@ -28710,7 +28806,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 72,
+      "line": 73,
       "signature": "get splitActivities"
     },
     "HomeFeedViewModel.mineActivities": {
@@ -28718,7 +28814,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 73,
+      "line": 74,
       "signature": "get mineActivities"
     },
     "HomeFeedViewModel.sharedActivities": {
@@ -28726,7 +28822,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 74,
+      "line": 75,
       "signature": "get sharedActivities"
     },
     "HomeFeedViewModel.filter": {
@@ -28734,7 +28830,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 76,
+      "line": 77,
       "signature": "get filter"
     },
     "HomeFeedViewModel.setFilter": {
@@ -28742,7 +28838,7 @@
       "kind": "method",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 77,
+      "line": 78,
       "signature": "void setFilter(HomeFeedFilter f)"
     },
     "HomeFeedViewModel.filteredActivities": {
@@ -28750,7 +28846,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 79,
+      "line": 80,
       "signature": "get filteredActivities"
     },
     "HomeFeedViewModel.isPrimaryUser": {
@@ -28758,7 +28854,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 85,
+      "line": 86,
       "signature": "get isPrimaryUser"
     },
     "HomeFeedViewModel.friendEmailDoc": {
@@ -28766,7 +28862,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 86,
+      "line": 87,
       "signature": "get friendEmailDoc"
     },
     "HomeFeedViewModel.friendProfile": {
@@ -28774,7 +28870,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 87,
+      "line": 88,
       "signature": "get friendProfile"
     },
     "HomeFeedViewModel.myProfile": {
@@ -28782,7 +28878,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 88,
+      "line": 89,
       "signature": "get myProfile"
     },
     "HomeFeedViewModel.myInitialBalance": {
@@ -28790,7 +28886,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 89,
+      "line": 90,
       "signature": "get myInitialBalance"
     },
     "HomeFeedViewModel.friendInitialBalance": {
@@ -28798,7 +28894,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 90,
+      "line": 91,
       "signature": "get friendInitialBalance"
     },
     "HomeFeedViewModel.myUsdBalance": {
@@ -28806,7 +28902,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 92,
+      "line": 93,
       "signature": "get myUsdBalance"
     },
     "HomeFeedViewModel.myEgpBalance": {
@@ -28814,7 +28910,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 93,
+      "line": 94,
       "signature": "get myEgpBalance"
     },
     "HomeFeedViewModel.friendUsdBalance": {
@@ -28822,7 +28918,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 94,
+      "line": 95,
       "signature": "get friendUsdBalance"
     },
     "HomeFeedViewModel.friendEgpBalance": {
@@ -28830,7 +28926,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 95,
+      "line": 96,
       "signature": "get friendEgpBalance"
     },
     "HomeFeedViewModel.isProcessing": {
@@ -28838,7 +28934,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 97,
+      "line": 98,
       "signature": "get isProcessing"
     },
     "HomeFeedViewModel.isLoading": {
@@ -28846,7 +28942,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 98,
+      "line": 99,
       "signature": "get isLoading"
     },
     "HomeFeedViewModel.errorMessage": {
@@ -28854,7 +28950,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 99,
+      "line": 100,
       "signature": "get errorMessage"
     },
     "HomeFeedViewModel.refresh": {
@@ -28862,7 +28958,7 @@
       "kind": "method",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 101,
+      "line": 102,
       "signature": "Future<void> refresh() async"
     },
     "HomeFeedViewModel.mutations": {
@@ -28870,7 +28966,7 @@
       "kind": "getter",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 107,
+      "line": 110,
       "signature": "get mutations"
     },
     "HomeFeedViewModel.dispose": {
@@ -28878,7 +28974,7 @@
       "kind": "method",
       "class": "HomeFeedViewModel",
       "file": "lib/features/home/vm_home_feed.dart",
-      "line": 110,
+      "line": 113,
       "signature": "void dispose()"
     },
     "HomeTabScreen": {

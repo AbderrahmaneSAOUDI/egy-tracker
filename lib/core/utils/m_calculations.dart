@@ -49,11 +49,13 @@ class Calculations {
     required Expense expense,
     required bool isPrimaryUser,
     String? userId,
+    String? userEmail,
   }) =>
       getUserPercentageInternal(
         expense: expense,
         isPrimaryUser: isPrimaryUser,
         userId: userId,
+        userEmail: userEmail,
       );
 
   /// Calculates the exact personal consumption share for the given user on an [expense].
@@ -61,10 +63,12 @@ class Calculations {
     required Expense expense,
     required bool isPrimaryUser,
     String? userId,
+    String? userEmail,
   }) =>
       calculateUserExpenseShareInternal(
         expense: expense,
         isPrimaryUser: isPrimaryUser,
         userId: userId,
+        userEmail: userEmail,
       );
 }

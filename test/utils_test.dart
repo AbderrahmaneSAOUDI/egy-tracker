@@ -101,7 +101,7 @@ void main() {
       );
       expect(usdBalance, equals(400.0));
 
-      // EGP Balance: 2000 initial + 4800 exchange in - 100 (50% of 200 split expense) = 6700 EGP
+      // EGP Balance: 2000 initial + 4800 exchange in - 100 (50% split share) = 6700 EGP
       final egpBalance = Calculations.calculateCashBalance(
         userId: 'userA',
         currency: 'EGP',
@@ -110,6 +110,22 @@ void main() {
         expenses: expenses,
       );
       expect(egpBalance, equals(6700.0));
+
+      // UserB EGP Balance: 500 initial - 100 (50% split share) = 400 EGP
+      final userBInitial = InitialBalance(
+        userId: 'userB',
+        usdAmount: 100.0,
+        egpAmount: 500.0,
+        updatedAt: DateTime.now(),
+      );
+      final userBEgpBalance = Calculations.calculateCashBalance(
+        userId: 'userB',
+        currency: 'EGP',
+        initialBalance: userBInitial,
+        exchanges: const [],
+        expenses: expenses,
+      );
+      expect(userBEgpBalance, equals(400.0));
     });
 
     test('calculateCashBalance correctly adjusts balances for borrows and handles email aliases', () {

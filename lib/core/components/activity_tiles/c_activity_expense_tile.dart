@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/mod_expense.dart';
 import '../../theme/t_app_theme.dart';
+import '../../utils/m_calculations.dart';
 import '../../utils/m_formatters.dart';
 import 'c_activity_amount.dart';
 
@@ -28,8 +29,13 @@ Widget buildExpenseTile({
       : 'Friend';
   final payerLabel = isPaidByMe ? 'Paid by You' : 'Paid by $cleanFriendName';
 
-  final myPct = isPrimaryUser ? expense.mePercentage : expense.friendPercentage;
-  final friendPct = isPrimaryUser ? expense.friendPercentage : expense.mePercentage;
+  final myPct = Calculations.getUserPercentage(
+    expense: expense,
+    isPrimaryUser: isPrimaryUser,
+    userId: currentUserId,
+    userEmail: currentUserEmail,
+  );
+  final friendPct = 100.0 - myPct;
 
   String splitLabel;
   if (myPct == 100.0) {
