@@ -8,7 +8,7 @@
     ".github": true,
     ".idea": true,
     ".vscode": true,
-    "android": true,
+    "android": false,
     "web": true,
     ".clinerules": true,
     ".firebaserc": true,
