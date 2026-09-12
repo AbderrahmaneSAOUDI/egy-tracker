@@ -1,9 +1,10 @@
 {
   "name": "codebase-index-daemon",
+  "enabled": false,
   "description": "Continuous background codebase indexer and symbol cache generator for Gemini 3.8 Flash High",
   "command": "python3",
   "args": ["indexer_daemon.py"],
-  "restart_policy": "always",
+  "restart_policy": "never",
   "env": {
     "POLL_INTERVAL": "3"
   }

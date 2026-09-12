@@ -6,19 +6,21 @@ import '../../../core/services/f_auth.dart';
 import '../../../core/services/f_firestore.dart';
 import '../../../core/utils/m_auth_helpers.dart';
 import '../../home/s_home.dart';
-import 'c_access_denied_screen.dart';
+import '../s_login.dart';
 
 /// Verifies whether an authenticated user is on the allowed emails whitelist.
 class AuthWhitelistGate extends StatefulWidget {
   final User user;
   final AuthService authService;
   final FirestoreService firestoreService;
+  final ValueChanged<String>? onAuthFailed;
 
   const AuthWhitelistGate({
     super.key,
     required this.user,
     required this.authService,
     required this.firestoreService,
+    this.onAuthFailed,
   });
 
   @override
@@ -33,12 +35,6 @@ class _AuthWhitelistGateState extends State<AuthWhitelistGate> {
   void initState() {
     super.initState();
     _whitelistFuture = widget.firestoreService.isEmailAllowed(widget.user.email ?? '');
-  }
-
-  void _retryCheck() {
-    setState(() {
-      _whitelistFuture = widget.firestoreService.isEmailAllowed(widget.user.email ?? '');
-    });
   }
 
   void _syncProfile() {
@@ -75,17 +71,10 @@ class _AuthWhitelistGateState extends State<AuthWhitelistGate> {
         if (!snapshot.hasData &&
             snapshot.connectionState == ConnectionState.waiting &&
             !isDefaultAllowed) {
-          return const Scaffold(
-            body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 16),
-                  Text('Verifying trip authorization...'),
-                ],
-              ),
-            ),
+          return LoginScreen(
+            authService: widget.authService,
+            isVerifying: true,
+            verificationMessage: 'Verifying trip authorization...',
           );
         }
 
@@ -102,10 +91,19 @@ class _AuthWhitelistGateState extends State<AuthWhitelistGate> {
           );
         }
 
-        return AccessDeniedScreen(
-          email: widget.user.email ?? '',
-          onSignOut: () => widget.authService.signOut(),
-          onRetry: _retryCheck,
+        final errorMsg = snapshot.hasError
+            ? 'Authorization check failed. Please check your connection and sign in again.'
+            : 'The account "$email" is not authorized for this trip.';
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          widget.authService.signOut();
+          widget.onAuthFailed?.call(errorMsg);
+        });
+
+        return LoginScreen(
+          authService: widget.authService,
+          isVerifying: false,
+          errorMessage: errorMsg,
         );
       },
     );

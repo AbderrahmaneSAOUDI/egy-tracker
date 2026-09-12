@@ -388,7 +388,7 @@ void main() {
       firestore.exchangesController.add([]);
       firestore.borrowsController.add([]);
 
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       // Balances card should be present
       expect(find.text('You'), findsWidgets);

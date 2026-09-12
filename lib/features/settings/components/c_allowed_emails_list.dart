@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../../../core/config/app_config.dart';
 import '../../../core/models/mod_allowed_email.dart';
 import '../../../core/models/mod_user_profile.dart';
 import '../../../core/utils/m_auth_helpers.dart';
@@ -33,6 +34,10 @@ class AllowedEmailsList extends StatelessWidget {
             final normEmail = allowed.email.toLowerCase().trim();
             final isCurrentUser =
                 normEmail == (user.email ?? '').toLowerCase().trim();
+            final isSuperAdminEmail =
+                normEmail == AppConfig.adminEmail.toLowerCase().trim();
+            final canManage =
+                viewModel.isSuperAdmin && !isCurrentUser && !isSuperAdminEmail;
 
             UserProfile? matchingProfile;
             for (final u in users) {
@@ -54,9 +59,8 @@ class AllowedEmailsList extends StatelessWidget {
               isCurrentUser: isCurrentUser,
               photoUrl: photoUrl,
               displayName: displayName,
-              onEdit: isCurrentUser
-                  ? null
-                  : () => showAddEmailDialog(
+              onEdit: canManage
+                  ? () => showAddEmailDialog(
                         context: context,
                         initialEmail: allowed.email,
                         onAddEmail: (newEmail) async {
@@ -64,13 +68,16 @@ class AllowedEmailsList extends StatelessWidget {
                               allowed.id, newEmail);
                           return true;
                         },
-                      ),
-              onDelete: () => showConfirmDeleteEmailDialog(
-                context: context,
-                allowedEmail: allowed,
-                isCurrentUser: isCurrentUser,
-                onDeleteEmail: viewModel.deleteAllowedEmail,
-              ),
+                      )
+                  : null,
+              onDelete: canManage
+                  ? () => showConfirmDeleteEmailDialog(
+                        context: context,
+                        allowedEmail: allowed,
+                        isCurrentUser: isCurrentUser,
+                        onDeleteEmail: viewModel.deleteAllowedEmail,
+                      )
+                  : null,
             );
           }).toList(),
         );

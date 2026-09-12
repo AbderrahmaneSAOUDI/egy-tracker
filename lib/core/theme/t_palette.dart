@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 // ===================== GOOGLE BRAND PALETTE TOKENS =====================
 const Color googleBlue = Color(0xFF1A73E8);
-const Color googleBlueDark = Color(0xFF8AB4F8);
+const Color googleBlueDark = Color(0xFF2563EB);
 
 const Color googleRed = Color(0xFFD93025);
 const Color googleRedDark = Color(0xFFF28B82);
@@ -69,9 +69,9 @@ ColorScheme get lightColorScheme => const ColorScheme(
 ColorScheme get darkColorScheme => const ColorScheme(
       brightness: Brightness.dark,
       primary: googleBlueDark,
-      onPrimary: Color(0xFF041E49),
-      primaryContainer: Color(0xFF174EA6),
-      onPrimaryContainer: Color(0xFFD2E3FC),
+      onPrimary: Colors.white,
+      primaryContainer: Color(0xFF1D4ED8),
+      onPrimaryContainer: Colors.white,
       secondary: googleGreenDark,
       onSecondary: Color(0xFF0D652D),
       secondaryContainer: Color(0xFF0D652D),

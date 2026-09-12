@@ -28,18 +28,19 @@ class _AnimatedZoomButtonState extends State<AnimatedZoomButton>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 450),
+      reverseDuration: const Duration(milliseconds: 420),
       value: widget.visible ? 1.0 : 0.0,
     );
     _scaleAnimation = CurvedAnimation(
       parent: _controller,
-      curve: Curves.easeOutBack,
-      reverseCurve: Curves.easeInCubic,
+      curve: Curves.easeInOutCubic,
+      reverseCurve: Curves.easeInOutCubic,
     );
     _fadeAnimation = CurvedAnimation(
       parent: _controller,
-      curve: Curves.easeInOut,
-      reverseCurve: Curves.easeInOut,
+      curve: Curves.easeInOutCubic,
+      reverseCurve: Curves.easeInOutCubic,
     );
   }
 
@@ -47,7 +48,11 @@ class _AnimatedZoomButtonState extends State<AnimatedZoomButton>
   void didUpdateWidget(covariant AnimatedZoomButton oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.visible != oldWidget.visible) {
-      widget.visible ? _controller.forward() : _controller.reverse();
+      if (widget.visible) {
+        _controller.forward();
+      } else {
+        _controller.reverse();
+      }
     }
   }
 
@@ -72,23 +77,22 @@ class _AnimatedZoomButtonState extends State<AnimatedZoomButton>
         if (_controller.isDismissed && !widget.visible) {
           return SizedBox.shrink(key: hiddenKey);
         }
-        return ClipRect(
-          child: Align(
-            alignment: widget.isLeft ? Alignment.centerRight : Alignment.centerLeft,
-            widthFactor: _scaleAnimation.value.clamp(0.0, 1.0),
-            heightFactor: 1.0,
-            child: FadeTransition(
-              opacity: _fadeAnimation,
-              child: ScaleTransition(
-                scale: _scaleAnimation,
-                child: Padding(
-                  key: containerKey,
-                  padding: EdgeInsets.only(
-                    right: widget.isLeft ? 8 : 0,
-                    left: widget.isLeft ? 0 : 8,
-                  ),
-                  child: widget.child,
+        return Align(
+          alignment: widget.isLeft ? Alignment.centerRight : Alignment.centerLeft,
+          widthFactor: _scaleAnimation.value.clamp(0.0, 1.0),
+          heightFactor: 1.0,
+          child: FadeTransition(
+            opacity: _fadeAnimation,
+            child: ScaleTransition(
+              scale: _scaleAnimation,
+              alignment: Alignment.center,
+              child: Padding(
+                key: containerKey,
+                padding: EdgeInsets.only(
+                  right: widget.isLeft ? 8 : 0,
+                  left: widget.isLeft ? 0 : 8,
                 ),
+                child: widget.child,
               ),
             ),
           ),

@@ -60,6 +60,14 @@ mixin FirestoreEmailsMixin on FirestoreServiceBase {
   }
 
   Future<void> updateAllowedEmail(String id, String newEmail) async {
+    final doc = await _allowedEmailsCollection.doc(id).get();
+    if (doc.exists) {
+      final currentEmail =
+          (doc.data()?['email'] as String? ?? '').toLowerCase().trim();
+      if (currentEmail == AppConfig.adminEmail) {
+        throw StateError('Cannot modify super admin email');
+      }
+    }
     final normalized = newEmail.trim().toLowerCase();
     await _allowedEmailsCollection.doc(id).update({
       'email': normalized,
@@ -67,6 +75,14 @@ mixin FirestoreEmailsMixin on FirestoreServiceBase {
   }
 
   Future<void> deleteAllowedEmail(String id) async {
+    final doc = await _allowedEmailsCollection.doc(id).get();
+    if (doc.exists) {
+      final currentEmail =
+          (doc.data()?['email'] as String? ?? '').toLowerCase().trim();
+      if (currentEmail == AppConfig.adminEmail) {
+        throw StateError('Cannot delete super admin email');
+      }
+    }
     await _allowedEmailsCollection.doc(id).delete();
   }
 }

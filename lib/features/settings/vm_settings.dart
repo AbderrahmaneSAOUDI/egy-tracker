@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import '../../core/config/app_config.dart';
 import '../../core/models/mod_allowed_email.dart';
 import '../../core/models/mod_initial_balance.dart';
 import '../../core/models/mod_user_profile.dart';
@@ -25,6 +26,8 @@ class SettingsViewModel extends ChangeNotifier {
 
   bool get isProcessing => _isProcessing;
   String? get errorMessage => _errorMessage;
+  bool get isSuperAdmin =>
+      (user.email ?? '').toLowerCase().trim() == AppConfig.adminEmail.toLowerCase().trim();
 
   Stream<List<UserProfile>> get usersStream =>
       firestoreService.getUsersStream();
@@ -33,16 +36,37 @@ class SettingsViewModel extends ChangeNotifier {
   Stream<List<InitialBalance>> get initialBalancesStream =>
       firestoreService.getInitialBalancesStream();
 
-  Future<bool> updateAllowedEmail(String id, String email) => _run(
-      'Failed to update email',
-      () => firestoreService.updateAllowedEmail(id, email.trim().toLowerCase()));
+  Future<bool> updateAllowedEmail(String id, String email) {
+    if (!isSuperAdmin) {
+      _errorMessage = 'Only the super admin can update allowed emails.';
+      notifyListeners();
+      return Future.value(false);
+    }
+    return _run(
+        'Failed to update email',
+        () => firestoreService.updateAllowedEmail(id, email.trim().toLowerCase()));
+  }
 
-  Future<bool> addAllowedEmail(String email) => _run(
-      'Failed to add email',
-      () => firestoreService.addAllowedEmail(email.trim().toLowerCase()));
+  Future<bool> addAllowedEmail(String email) {
+    if (!isSuperAdmin) {
+      _errorMessage = 'Only the super admin can add allowed emails.';
+      notifyListeners();
+      return Future.value(false);
+    }
+    return _run(
+        'Failed to add email',
+        () => firestoreService.addAllowedEmail(email.trim().toLowerCase()));
+  }
 
-  Future<bool> deleteAllowedEmail(String id) => _run(
-      'Failed to delete email', () => firestoreService.deleteAllowedEmail(id));
+  Future<bool> deleteAllowedEmail(String id) {
+    if (!isSuperAdmin) {
+      _errorMessage = 'Only the super admin can delete allowed emails.';
+      notifyListeners();
+      return Future.value(false);
+    }
+    return _run(
+        'Failed to delete email', () => firestoreService.deleteAllowedEmail(id));
+  }
 
   Future<bool> setInitialBalances({
     required String userId,
@@ -70,11 +94,18 @@ class SettingsViewModel extends ChangeNotifier {
     bool deleteBorrows = true,
     bool deleteInitialBalances = true,
     bool deleteFriends = true,
-  }) => _run('Failed to delete data', () => firestoreService.deleteTripData(
-        deleteExpenses: deleteExpenses, deleteExchanges: deleteExchanges,
-        deleteBorrows: deleteBorrows, deleteInitialBalances: deleteInitialBalances,
-        deleteFriends: deleteFriends, keepEmail: user.email, keepUserId: user.uid,
-      ));
+  }) {
+    if (!isSuperAdmin) {
+      _errorMessage = 'Only the super admin can delete trip data.';
+      notifyListeners();
+      return Future.value(false);
+    }
+    return _run('Failed to delete data', () => firestoreService.deleteTripData(
+          deleteExpenses: deleteExpenses, deleteExchanges: deleteExchanges,
+          deleteBorrows: deleteBorrows, deleteInitialBalances: deleteInitialBalances,
+          deleteFriends: deleteFriends, keepEmail: user.email, keepUserId: user.uid,
+        ));
+  }
 
   Future<bool> deleteAllTripData() => deleteTripData();
 

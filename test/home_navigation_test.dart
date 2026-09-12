@@ -198,5 +198,93 @@ void main() {
       expect(find.byKey(const ValueKey('nav_add_button')), findsOneWidget);
       expect(find.byKey(const ValueKey('nav_exchange_button')), findsOneWidget);
     });
+
+    testWidgets('Sliding left and right moves between pages and synchronizes nav bar', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: HomeScreen(
+            user: devUser,
+            authService: fakeAuthService,
+            firestoreService: fakeFirestoreService,
+          ),
+        ),
+      );
+
+      var navBar = tester.widget<FloatingPillNavBar>(find.byType(FloatingPillNavBar));
+      expect(navBar.selectedIndex, equals(0));
+
+      // Slide left to navigate from Home (0) to My Tracker (1)
+      await tester.fling(find.byType(HomeScreen), const Offset(-500, 0), 1000);
+      await tester.pumpAndSettle();
+
+      navBar = tester.widget<FloatingPillNavBar>(find.byType(FloatingPillNavBar));
+      expect(navBar.selectedIndex, equals(1));
+      expect(
+        find.descendant(of: find.byType(FloatingPillNavBar), matching: find.text('My Tracker')),
+        findsOneWidget,
+      );
+
+      // Slide left to navigate from My Tracker (1) to Settings (2)
+      await tester.fling(find.byType(HomeScreen), const Offset(-500, 0), 1000);
+      await tester.pumpAndSettle();
+
+      navBar = tester.widget<FloatingPillNavBar>(find.byType(FloatingPillNavBar));
+      expect(navBar.selectedIndex, equals(2));
+      expect(
+        find.descendant(of: find.byType(FloatingPillNavBar), matching: find.text('Settings')),
+        findsOneWidget,
+      );
+
+      // Slide right to navigate from Settings (2) back to My Tracker (1)
+      await tester.fling(find.byType(HomeScreen), const Offset(500, 0), 1000);
+      await tester.pumpAndSettle();
+
+      navBar = tester.widget<FloatingPillNavBar>(find.byType(FloatingPillNavBar));
+      expect(navBar.selectedIndex, equals(1));
+
+      // Slide right to navigate from My Tracker (1) back to Home (0)
+      await tester.fling(find.byType(HomeScreen), const Offset(500, 0), 1000);
+      await tester.pumpAndSettle();
+
+      navBar = tester.widget<FloatingPillNavBar>(find.byType(FloatingPillNavBar));
+      expect(navBar.selectedIndex, equals(0));
+      expect(
+        find.descendant(of: find.byType(FloatingPillNavBar), matching: find.text('Home')),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('Action buttons use white icons and have no shadows in dark theme', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.darkTheme,
+          home: HomeScreen(
+            user: devUser,
+            authService: fakeAuthService,
+            firestoreService: fakeFirestoreService,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final addIcon = tester.widget<Icon>(find.byIcon(Icons.add_rounded));
+      expect(addIcon.color, equals(Colors.white));
+
+      final exchangeIcon = tester.widget<Icon>(find.byIcon(Icons.sync_alt_rounded));
+      expect(exchangeIcon.color, equals(Colors.white));
+
+      final addBtnContainer = tester.widget<Container>(
+        find.ancestor(of: find.byKey(const ValueKey('nav_add_button')), matching: find.byType(Container)).first,
+      );
+      final addDecoration = addBtnContainer.decoration as BoxDecoration?;
+      expect(addDecoration?.boxShadow, isNull);
+
+      final exchangeBtnContainer = tester.widget<Container>(
+        find.ancestor(of: find.byKey(const ValueKey('nav_exchange_button')), matching: find.byType(Container)).first,
+      );
+      final exchangeDecoration = exchangeBtnContainer.decoration as BoxDecoration?;
+      expect(exchangeDecoration?.boxShadow, isNull);
+    });
   });
 }

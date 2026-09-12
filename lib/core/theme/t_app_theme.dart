@@ -39,7 +39,7 @@ class AppTheme {
 
   // Backward-compatible palette aliases
   static const Color googleBlue = Color(0xFF1A73E8);
-  static const Color googleBlueDark = Color(0xFF8AB4F8);
+  static const Color googleBlueDark = Color(0xFF2563EB);
   static const Color googleRed = Color(0xFFD93025);
   static const Color googleRedDark = Color(0xFFF28B82);
   static const Color googleYellow = Color(0xFFF9AB00);

@@ -49,7 +49,6 @@ Widget buildExpenseTile({
   }
 
   return Container(
-    margin: const EdgeInsets.only(bottom: 6),
     decoration: BoxDecoration(
       color: isDark ? const Color(0xFF1B1D22) : Colors.white,
       borderRadius: BorderRadius.circular(14),

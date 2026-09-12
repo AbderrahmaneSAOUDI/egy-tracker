@@ -25,6 +25,7 @@ class AuthGate extends StatefulWidget {
 
 class _AuthGateState extends State<AuthGate> {
   late Stream<User?> _authStream;
+  String? _authErrorMessage;
 
   @override
   void initState() {
@@ -49,11 +50,16 @@ class _AuthGateState extends State<AuthGate> {
         final user = snapshot.data ?? widget.authService.currentUser;
         if (user == null) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
+            return LoginScreen(
+              authService: widget.authService,
+              isVerifying: true,
+              verificationMessage: 'Verifying trip authorization...',
             );
           }
-          return LoginScreen(authService: widget.authService);
+          return LoginScreen(
+            authService: widget.authService,
+            errorMessage: _authErrorMessage,
+          );
         }
 
         return AuthWhitelistGate(
@@ -61,6 +67,13 @@ class _AuthGateState extends State<AuthGate> {
           user: user,
           authService: widget.authService,
           firestoreService: widget.firestoreService,
+          onAuthFailed: (errorMessage) {
+            if (mounted) {
+              setState(() {
+                _authErrorMessage = errorMessage;
+              });
+            }
+          },
         );
       },
     );

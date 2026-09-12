@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../animations/a_animated_counter.dart';
 import '../theme/t_app_theme.dart';
 
 /// Reusable currency display pill adhering strictly to currency independence.
@@ -6,11 +7,15 @@ import '../theme/t_app_theme.dart';
 class CurrencyPill extends StatelessWidget {
   final String currency; // 'USD' or 'EGP'
   final String formattedAmount;
+  final double? amount;
+  final String Function(double value)? formatter;
 
   const CurrencyPill({
     super.key,
     required this.currency,
     required this.formattedAmount,
+    this.amount,
+    this.formatter,
   });
 
   @override
@@ -46,15 +51,27 @@ class CurrencyPill extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           Expanded(
-            child: Text(
-              formattedAmount,
-              textAlign: TextAlign.right,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.bold,
-                color: currencyColor,
-              ),
-            ),
+            child: amount != null
+                ? AnimatedCurrencyCounter(
+                    value: amount!,
+                    currency: currency,
+                    formatter: formatter,
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: currencyColor,
+                    ),
+                  )
+                : Text(
+                    formattedAmount,
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: currencyColor,
+                    ),
+                  ),
           ),
         ],
       ),

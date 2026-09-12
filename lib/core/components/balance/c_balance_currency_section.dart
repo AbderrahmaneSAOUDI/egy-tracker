@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import '../../animations/a_animated_counter.dart';
 
 Widget buildCurrencySection({
   required String currencyCode,
-  required String amountFormatted,
+  required double amount,
+  String? amountFormatted,
   required Color color,
   required bool isDark,
   required String keyPrefix,
@@ -45,30 +47,18 @@ Widget buildCurrencySection({
         child: FittedBox(
           fit: BoxFit.scaleDown,
           alignment: Alignment.centerRight,
-          child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 280),
-            transitionBuilder: (child, animation) => FadeTransition(
-              opacity: animation,
-              child: SlideTransition(
-                position: Tween<Offset>(
-                  begin: const Offset(0, 0.2),
-                  end: Offset.zero,
-                ).animate(animation),
-                child: child,
-              ),
+          child: AnimatedCurrencyCounter(
+            key: ValueKey('${keyPrefix}_counter'),
+            value: amount,
+            currency: currencyCode,
+            textAlign: TextAlign.right,
+            style: TextStyle(
+              fontSize: 23,
+              fontWeight: FontWeight.w900,
+              letterSpacing: -0.6,
+              color: color,
             ),
-            child: Text(
-              amountFormatted,
-              key: ValueKey('${keyPrefix}_$amountFormatted'),
-              textAlign: TextAlign.right,
-              style: TextStyle(
-                fontSize: 23,
-                fontWeight: FontWeight.w900,
-                letterSpacing: -0.6,
-                color: color,
-              ),
-              maxLines: 1,
-            ),
+            maxLines: 1,
           ),
         ),
       ),

@@ -72,10 +72,11 @@ class ActivityTile extends StatelessWidget {
       cardFace = const SizedBox.shrink();
     }
 
+    Widget content;
     if (onDelete != null || onEdit != null) {
       final blue = isDark ? AppTheme.googleBlueDark : AppTheme.googleBlue;
       final red = isDark ? AppTheme.googleRedDark : AppTheme.googleRed;
-      return SlideActionCard(
+      content = SlideActionCard(
         onTap: onTap,
         maxActionWidth: 88,
         triggerThreshold: 52,
@@ -84,6 +85,7 @@ class ActivityTile extends StatelessWidget {
           label: 'Edit',
           foregroundColor: Colors.white,
           backgroundColor: blue,
+          borderRadius: BorderRadius.circular(14),
           onTrigger: onEdit!,
         ),
         endAction: onDelete == null ? null : SlideActionItem(
@@ -91,16 +93,22 @@ class ActivityTile extends StatelessWidget {
           label: 'Delete',
           foregroundColor: Colors.white,
           backgroundColor: red,
+          borderRadius: BorderRadius.circular(14),
           onTrigger: onDelete!,
         ),
         child: cardFace,
       );
+    } else {
+      content = GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: cardFace,
+      );
     }
 
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: cardFace,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: content,
     );
   }
 }

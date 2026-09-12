@@ -30,7 +30,7 @@ void main() {
 
       // Google 4-color brand tokens
       expect(AppTheme.googleBlue, equals(const Color(0xFF1A73E8)));
-      expect(AppTheme.googleBlueDark, equals(const Color(0xFF8AB4F8)));
+      expect(AppTheme.googleBlueDark, equals(const Color(0xFF2563EB)));
       expect(AppTheme.googleGreen, equals(const Color(0xFF1E8E3E)));
       expect(AppTheme.googleGreenDark, equals(const Color(0xFF81C995)));
       expect(AppTheme.googleYellow, equals(const Color(0xFFF9AB00)));

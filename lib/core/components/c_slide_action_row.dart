@@ -14,30 +14,32 @@ Widget buildSlideActionRow({
   required VoidCallback onStartTrigger,
   required VoidCallback onEndTrigger,
 }) {
-  return Row(
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: [
-      if (startAction != null && startWidth > 0) ...[
-        buildSlideActionCard(
-          context: context,
-          action: startAction,
-          width: startWidth,
-          maxActionWidth: maxActionWidth,
-          onTrigger: onStartTrigger,
-        ),
-        SizedBox(width: (startWidth / maxActionWidth) * spacing),
+  return IntrinsicHeight(
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (startAction != null && startWidth > 0) ...[
+          buildSlideActionCard(
+            context: context,
+            action: startAction,
+            width: startWidth,
+            maxActionWidth: maxActionWidth,
+            onTrigger: onStartTrigger,
+          ),
+          SizedBox(width: (startWidth / maxActionWidth) * spacing),
+        ],
+        Expanded(child: child),
+        if (endAction != null && endWidth > 0) ...[
+          SizedBox(width: (endWidth / maxActionWidth) * spacing),
+          buildSlideActionCard(
+            context: context,
+            action: endAction,
+            width: endWidth,
+            maxActionWidth: maxActionWidth,
+            onTrigger: onEndTrigger,
+          ),
+        ],
       ],
-      Expanded(child: child),
-      if (endAction != null && endWidth > 0) ...[
-        SizedBox(width: (endWidth / maxActionWidth) * spacing),
-        buildSlideActionCard(
-          context: context,
-          action: endAction,
-          width: endWidth,
-          maxActionWidth: maxActionWidth,
-          onTrigger: onEndTrigger,
-        ),
-      ],
-    ],
+    ),
   );
 }

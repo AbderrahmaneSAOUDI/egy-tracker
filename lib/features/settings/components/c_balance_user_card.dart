@@ -63,6 +63,9 @@ class BalanceUserCard extends StatelessWidget {
               Expanded(
                 child: CurrencyPill(
                   currency: 'USD',
+                  amount: usdAmount,
+                  formatter: (val) =>
+                      '\$${val.toStringAsFixed(val % 1 == 0 ? 0 : 2)}',
                   formattedAmount: usdFormatted,
                 ),
               ),
@@ -70,6 +73,9 @@ class BalanceUserCard extends StatelessWidget {
               Expanded(
                 child: CurrencyPill(
                   currency: 'EGP',
+                  amount: egpAmount,
+                  formatter: (val) =>
+                      '${val.toStringAsFixed(val % 1 == 0 ? 0 : 2)} EGP',
                   formattedAmount: egpFormatted,
                 ),
               ),

@@ -8,14 +8,50 @@ class AuthViewModel extends ChangeNotifier {
   final AuthService authService;
 
   bool _isSigningIn = false;
+  bool _isVerifying = false;
+  String? _verificationMessage;
   String? _errorMessage;
+  bool _disposed = false;
 
-  AuthViewModel({required this.authService});
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
+  }
+
+  @override
+  void notifyListeners() {
+    if (!_disposed) {
+      super.notifyListeners();
+    }
+  }
+
+  AuthViewModel({
+    required this.authService,
+    bool isVerifying = false,
+    String? verificationMessage,
+    String? errorMessage,
+  })  : _isVerifying = isVerifying,
+        _verificationMessage = verificationMessage,
+        _errorMessage = errorMessage;
 
   bool get isSigningIn => _isSigningIn;
+  bool get isVerifying => _isVerifying;
+  String? get verificationMessage => _verificationMessage;
   String? get errorMessage => _errorMessage;
   User? get currentUser => authService.currentUser;
   Stream<User?> get authStateChanges => authService.authStateChanges;
+
+  void setVerifying(bool verifying, [String? message]) {
+    _isVerifying = verifying;
+    _verificationMessage = message;
+    notifyListeners();
+  }
+
+  void setErrorMessage(String? error) {
+    _errorMessage = error;
+    notifyListeners();
+  }
 
   Future<void> handleAutoLogin() async {
     // SECURITY: Dev login is disabled in release builds (Fix 1.5.3)

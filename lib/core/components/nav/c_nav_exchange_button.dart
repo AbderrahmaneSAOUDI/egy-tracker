@@ -17,28 +17,14 @@ Widget buildNavExchangeButton({
         width: 48,
         height: 48,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [exchangeColor, exchangeColor.withValues(alpha: 0.88)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          color: exchangeColor,
           shape: BoxShape.circle,
           border: Border.all(
-            color: isDark ? Colors.white.withValues(alpha: 0.28) : Colors.white.withValues(alpha: 0.70),
-            width: 1.3,
+            color: isDark
+                ? Colors.white.withValues(alpha: 0.16)
+                : Colors.black.withValues(alpha: 0.08),
+            width: 1.2,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: exchangeColor.withValues(alpha: isDark ? 0.45 : 0.35),
-              blurRadius: 14,
-              offset: const Offset(0, 4),
-            ),
-            BoxShadow(
-              color: Colors.white.withValues(alpha: isDark ? 0.20 : 0.45),
-              blurRadius: 2,
-              offset: const Offset(0, -1),
-            ),
-          ],
         ),
         child: Material(
           color: Colors.transparent,

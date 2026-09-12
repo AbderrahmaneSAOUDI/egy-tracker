@@ -72,6 +72,7 @@ class TravelerBalanceCard extends StatelessWidget {
               Expanded(
                 child: buildCurrencySection(
                   currencyCode: 'USD',
+                  amount: usdAmount,
                   amountFormatted: Formatters.formatUsd(usdAmount),
                   color: usdColor,
                   isDark: isDark,
@@ -87,6 +88,7 @@ class TravelerBalanceCard extends StatelessWidget {
               Expanded(
                 child: buildCurrencySection(
                   currencyCode: 'EGP',
+                  amount: egpAmount,
                   amountFormatted: Formatters.formatEgp(egpAmount),
                   color: egpColor,
                   isDark: isDark,
