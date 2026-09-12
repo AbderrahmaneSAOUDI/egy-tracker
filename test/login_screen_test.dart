@@ -106,5 +106,72 @@ void main() {
 
       expect(find.textContaining('Sign-in failed: Exception: Network error'), findsOneWidget);
     });
+
+    testWidgets('Renders AnimatedLoginBackground behind login form in light and dark mode',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(MaterialApp(
+        theme: AppTheme.darkTheme,
+        home: LoginScreen(
+          authService: fakeAuthService,
+          enableLoopAnimation: false,
+        ),
+      ));
+
+      expect(find.byType(AnimatedLoginBackground), findsOneWidget);
+      expect(find.byType(LoginForm), findsOneWidget);
+      expect(find.text('egy_tracker'), findsOneWidget);
+    });
+
+    testWidgets('Shows GoogleProgressBar and hides login button when isVerifying is true',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(MaterialApp(
+        theme: AppTheme.lightTheme,
+        home: LoginScreen(
+          authService: fakeAuthService,
+          isVerifying: true,
+          verificationMessage: 'Verifying trip authorization...',
+          enableLoopAnimation: false,
+        ),
+      ));
+
+      // Logo and Title still visible
+      expect(find.byKey(const Key('login_logo_button')), findsOneWidget);
+      expect(find.text('egy_tracker'), findsOneWidget);
+
+      // Google progress bar and caption are visible
+      expect(find.byType(GoogleProgressBar), findsOneWidget);
+      expect(find.text('Verifying trip authorization...'), findsOneWidget);
+
+      // Google Sign-In button is NOT shown
+      expect(find.text('Sign in with Google'), findsNothing);
+
+      // Tapping logo while verifying does not trigger auto login
+      await tester.tap(find.byKey(const Key('login_logo_button')));
+      await tester.pump();
+      expect(fakeAuthService.autoLoginCalled, isFalse);
+    });
+
+    testWidgets('Shows Google sign-in button and error banner when authorization failed',
+        (WidgetTester tester) async {
+      const errorMsg = 'The account "unauthorized@example.com" is not authorized for this trip.';
+      await tester.pumpWidget(MaterialApp(
+        theme: AppTheme.lightTheme,
+        home: LoginScreen(
+          authService: fakeAuthService,
+          isVerifying: false,
+          errorMessage: errorMsg,
+          enableLoopAnimation: false,
+        ),
+      ));
+
+      // Progress bar should NOT be shown
+      expect(find.byType(GoogleProgressBar), findsNothing);
+
+      // Error message banner should be shown
+      expect(find.text(errorMsg), findsOneWidget);
+
+      // Google sign-in button should be shown
+      expect(find.text('Sign in with Google'), findsOneWidget);
+    });
   });
 }

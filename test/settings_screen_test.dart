@@ -13,7 +13,9 @@ import 'package:egy_tracker/core/services/f_auth.dart';
 import 'package:egy_tracker/core/services/f_firestore.dart';
 import 'package:egy_tracker/core/theme/t_app_theme.dart';
 import 'package:egy_tracker/features/auth/s_auth_gate.dart';
+import 'package:egy_tracker/features/settings/components/c_allowed_emails_card.dart';
 import 'package:egy_tracker/features/settings/s_settings.dart';
+import 'package:egy_tracker/features/settings/vm_settings.dart';
 
 class FakeAuthService extends AuthService {
   FakeAuthService() : super(initializeGoogleSignIn: false);
@@ -507,6 +509,99 @@ void main() {
 
       expect(firestoreService.deleteAllTripDataCalled, isTrue);
       expect(find.text('All trip data has been deleted.'), findsOneWidget);
+    });
+
+    testWidgets('Non-super-admin user has view-only access to Allowed Emails and mutations are blocked', (tester) async {
+      final nonAdminUser = DevUser(
+        uid: 'dev_user_friend',
+        email: 'friend@example.com',
+      );
+      setLargeSurface(tester);
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          home: Scaffold(
+            body: SettingsScreen(
+              user: nonAdminUser,
+              authService: authService,
+              firestoreService: firestoreService,
+            ),
+          ),
+        ),
+      );
+      firestoreService.emitEmails([
+        AllowedEmail(
+          id: 'doc-1',
+          email: 'abderrahmane.saoudi.26@gmail.com',
+          createdAt: DateTime.now(),
+        ),
+        AllowedEmail(
+          id: 'doc-2',
+          email: 'friend@example.com',
+          createdAt: DateTime.now(),
+        ),
+      ]);
+      await tester.pump();
+
+      // Non-admin sees Allowed Emails with View-only access subtitle
+      expect(find.text('Allowed Emails'), findsOneWidget);
+      expect(find.text('View-only access'), findsOneWidget);
+
+      // Non-admin does NOT see the Add button
+      expect(find.widgetWithText(FilledButton, 'Add'), findsNothing);
+
+      // Expand Allowed Emails card
+      await tester.tap(find.text('Allowed Emails'));
+      await tester.pumpAndSettle();
+
+      // Super Admin badge is visible on the super admin email
+      expect(find.text('Super Admin'), findsOneWidget);
+
+      // Non-admin does NOT see edit buttons inside AllowedEmailsCard
+      final editEmailButton = find.descendant(
+        of: find.byType(AllowedEmailsCard),
+        matching: find.byIcon(Icons.edit_outlined),
+      );
+      expect(editEmailButton, findsNothing);
+
+      // Non-admin does NOT see swipe indicator chevron inside AllowedEmailsCard
+      final swipeChevron = find.descendant(
+        of: find.byType(AllowedEmailsCard),
+        matching: find.byIcon(Icons.chevron_left_rounded),
+      );
+      expect(swipeChevron, findsNothing);
+
+      // SlideActionCard should not be rendered inside AllowedEmailsCard
+      final slideCards = find.descendant(
+        of: find.byType(AllowedEmailsCard),
+        matching: find.byType(SlideActionCard),
+      );
+      expect(slideCards, findsNothing);
+
+      // Verify ViewModel methods directly block mutations for non-super-admin
+      final vm = SettingsViewModel(
+        user: nonAdminUser,
+        authService: authService,
+        firestoreService: firestoreService,
+      );
+      expect(vm.isSuperAdmin, isFalse);
+      expect(await vm.addAllowedEmail('test@gmail.com'), isFalse);
+      expect(vm.errorMessage, contains('Only the super admin'));
+      expect(await vm.updateAllowedEmail('doc-1', 'test2@gmail.com'), isFalse);
+      expect(vm.errorMessage, contains('Only the super admin'));
+      expect(await vm.deleteAllowedEmail('doc-1'), isFalse);
+      expect(vm.errorMessage, contains('Only the super admin'));
+
+      // Non-admin does NOT see Trip Data & Reset card
+      expect(find.text('Trip Data & Reset'), findsNothing);
+      expect(find.byKey(const ValueKey('delete_all_data_button')), findsNothing);
+
+      // Verify ViewModel methods directly block trip data deletion for non-super-admin
+      expect(await vm.deleteTripData(), isFalse);
+      expect(vm.errorMessage, contains('Only the super admin can delete trip data'));
+      expect(await vm.deleteAllTripData(), isFalse);
+      expect(vm.errorMessage, contains('Only the super admin can delete trip data'));
     });
   });
 }

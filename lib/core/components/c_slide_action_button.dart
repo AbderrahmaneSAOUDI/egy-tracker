@@ -10,13 +10,12 @@ Widget buildSlideActionCard({
 }) {
   final progress = (width / maxActionWidth).clamp(0.0, 1.0);
   final iconScale = (0.6 + 0.4 * progress).clamp(0.6, 1.0);
-  final borderRadius = action.borderRadius ?? BorderRadius.circular(20);
+  final borderRadius = action.borderRadius ?? BorderRadius.circular(14);
 
   return GestureDetector(
     onTap: onTrigger,
     child: Container(
       width: width,
-      margin: const EdgeInsets.only(bottom: 6),
       decoration: BoxDecoration(
         gradient: action.gradient,
         color: action.gradient == null

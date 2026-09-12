@@ -33,14 +33,13 @@ When modifying Dart/Flutter files:
 
 ---
 
-## 3. Gemini 3.8 Flash High Speed & Indexing Directives
+## 3. Gemini 3.8 Flash High Speed & Directives
 
-To maximize velocity and avoid reading all files each turn:
-1. **Never read entire files**: Prohibit `view_file` on files > 50 lines without `StartLine` and `EndLine`. Always read 20-50 line slices.
-2. **Instant Symbol Lookup**: Run `python3 scripts/find_symbol.py <symbol>` or check `.agents/cache/codebase_index.md` before inspecting files.
-3. **Targeted Search**: Use `grep_search` with `MatchPerLine: true` and `Includes` globs instead of directory browsing.
-4. **Surgical Modifications**: Apply targeted edits with `replace_file_content`. Run `flutter analyze` or unit tests to verify instead of re-reading code.
-5. **Background Indexing**: The `codebase-index-daemon` sidecar and `cache-auto-updater` hook maintain `.agents/cache/` continuously.
+To maximize velocity, code quality, and surgical accuracy:
+1. **Parallel Tool Batching & Full-File Reading**: Read files in full using a single `view_file` call (up to 500 lines). When inspecting multiple files, emit multiple `view_file` or `grep_search` calls in the SAME turn to parallelize requests.
+2. **Targeted Search**: Use `grep_search` with `MatchPerLine: true` and `Includes: ["lib/**/*.dart"]` to pinpoint symbols without directory crawling.
+3. **Surgical Modifications**: Apply targeted, clean edits with `replace_file_content`.
+4. **Fast Targeted Verification**: Run `flutter analyze lib/path/to/file.dart` or targeted test files (`flutter test test/specific_test.dart`) instead of running full project rebuilds for minor changes.
 
 ---
 

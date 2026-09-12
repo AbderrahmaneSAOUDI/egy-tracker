@@ -11,7 +11,7 @@ class AllowedEmailTile extends StatelessWidget {
   final bool isCurrentUser;
   final String? photoUrl;
   final String? displayName;
-  final VoidCallback onDelete;
+  final VoidCallback? onDelete;
   final VoidCallback? onEdit;
 
   const AllowedEmailTile({
@@ -20,7 +20,7 @@ class AllowedEmailTile extends StatelessWidget {
     required this.isCurrentUser,
     this.photoUrl,
     this.displayName,
-    required this.onDelete,
+    this.onDelete,
     this.onEdit,
   });
 
@@ -32,16 +32,19 @@ class AllowedEmailTile extends StatelessWidget {
         ? (isDark ? AppTheme.usdColorDark : AppTheme.usdColorLight)
         : (isDark ? AppTheme.googleBlueDark : AppTheme.googleBlue);
 
+    final canDelete = !isCurrentUser && onDelete != null;
+
     final cardFace = AllowedEmailTileContent(
       allowedEmail: allowedEmail,
       isCurrentUser: isCurrentUser,
       photoUrl: photoUrl,
       displayName: displayName,
       onEdit: onEdit,
+      canDelete: canDelete,
       accentColor: accentColor,
     );
 
-    if (isCurrentUser) {
+    if (!canDelete) {
       return Container(
         margin: const EdgeInsets.only(bottom: 10),
         child: cardFace,
@@ -62,7 +65,7 @@ class AllowedEmailTile extends StatelessWidget {
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
           ),
-          onTrigger: onDelete,
+          onTrigger: onDelete!,
         ),
         child: cardFace,
       ),

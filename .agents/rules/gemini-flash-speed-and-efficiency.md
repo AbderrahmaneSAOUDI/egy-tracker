@@ -15,33 +15,24 @@ Gemini 3.8 Flash High is optimized for ultra-low latency, fast reasoning, and su
 
 ## 2. Invariants & Rules for File Access
 
-### Rule 1: Zero Full-File Dumps
-- **PROHIBITED**: Calling `view_file` without line range constraints on files longer than 50 lines.
-- **MANDATORY**: Always specify `StartLine` and `EndLine` to inspect only the targeted 20–50 line window containing the relevant function, widget, or property.
+### Rule 1: Single-Turn Parallel Reading & Batching
+- Read files in full with a single `view_file` call. When multiple files are needed to understand a feature or fix a bug, emit multiple `view_file` or `grep_search` calls in the SAME turn to parallelize lookups.
+- Never fragment file reads into tiny line slices unless the file exceeds 500 lines.
 
-### Rule 2: Index-First Symbol Resolution
-- Before inspecting files to locate a class, function, or model, consult the pre-computed index:
-  1. Quick CLI: Run `python3 scripts/find_symbol.py <symbol>` to get the exact file and line slice.
-  2. Index Catalog: View [.agents/cache/codebase_index.md](file:///.agents/cache/codebase_index.md).
-  3. Machine Map: Read specific keys from [.agents/cache/repo_map.json](file:///.agents/cache/repo_map.json).
+### Rule 2: Precision Search
+- Use `grep_search` with `MatchPerLine: true` and `Includes: ["lib/**/*.dart"]` to pinpoint symbols, strings, or widget usages across the project.
 
-### Rule 3: Surgical Search Over Directory Crawling
-- **PROHIBITED**: Recursive `list_dir` exploration or inspecting folders to "find where things are".
-- **MANDATORY**: Use `grep_search` with:
-  - `MatchPerLine: true`
-  - Exact regex or query string
-  - `Includes` pattern (e.g. `["lib/**/*.dart"]`)
+### Rule 3: Single-Pass Surgical Edits
+- Inspect code, determine the exact replacement, and apply changes in clean, focused `replace_file_content` calls.
 
-### Rule 4: Single-Pass Surgical Edits
-- Locate the exact line range using `find_symbol.py` or `grep_search`.
-- Inspect the targeted 20–40 line slice using `view_file`.
-- Apply targeted modifications with `replace_file_content`.
-- Never rewrite entire files unless creating a new file from scratch.
+### Rule 4: Hyper-Fast Targeted Verification
+- **Selective Testing**: NEVER run the full test suite (`flutter test`, ~25s) for localized changes. Run only the specific test file impacted: e.g. `flutter test test/dialogs_and_animations_test.dart` (~2s).
+- **Targeted Lint**: Run `dart analyze lib/path/to/modified_file.dart` for fast verification instead of full repo analysis when possible.
 
-### Rule 5: Fast Verification over File Re-Scanning
-- After editing code, **do not re-read all dependent files**.
-- Run `flutter analyze` or execute targeted unit/scenario tests to verify compilation and correctness.
-- The `PostToolUse` hook automatically synchronizes the index cache upon file edits.
+### Rule 5: State & Architecture Invariants
+- State and business logic belong in ViewModels (`vm_*.dart`), not embedded inside UI widgets.
+- Reusable UI elements belong in `lib/core/components/` (`c_*.dart`).
+- Pure calculations and formatters belong in `m_calculations.dart` and `m_formatters.dart`.
 
 ---
 

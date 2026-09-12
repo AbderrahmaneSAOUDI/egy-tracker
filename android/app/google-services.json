@@ -41,6 +41,43 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:27615434041:android:4069fc8ee62217302fc4e8",
+        "android_client_info": {
+          "package_name": "online.saoudi.egy_tracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "27615434041-sult5acdeuneug3t1t0hhnosrnpglg0r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "online.saoudi.egy_tracker",
+            "certificate_hash": "d7803b09cf53fe8e90ddb939893970c92df86a7e"
+          }
+        },
+        {
+          "client_id": "27615434041-rpa8j2d54r5pkpmoctpu3oe48s5jfads.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRaDOjv631hOfHura-rkNqswXr0DXLU6k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "27615434041-rpa8j2d54r5pkpmoctpu3oe48s5jfads.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

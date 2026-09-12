@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/components/c_badge.dart';
+import '../../../core/config/app_config.dart';
+import '../../../core/theme/t_app_theme.dart';
 
 /// Text info and badge for an allowed email tile.
 class AllowedEmailTileInfo extends StatelessWidget {
@@ -18,8 +20,12 @@ class AllowedEmailTileInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
     final hasName = displayName?.isNotEmpty == true;
+    final isSuperAdmin =
+        email.toLowerCase().trim() == AppConfig.adminEmail.toLowerCase().trim();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,6 +49,16 @@ class AllowedEmailTileInfo extends StatelessWidget {
               StatusBadge(
                 label: 'You',
                 color: accentColor,
+              ),
+            ],
+            if (isSuperAdmin) ...[
+              const SizedBox(width: 6),
+              StatusBadge(
+                label: 'Super Admin',
+                icon: Icons.star_rounded,
+                color: isDark
+                    ? AppTheme.googleYellowDark
+                    : AppTheme.googleYellow,
               ),
             ],
           ],

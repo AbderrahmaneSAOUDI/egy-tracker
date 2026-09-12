@@ -23,25 +23,38 @@ class LoginLogoButton extends StatelessWidget {
           width: 96,
           height: 96,
           decoration: BoxDecoration(
-            color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
-            borderRadius: BorderRadius.circular(20),
+            color: theme.colorScheme.surface.withValues(alpha: 0.85),
+            borderRadius: BorderRadius.circular(24),
             border: Border.all(
-              color: theme.colorScheme.primary.withValues(alpha: 0.2),
+              color: theme.colorScheme.primary.withValues(alpha: 0.25),
               width: 1.5,
             ),
+            boxShadow: [
+              BoxShadow(
+                color: theme.colorScheme.primary.withValues(alpha: 0.18),
+                blurRadius: 28,
+                spreadRadius: 2,
+                offset: const Offset(0, 8),
+              ),
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.06),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
           clipBehavior: Clip.antiAlias,
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(10.0),
             child: Image.asset(
               'assets/images/logo.png',
-              fit: BoxFit.cover,
+              fit: BoxFit.contain,
               cacheWidth: 256,
               cacheHeight: 256,
               errorBuilder: (context, error, stackTrace) {
                 return Icon(
                   Icons.account_balance_wallet_rounded,
-                  size: 36,
+                  size: 40,
                   color: theme.colorScheme.primary,
                 );
               },

@@ -19,18 +19,19 @@ class GoogleSignInButton extends StatelessWidget {
 
     return SizedBox(
       width: double.infinity,
-      height: 50,
+      height: 52,
       child: OutlinedButton.icon(
         onPressed: isSigningIn ? null : onPressed,
         style: OutlinedButton.styleFrom(
-          backgroundColor:
-              isDark ? theme.colorScheme.surfaceContainer : Colors.white,
+          backgroundColor: isDark
+              ? theme.colorScheme.surfaceContainerHigh.withValues(alpha: 0.75)
+              : Colors.white,
           side: BorderSide(
-            color: theme.colorScheme.outlineVariant,
+            color: theme.colorScheme.outlineVariant.withValues(alpha: 0.8),
             width: 1.2,
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(14),
           ),
         ),
         icon: isSigningIn
@@ -46,6 +47,7 @@ class GoogleSignInButton extends StatelessWidget {
                 'assets/images/logo_google.svg',
                 width: 20,
                 height: 20,
+                fit: BoxFit.contain,
                 placeholderBuilder: (context) => const Icon(
                   Icons.g_mobiledata_rounded,
                   size: 22,

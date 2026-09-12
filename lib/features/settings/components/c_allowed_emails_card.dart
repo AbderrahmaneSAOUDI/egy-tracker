@@ -23,35 +23,39 @@ class AllowedEmailsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isSuperAdmin = viewModel.isSuperAdmin;
 
     return SectionCard(
       icon: Icons.shield_rounded,
       iconColor: isDark ? AppTheme.googleBlueDark : AppTheme.googleBlue,
       title: 'Allowed Emails',
+      subtitle: isSuperAdmin ? null : 'View-only access',
       isCollapsible: true,
       initiallyExpanded: false,
-      trailing: FilledButton.icon(
-        onPressed: () => showAddEmailDialog(
-          context: context,
-          onAddEmail: viewModel.addAllowedEmail,
-        ),
-        icon: const Icon(Icons.add_rounded, size: 18),
-        label: const Text('Add'),
-        style: FilledButton.styleFrom(
-          backgroundColor:
-              isDark ? AppTheme.googleBlueDark : AppTheme.googleBlue,
-          foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          padding: const EdgeInsets.symmetric(
-            horizontal: 14,
-            vertical: 8,
-          ),
-          minimumSize: const Size(0, 36),
-          elevation: 0,
-        ),
-      ),
+      trailing: isSuperAdmin
+          ? FilledButton.icon(
+              onPressed: () => showAddEmailDialog(
+                context: context,
+                onAddEmail: viewModel.addAllowedEmail,
+              ),
+              icon: const Icon(Icons.add_rounded, size: 18),
+              label: const Text('Add'),
+              style: FilledButton.styleFrom(
+                backgroundColor:
+                    isDark ? AppTheme.googleBlueDark : AppTheme.googleBlue,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 8,
+                ),
+                minimumSize: const Size(0, 36),
+                elevation: 0,
+              ),
+            )
+          : null,
       child: StreamBuilder<List<AllowedEmail>>(
         stream: viewModel.allowedEmailsStream,
         builder: (context, snapshot) {

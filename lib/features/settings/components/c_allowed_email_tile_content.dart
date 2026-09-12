@@ -11,6 +11,7 @@ class AllowedEmailTileContent extends StatelessWidget {
   final String? displayName;
   final VoidCallback? onEdit;
   final Color accentColor;
+  final bool canDelete;
 
   const AllowedEmailTileContent({
     super.key,
@@ -20,6 +21,7 @@ class AllowedEmailTileContent extends StatelessWidget {
     this.displayName,
     this.onEdit,
     required this.accentColor,
+    this.canDelete = false,
   });
 
   @override
@@ -88,7 +90,7 @@ class AllowedEmailTileContent extends StatelessWidget {
               onPressed: onEdit,
               visualDensity: VisualDensity.compact,
             ),
-          if (!isCurrentUser)
+          if (canDelete)
             Icon(
               Icons.chevron_left_rounded,
               size: 20,

@@ -1,5 +1,6 @@
 {
   "invariant-guard": {
+    "enabled": false,
     "PreToolUse": [
       {
         "matcher": "write_to_file|replace_file_content|multi_replace_file_content|run_command",
@@ -26,6 +27,7 @@
     ]
   },
   "fast-context-injector": {
+    "enabled": false,
     "PreInvocation": [
       {
         "type": "command",
@@ -35,6 +37,7 @@
     ]
   },
   "cache-auto-updater": {
+    "enabled": false,
     "PostToolUse": [
       {
         "matcher": "write_to_file|replace_file_content|multi_replace_file_content",

@@ -34,6 +34,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late final HomeViewModel _viewModel;
   late final HomeFeedViewModel _homeFeedViewModel;
+  late final PageController _pageController;
   bool _ownsViewModel = false;
   bool _ownsFeedViewModel = false;
 
@@ -56,10 +57,12 @@ class _HomeScreenState extends State<HomeScreen> {
       _viewModel = HomeViewModel();
       _ownsViewModel = true;
     }
+    _pageController = PageController(initialPage: _viewModel.selectedIndex);
   }
 
   @override
   void dispose() {
+    _pageController.dispose();
     if (_ownsFeedViewModel) _homeFeedViewModel.dispose();
     if (_ownsViewModel) _viewModel.dispose();
     super.dispose();
@@ -77,7 +80,12 @@ class _HomeScreenState extends State<HomeScreen> {
           body: SafeArea(
             bottom: false,
             child: HomeTabStack(
+              pageController: _pageController,
               selectedIndex: selectedIndex,
+              onPageChanged: (index) {
+                HapticFeedback.selectionClick();
+                _viewModel.selectTab(index);
+              },
               user: widget.user,
               authService: widget.authService,
               firestoreService: widget.firestoreService,
@@ -91,6 +99,14 @@ class _HomeScreenState extends State<HomeScreen> {
             onDestinationSelected: (index) {
               HapticFeedback.selectionClick();
               _viewModel.selectTab(index);
+              if (_pageController.hasClients &&
+                  _pageController.page?.round() != index) {
+                _pageController.animateToPage(
+                  index,
+                  duration: const Duration(milliseconds: 320),
+                  curve: Curves.easeOutCubic,
+                );
+              }
             },
           ),
         );

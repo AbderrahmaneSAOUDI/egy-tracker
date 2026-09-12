@@ -1,9 +1,10 @@
 {
   "name": "currency-invariant-watcher",
+  "enabled": false,
   "description": "Continuous background watcher guarding two-currency invariants and forbidden domain patterns",
   "command": "python3",
   "args": ["watcher.py"],
-  "restart_policy": "always",
+  "restart_policy": "never",
   "env": {
     "POLL_INTERVAL": "5"
   }

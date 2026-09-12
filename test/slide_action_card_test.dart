@@ -194,5 +194,49 @@ void main() {
       await gesture.up();
       await tester.pumpAndSettle();
     });
+
+    testWidgets('Action button height matches child height when revealed', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SlideActionCard(
+              startAction: SlideActionItem(
+                icon: Icons.edit,
+                label: 'Edit',
+                backgroundColor: Colors.blue,
+                onTrigger: () {},
+              ),
+              child: const SizedBox(
+                height: 85,
+                child: Text('Card Content'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      // Drag right to reveal startAction: first move exceeds slop, second moves dragOffset
+      final gesture = await tester.startGesture(tester.getCenter(find.text('Card Content')));
+      await gesture.moveBy(const Offset(25, 0));
+      await tester.pump();
+      await gesture.moveBy(const Offset(50, 0));
+      await tester.pump();
+
+      expect(find.byIcon(Icons.edit), findsOneWidget);
+
+      // Find the action card container (ancestor of icon)
+      final actionButtonFinder = find.ancestor(
+        of: find.byIcon(Icons.edit),
+        matching: find.byType(Container),
+      ).last;
+
+      final buttonSize = tester.getSize(actionButtonFinder);
+      final cardSize = tester.getSize(find.text('Card Content'));
+      expect(buttonSize.height, equals(cardSize.height));
+      expect(buttonSize.height, equals(85.0));
+
+      await gesture.up();
+      await tester.pumpAndSettle();
+    });
   });
 }
