@@ -7,6 +7,9 @@ class ExpenseSaveButton extends StatelessWidget {
   final TextEditingController titleController;
   final TextEditingController amountController;
   final ExpenseDialogSplitState splitState;
+  final ExpenseDialogBalances balances;
+  final String paidBy;
+  final String currency;
   final bool isSubmitting;
   final bool isDark;
   final VoidCallback onSave;
@@ -16,6 +19,9 @@ class ExpenseSaveButton extends StatelessWidget {
     required this.titleController,
     required this.amountController,
     required this.splitState,
+    required this.balances,
+    required this.paidBy,
+    required this.currency,
     required this.isSubmitting,
     required this.isDark,
     required this.onSave,
@@ -30,7 +36,15 @@ class ExpenseSaveButton extends StatelessWidget {
         final enteredAmt = double.tryParse(amountController.text.trim()) ?? 0.0;
         final isCustomValid = splitState.splitType != 'custom' ||
             ((splitState.customMePercentage + splitState.customFriendPercentage - 100.0).abs() <= 0.01);
-        final canSubmit = hasTitle && enteredAmt > 0 && isCustomValid && !isSubmitting;
+        final isOverdraft = balances.isOverdraft(
+          amount: enteredAmt,
+          splitType: splitState.splitType,
+          customMePercentage: splitState.customMePercentage,
+          customFriendPercentage: splitState.customFriendPercentage,
+          paidBy: paidBy,
+          currency: currency,
+        );
+        final canSubmit = hasTitle && enteredAmt > 0 && isCustomValid && !isOverdraft && !isSubmitting;
 
         return FilledButton(
           onPressed: canSubmit ? onSave : null,

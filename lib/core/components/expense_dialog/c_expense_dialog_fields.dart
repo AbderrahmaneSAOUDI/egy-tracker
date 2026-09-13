@@ -13,6 +13,8 @@ class ExpenseDialogFields extends StatelessWidget {
   final Color currencyColor;
   final bool isDark;
   final ValueChanged<String> onCurrencyChanged;
+  final String? Function(String?)? amountValidator;
+  final VoidCallback? onSubmit;
 
   const ExpenseDialogFields({
     super.key,
@@ -23,6 +25,8 @@ class ExpenseDialogFields extends StatelessWidget {
     required this.currencyColor,
     required this.isDark,
     required this.onCurrencyChanged,
+    this.amountValidator,
+    this.onSubmit,
   });
 
   @override
@@ -33,6 +37,7 @@ class ExpenseDialogFields extends StatelessWidget {
           controller: titleController,
           autofocus: true,
           textCapitalization: TextCapitalization.sentences,
+          textInputAction: TextInputAction.next,
           enabled: !isSubmitting,
           decoration: const InputDecoration(
             labelText: 'Title',
@@ -51,6 +56,8 @@ class ExpenseDialogFields extends StatelessWidget {
                 controller: amountController,
                 textAlign: TextAlign.right,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                textInputAction: TextInputAction.done,
+                onFieldSubmitted: onSubmit != null ? (_) => onSubmit!() : null,
                 inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))],
                 enabled: !isSubmitting,
                 decoration: InputDecoration(
@@ -63,8 +70,8 @@ class ExpenseDialogFields extends StatelessWidget {
                     color: currencyColor,
                   ),
                 ),
-                validator: (val) =>
-                    Validators.validatePositiveAmount(val, selectedCurrency),
+                validator: amountValidator ??
+                    ((val) => Validators.validatePositiveAmount(val, selectedCurrency)),
               ),
             ),
             const SizedBox(width: 8),

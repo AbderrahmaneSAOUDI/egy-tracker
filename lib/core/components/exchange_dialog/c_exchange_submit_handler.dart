@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../c_app_snack_bar.dart';
 import '../../models/mod_exchange.dart';
 import '../../utils/m_formatters.dart';
 import '../../utils/m_validators.dart';
@@ -13,6 +14,7 @@ class ExchangeSubmitHandler {
     required TextEditingController toAmountController,
     required String fromCurrency,
     required String toCurrency,
+    required double effectiveAvailable,
     required DateTime selectedDate,
     required Exchange? initialExchange,
     required String currentUserId,
@@ -24,6 +26,14 @@ class ExchangeSubmitHandler {
     if (currErr != null) return;
 
     final fromAmt = double.tryParse(fromAmountController.text.trim()) ?? 0.0;
+    if (fromAmt > effectiveAvailable) {
+      AppSnackBar.show(
+        context,
+        message: 'Amount exceeds available $fromCurrency (${Formatters.formatCurrency(effectiveAvailable, fromCurrency)})',
+        type: AppSnackBarType.error,
+      );
+      return;
+    }
     final toAmt = double.tryParse(toAmountController.text.trim()) ?? 0.0;
     final rate = fromAmt > 0
         ? (fromCurrency == 'USD'
@@ -48,15 +58,12 @@ class ExchangeSubmitHandler {
     final success = await onSave(exchange);
     if (dialogContext.mounted && success) {
       Navigator.of(dialogContext).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            initialExchange != null
-                ? 'Updated exchange: ${Formatters.formatCurrency(fromAmt, fromCurrency)} → ${Formatters.formatCurrency(toAmt, toCurrency)}'
-                : 'Recorded exchange: ${Formatters.formatCurrency(fromAmt, fromCurrency)} → ${Formatters.formatCurrency(toAmt, toCurrency)}',
-          ),
-          behavior: SnackBarBehavior.floating,
-        ),
+      AppSnackBar.show(
+        context,
+        message: initialExchange != null
+            ? 'Updated exchange: ${Formatters.formatCurrency(fromAmt, fromCurrency)} → ${Formatters.formatCurrency(toAmt, toCurrency)}'
+            : 'Recorded exchange: ${Formatters.formatCurrency(fromAmt, fromCurrency)} → ${Formatters.formatCurrency(toAmt, toCurrency)}',
+        type: AppSnackBarType.success,
       );
     } else if (dialogContext.mounted) {
       setSubmitting(false);

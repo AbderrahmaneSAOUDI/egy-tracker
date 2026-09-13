@@ -14,6 +14,10 @@ Widget buildSlideActionRow({
   required VoidCallback onStartTrigger,
   required VoidCallback onEndTrigger,
 }) {
+  if (startWidth <= 0 && endWidth <= 0) {
+    return child;
+  }
+
   return IntrinsicHeight(
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -38,6 +38,11 @@ class FakeFirestoreService extends FirestoreService {
     _expensesCtrl.add(list);
   }
 
+  void emitExchanges(List<Exchange> list) {
+    exchanges = list;
+    _exchangesCtrl.add(list);
+  }
+
   void emitBalances(List<InitialBalance> list) {
     initialBalances = list;
     _balancesCtrl.add(list);
@@ -371,15 +376,19 @@ void main() {
       expect(find.text('\$150.00'), findsOneWidget);
       expect(find.text('3,500.00 EGP'), findsOneWidget);
 
-      // Verify SegmentedPillBar is NOT on My Tracker (moved to Home page)
-      expect(find.byType(SegmentedPillBar<MyTrackerFilter>), findsNothing);
+      // Verify SegmentedPillBar is rendered on My Tracker
+      expect(find.byType(SegmentedPillBar<MyTrackerFilter>), findsOneWidget);
+      expect(find.text('All'), findsOneWidget);
+      expect(find.text('Expenses'), findsOneWidget);
+      expect(find.text('Exchanges'), findsOneWidget);
+      expect(find.text('Splits'), findsOneWidget);
 
       // Verify Empty state for unified list
       expect(find.byType(EmptyState), findsOneWidget);
       expect(find.text('No personal expenses yet'), findsOneWidget);
     });
 
-    testWidgets('Renders all personal and shared expenses directly without filter tabs', (tester) async {
+    testWidgets('Renders personal and shared expenses with working filter tabs', (tester) async {
       tester.view.physicalSize = const Size(1200, 1800);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
@@ -431,7 +440,7 @@ void main() {
       expect(find.text('\$25.00'), findsOneWidget); // 100% of $25
       expect(find.text('300.00 EGP'), findsOneWidget); // 50% of 600 EGP
 
-      // Both personal and shared activity tiles should render directly
+      // Both personal and shared activity tiles should render directly under All tab
       expect(find.byType(ActivityTile), findsNWidgets(2));
       expect(find.text('Taxi to Pyramids'), findsOneWidget);
       expect(find.text('Dinner Koshary'), findsOneWidget);
@@ -440,8 +449,74 @@ void main() {
       expect(find.text('My share: 100%'), findsOneWidget);
       expect(find.text('My share: 50%'), findsOneWidget);
 
-      // No segmented filter bar in My Tracker
-      expect(find.byType(SegmentedPillBar<MyTrackerFilter>), findsNothing);
+      // Verify SegmentedPillBar exists with 4 filter tabs
+      expect(find.byType(SegmentedPillBar<MyTrackerFilter>), findsOneWidget);
+
+      // Tap on Expenses (100% personal only)
+      await tester.tap(find.text('Expenses'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Taxi to Pyramids'), findsOneWidget);
+      expect(find.text('Dinner Koshary'), findsNothing);
+
+      // Tap on Splits (shared expenses only)
+      await tester.tap(find.text('Splits'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Taxi to Pyramids'), findsNothing);
+      expect(find.text('Dinner Koshary'), findsOneWidget);
+
+      // Tap on All (both shown)
+      await tester.tap(find.text('All'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Taxi to Pyramids'), findsOneWidget);
+      expect(find.text('Dinner Koshary'), findsOneWidget);
+    });
+
+    testWidgets('Exchange tiles in My Tracker have onEdit and onDelete enabled', (tester) async {
+      tester.view.physicalSize = const Size(1200, 1800);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      final exch1 = Exchange(
+        id: 'exch1',
+        userId: 'uid_a',
+        fromAmount: 100.0,
+        fromCurrency: 'USD',
+        toAmount: 4800.0,
+        toCurrency: 'EGP',
+        exchangeRate: 48.0,
+        date: DateTime.now(),
+        createdAt: DateTime.now(),
+      );
+
+      firestoreService.emitExchanges([exch1]);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: Scaffold(
+            body: MyTrackerScreen(
+              user: userA,
+              firestoreService: firestoreService,
+              feedViewModel: feedViewModel,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Tap on Exchanges filter
+      await tester.tap(find.text('Exchanges'));
+      await tester.pumpAndSettle();
+
+      final tileFinder = find.byType(ActivityTile);
+      expect(tileFinder, findsOneWidget);
+      final tile = tester.widget<ActivityTile>(tileFinder);
+      expect(tile.onEdit, isNotNull);
+      expect(tile.onDelete, isNotNull);
     });
   });
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/components/c_app_snack_bar.dart';
 import '../../../core/components/c_app_dialog.dart';
 import '../../../core/theme/t_app_theme.dart';
 import 'c_edit_initial_balances_form.dart';
@@ -33,17 +34,9 @@ Future<void> showEditInitialBalancesDialog({
             final colorScheme = theme.colorScheme;
             final isDark = theme.brightness == Brightness.dark;
 
-            return AppDialog(
-            icon: Icons.account_balance_wallet_rounded,
-            iconColor: isDark ? AppTheme.usdColorDark : AppTheme.usdColorLight,
-            title: 'Initial Balances',
-            actionLabel: 'Save',
-            isSubmitting: isSubmitting,
-            onCancel: () => Navigator.of(dialogContext).pop(),
-            onAction: () async {
+            Future<void> doSubmit() async {
+              if (isSubmitting) return;
               if (!formKey.currentState!.validate()) return;
-              final messenger = ScaffoldMessenger.of(context);
-              final errorColor = colorScheme.error;
               final usd = double.tryParse(usdController.text.trim()) ?? 0.0;
               final egp = double.tryParse(egpController.text.trim()) ?? 0.0;
               setDialogState(() => isSubmitting = true);
@@ -57,37 +50,41 @@ Future<void> showEditInitialBalancesDialog({
                 if (dialogContext.mounted) {
                   Navigator.of(dialogContext).pop();
                 }
-                messenger.showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      'Updated starting balances for $userName',
-                    ),
-                    behavior: SnackBarBehavior.floating,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
+                if (!context.mounted) return;
+                AppSnackBar.show(
+                  context,
+                  message: 'Updated starting balances for $userName',
+                  type: AppSnackBarType.success,
                 );
               } catch (e) {
                 setDialogState(() => isSubmitting = false);
-                messenger.showSnackBar(
-                  SnackBar(
-                    content: Text('Failed to save balances: $e'),
-                    backgroundColor: errorColor,
-                    behavior: SnackBarBehavior.floating,
-                  ),
+                if (!context.mounted) return;
+                AppSnackBar.show(
+                  context,
+                  message: 'Failed to save balances: $e',
+                  type: AppSnackBarType.error,
                 );
               }
-            },
-            content: EditInitialBalancesForm(
-              formKey: formKey,
-              usdController: usdController,
-              egpController: egpController,
+            }
+
+            return AppDialog(
+              icon: Icons.account_balance_wallet_rounded,
+              iconColor: isDark ? AppTheme.usdColorDark : AppTheme.usdColorLight,
+              title: 'Initial Balances',
+              actionLabel: 'Save',
               isSubmitting: isSubmitting,
-              isDark: isDark,
-              colorScheme: colorScheme,
-            ),
-          );
+              onCancel: () => Navigator.of(dialogContext).pop(),
+              onAction: isSubmitting ? null : doSubmit,
+              content: EditInitialBalancesForm(
+                formKey: formKey,
+                usdController: usdController,
+                egpController: egpController,
+                isSubmitting: isSubmitting,
+                isDark: isDark,
+                colorScheme: colorScheme,
+                onSubmit: isSubmitting ? null : doSubmit,
+              ),
+            );
         },
       );
     },

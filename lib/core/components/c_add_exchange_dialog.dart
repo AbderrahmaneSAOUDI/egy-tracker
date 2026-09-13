@@ -58,6 +58,7 @@ Future<void> showAddExchangeDialog({
                 toAmountController: toAmountController,
                 fromCurrency: fromCurrency,
                 toCurrency: toCurrency,
+                effectiveAvailable: effectiveAvailable,
                 selectedDate: selectedDate,
                 initialExchange: initialExchange,
                 currentUserId: currentUserId,
@@ -76,6 +77,7 @@ Future<void> showAddExchangeDialog({
             customAction: ExchangeSaveButton(
               fromAmountController: fromAmountController,
               toAmountController: toAmountController,
+              effectiveAvailable: effectiveAvailable,
               isSubmitting: isSubmitting,
               isDark: isDark,
               onSave: doSubmit,
@@ -95,6 +97,7 @@ Future<void> showAddExchangeDialog({
                 toCurrency = to;
               }),
               onDateChanged: (d) => setDialogState(() => selectedDate = d),
+              onSubmit: isSubmitting ? null : doSubmit,
             ),
           );
         },

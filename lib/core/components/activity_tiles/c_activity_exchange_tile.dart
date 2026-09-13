@@ -9,6 +9,7 @@ Widget buildExchangeTile({
   required bool isDark,
   required String currentUserId,
   required String? friendName,
+  Widget? trailingAffordance,
 }) {
   final exchangeColor = isDark ? AppTheme.googleBlueDark : AppTheme.googleBlue;
   final isByMe = exchange.userId == currentUserId;
@@ -47,22 +48,36 @@ Widget buildExchangeTile({
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 '$fromFormatted → $toFormatted',
-                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, letterSpacing: -0.2),
+                style: const TextStyle(
+                  fontSize: 15,
+                  height: 1.2,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: -0.2,
+                ),
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 3),
+              const SizedBox(height: 2),
               Text(
                 '$userLabel · Rate: ${exchange.exchangeRate.isFinite ? exchange.exchangeRate.toStringAsFixed(2) : '-'}',
-                style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                style: TextStyle(
+                  fontSize: 12,
+                  height: 1.2,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 3),
+              const SizedBox(height: 2),
               Text(
                 Formatters.formatDate(exchange.date),
-                style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.outline),
+                style: TextStyle(
+                  fontSize: 11,
+                  height: 1.2,
+                  color: Theme.of(context).colorScheme.outline,
+                ),
               ),
             ],
           ),
@@ -79,6 +94,10 @@ Widget buildExchangeTile({
             style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold, color: exchangeColor),
           ),
         ),
+        if (trailingAffordance != null) ...[
+          const SizedBox(width: 4),
+          trailingAffordance,
+        ],
       ],
     ),
   );

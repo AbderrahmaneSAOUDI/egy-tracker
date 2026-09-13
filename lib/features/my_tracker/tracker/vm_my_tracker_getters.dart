@@ -37,12 +37,35 @@ mixin MyTrackerGettersMixin {
       MyTrackerProfiles.findMyProfile(users, user.uid, user.email ?? '');
   InitialBalance? get myInitialBalance =>
       MyTrackerProfiles.findMyInitialBalance(balances, user.uid, user.email ?? '');
+  InitialBalance? get friendInitialBalance =>
+      MyTrackerProfiles.findMyInitialBalance(
+        balances,
+        friendProfile?.id ?? friendEmailDoc?.email ?? '',
+        friendEmailDoc?.email ?? friendProfile?.email ?? '',
+      );
 
   bool get isPrimaryUser =>
       MyTrackerProfiles.checkIsPrimaryUser(user.email ?? '', allowedEmails);
 
   double get myUsdBalance => _bal('USD');
   double get myEgpBalance => _bal('EGP');
+  double get friendUsdBalance => feedViewModel?.friendUsdBalance ?? _friendBal('USD');
+  double get friendEgpBalance => feedViewModel?.friendEgpBalance ?? _friendBal('EGP');
+
+  double _friendBal(String cur) {
+    final fId = friendProfile?.id ?? friendEmailDoc?.email;
+    if (fId == null) return 0.0;
+    return MyTrackerCalculator.calculateCashBalance(
+      userId: fId,
+      currency: cur,
+      initialBalance: friendInitialBalance,
+      exchanges: exchanges,
+      expenses: expenses,
+      borrows: borrows,
+      userEmail: friendEmailDoc?.email ?? friendProfile?.email,
+      isPrimaryUser: !isPrimaryUser,
+    );
+  }
 
   double _bal(String cur) => MyTrackerCalculator.calculateCashBalance(
         userId: user.uid,
@@ -74,8 +97,20 @@ mixin MyTrackerGettersMixin {
       case MyTrackerFilter.sharedExpenses:
         return sharedExpenses;
       case MyTrackerFilter.all:
-      case MyTrackerFilter.exchanges:
         return allPersonalExpenses;
+      case MyTrackerFilter.exchanges:
+        return const [];
+    }
+  }
+
+  List<Exchange> get filteredExchanges {
+    switch (filter) {
+      case MyTrackerFilter.all:
+      case MyTrackerFilter.exchanges:
+        return myExchanges;
+      case MyTrackerFilter.myExpenses:
+      case MyTrackerFilter.sharedExpenses:
+        return const [];
     }
   }
 

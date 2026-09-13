@@ -41,7 +41,7 @@ class TravelerBalanceCard extends StatelessWidget {
     final accentColor = isCurrentUser
         ? (isDark ? AppTheme.googleBlueDark : AppTheme.googleBlue)
         : (isDark ? const Color(0xFFA78BFA) : const Color(0xFF7C3AED));
-    final badge = roleLabel ?? (isCurrentUser ? 'You' : 'Friend');
+    final badge = roleLabel;
 
     return Container(
       decoration: buildBalanceCardDecoration(
@@ -81,7 +81,7 @@ class TravelerBalanceCard extends StatelessWidget {
               ),
               Container(
                 width: 1.2,
-                height: 44,
+                height: 28,
                 margin: const EdgeInsets.symmetric(horizontal: 14),
                 color: isDark ? const Color(0xFF262C38) : const Color(0xFFE2E8F0),
               ),

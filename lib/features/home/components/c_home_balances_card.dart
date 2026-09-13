@@ -51,7 +51,9 @@ class HomeBalancesCard extends StatelessWidget {
         // 2. Travel Partner Standalone Card
         if (friendEmail != null)
           TravelerBalanceCard(
-            name: friendName ?? 'Friend',
+            name: (friendName != null && friendName!.isNotEmpty)
+                ? friendName!
+                : friendEmail!,
             photoUrl: friendPhotoUrl,
             email: friendEmail!,
             isCurrentUser: false,

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../../core/components/c_segmented_pill_bar.dart';
 import '../../core/components/c_traveler_balance_card.dart';
 import '../../core/services/f_firestore.dart';
 import '../../core/utils/m_auth_helpers.dart';
@@ -78,9 +79,39 @@ class _MyTrackerScreenState extends State<MyTrackerScreen> {
                 egpAmount: _viewModel.myEgpBalance,
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+              child: SegmentedPillBar<MyTrackerFilter>(
+                selectedValue: _viewModel.filter,
+                onValueChanged: _viewModel.setFilter,
+                items: [
+                  SegmentedPillItem(
+                    value: MyTrackerFilter.all,
+                    label: 'All',
+                    count: _viewModel.allPersonalExpenses.length +
+                        _viewModel.myExchanges.length,
+                  ),
+                  SegmentedPillItem(
+                    value: MyTrackerFilter.myExpenses,
+                    label: 'Expenses',
+                    count: _viewModel.myExpenses.length,
+                  ),
+                  SegmentedPillItem(
+                    value: MyTrackerFilter.exchanges,
+                    label: 'Exchanges',
+                    count: _viewModel.myExchanges.length,
+                  ),
+                  SegmentedPillItem(
+                    value: MyTrackerFilter.sharedExpenses,
+                    label: 'Splits',
+                    count: _viewModel.sharedExpenses.length,
+                  ),
+                ],
+              ),
+            ),
             Expanded(
               child: MyTrackerExpenseList(
-                expenses: _viewModel.allPersonalExpenses,
+                expenses: _viewModel.filteredExpenses,
                 user: widget.user,
                 friendName: friendName,
                 viewModel: _viewModel,

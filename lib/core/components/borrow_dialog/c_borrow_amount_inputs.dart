@@ -17,6 +17,7 @@ class BorrowAmountInputs extends StatelessWidget {
   final double effectiveLimitEgp;
   final bool isDark;
   final VoidCallback onChanged;
+  final VoidCallback? onSubmit;
 
   const BorrowAmountInputs({
     super.key,
@@ -32,6 +33,7 @@ class BorrowAmountInputs extends StatelessWidget {
     required this.effectiveLimitEgp,
     required this.isDark,
     required this.onChanged,
+    this.onSubmit,
   });
 
   @override
@@ -44,6 +46,7 @@ class BorrowAmountInputs extends StatelessWidget {
           controller: usdController,
           textAlign: TextAlign.right,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          textInputAction: TextInputAction.next,
           inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))],
           enabled: !isSubmitting,
           onChanged: (_) => onChanged(),
@@ -73,6 +76,8 @@ class BorrowAmountInputs extends StatelessWidget {
           controller: egpController,
           textAlign: TextAlign.right,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          textInputAction: TextInputAction.done,
+          onFieldSubmitted: onSubmit != null ? (_) => onSubmit!() : null,
           inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))],
           enabled: !isSubmitting,
           onChanged: (_) => onChanged(),

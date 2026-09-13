@@ -69,6 +69,7 @@ class HomeActivitiesList extends StatelessWidget {
                 currentUserEmail: user.email,
                 friendName: friendName,
                 isPrimaryUser: viewModel.isPrimaryUser,
+                tileIndex: index,
                 onEdit: () => HomeTabActions.editItem(
                   context: context,
                   item: item,

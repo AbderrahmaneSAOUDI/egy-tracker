@@ -19,6 +19,7 @@ class BorrowDialogContent extends StatelessWidget {
   final ValueChanged<String> onModeChanged;
   final VoidCallback onChanged;
   final ValueChanged<DateTime> onDateChanged;
+  final VoidCallback? onSubmit;
 
   const BorrowDialogContent({
     super.key,
@@ -35,6 +36,7 @@ class BorrowDialogContent extends StatelessWidget {
     required this.onModeChanged,
     required this.onChanged,
     required this.onDateChanged,
+    this.onSubmit,
   });
 
   @override
@@ -67,6 +69,7 @@ class BorrowDialogContent extends StatelessWidget {
               effectiveLimitEgp: limits.effectiveLimitEgp,
               isDark: isDark,
               onChanged: onChanged,
+              onSubmit: onSubmit,
             ),
             const SizedBox(height: 14),
             BorrowDatePicker(

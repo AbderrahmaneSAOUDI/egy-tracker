@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'c_app_snack_bar.dart';
 import 'c_confirmation_dialog.dart';
 import '../models/mod_activity_item.dart';
+import '../utils/m_formatters.dart';
 
 /// Shows a standardized confirmation dialog for deleting an activity item
 /// (Expense, Exchange, or Borrow record).
@@ -19,11 +21,16 @@ Future<void> showDeleteActivityDialog({
     icon = Icons.receipt_long_rounded;
   } else if (item.isExchange) {
     title = 'Delete Exchange';
-    name = 'this exchange';
+    name =
+        '${Formatters.formatCurrency(item.exchange!.fromAmount, item.exchange!.fromCurrency)} → ${Formatters.formatCurrency(item.exchange!.toAmount, item.exchange!.toCurrency)}';
     icon = Icons.sync_alt_rounded;
   } else {
     title = 'Delete Borrow Record';
-    name = 'this borrow record';
+    final borrow = item.borrow!;
+    final parts = <String>[];
+    if (borrow.usdAmount > 0) parts.add(Formatters.formatUsd(borrow.usdAmount));
+    if (borrow.egpAmount > 0) parts.add(Formatters.formatEgp(borrow.egpAmount));
+    name = parts.isNotEmpty ? parts.join(' & ') : 'borrow record';
     icon = Icons.handshake_rounded;
   }
 
@@ -37,6 +44,13 @@ Future<void> showDeleteActivityDialog({
     isDestructive: true,
     onConfirm: () async {
       await onDelete();
+      if (context.mounted) {
+        AppSnackBar.show(
+          context,
+          message: 'Deleted "$name"',
+          type: AppSnackBarType.info,
+        );
+      }
       return true;
     },
   );

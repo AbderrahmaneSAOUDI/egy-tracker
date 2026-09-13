@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../c_app_snack_bar.dart';
 import '../../models/mod_borrow.dart';
 import '../../utils/m_formatters.dart';
 
@@ -42,21 +43,19 @@ class BorrowSubmitHandler {
       final egpText = egp > 0 ? Formatters.formatEgp(egp) : '';
       final andText = (usd > 0 && egp > 0) ? ' and ' : '';
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(initialBorrow != null
-              ? 'Updated $actionText: $usdText$andText$egpText'
-              : 'Recorded $actionText: $usdText$andText$egpText'),
-          behavior: SnackBarBehavior.floating,
-        ),
+      AppSnackBar.show(
+        context,
+        message: initialBorrow != null
+            ? 'Updated $actionText: $usdText$andText$egpText'
+            : 'Recorded $actionText: $usdText$andText$egpText',
+        type: AppSnackBarType.success,
       );
     } else if (dialogContext.mounted) {
       setSubmitting(false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Failed to save borrow record. Please check your connection and try again.'),
-          behavior: SnackBarBehavior.floating,
-        ),
+      AppSnackBar.show(
+        context,
+        message: 'Failed to save borrow record. Please check your connection and try again.',
+        type: AppSnackBarType.error,
       );
     }
   }

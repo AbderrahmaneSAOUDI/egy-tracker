@@ -10,6 +10,7 @@ class EditInitialBalancesForm extends StatelessWidget {
   final bool isSubmitting;
   final bool isDark;
   final ColorScheme colorScheme;
+  final VoidCallback? onSubmit;
 
   const EditInitialBalancesForm({
     super.key,
@@ -19,6 +20,7 @@ class EditInitialBalancesForm extends StatelessWidget {
     required this.isSubmitting,
     required this.isDark,
     required this.colorScheme,
+    this.onSubmit,
   });
 
   @override
@@ -45,6 +47,7 @@ class EditInitialBalancesForm extends StatelessWidget {
             colorDark: AppTheme.usdColorDark,
             isSubmitting: isSubmitting,
             isDark: isDark,
+            textInputAction: TextInputAction.next,
           ),
           const SizedBox(height: 16),
           InitialBalanceInputField(
@@ -55,6 +58,8 @@ class EditInitialBalancesForm extends StatelessWidget {
             colorDark: AppTheme.egpColorDark,
             isSubmitting: isSubmitting,
             isDark: isDark,
+            textInputAction: TextInputAction.done,
+            onFieldSubmitted: onSubmit != null ? (_) => onSubmit!() : null,
           ),
         ],
       ),

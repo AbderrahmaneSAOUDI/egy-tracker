@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../c_app_snack_bar.dart';
 import '../../models/mod_expense.dart';
 import 'c_expense_dialog_models.dart';
 import 'c_expense_dialog_validation.dart';
@@ -16,6 +17,7 @@ class ExpenseSubmitHandler {
     required double customMePercentage,
     required double customFriendPercentage,
     required DateTime selectedDate,
+    required ExpenseDialogBalances balances,
     required void Function(bool) setSubmitting,
   }) async {
     if (!formKey.currentState!.validate()) return;
@@ -31,6 +33,23 @@ class ExpenseSubmitHandler {
     if (pcts == null) return;
 
     final amount = double.tryParse(params.amountController.text.trim()) ?? 0.0;
+    final overdraftError = balances.getOverdraftError(
+      amount: amount,
+      splitType: splitType,
+      customMePercentage: customMePercentage,
+      customFriendPercentage: customFriendPercentage,
+      paidBy: paidBy,
+      currency: selectedCurrency,
+    );
+    if (overdraftError != null) {
+      AppSnackBar.show(
+        context,
+        message: overdraftError,
+        type: AppSnackBarType.error,
+      );
+      return;
+    }
+
     setSubmitting(true);
 
     final actualPayerId = paidBy == 'friend' ? params.friendId : params.currentUserId;
@@ -73,11 +92,10 @@ class ExpenseSubmitHandler {
         confirmationText = 'Added expense: ${expense.title}';
       }
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(confirmationText),
-          behavior: SnackBarBehavior.floating,
-        ),
+      AppSnackBar.show(
+        context,
+        message: confirmationText,
+        type: AppSnackBarType.success,
       );
     } else if (params.dialogContext.mounted) {
       setSubmitting(false);

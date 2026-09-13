@@ -25,16 +25,35 @@ class MyTrackerExpenseList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final exchanges = viewModel.myExchanges;
+    final exchanges = viewModel.filteredExchanges;
     final totalCount = expenses.length + exchanges.length;
 
     if (totalCount == 0) {
-      return const SingleChildScrollView(
-        key: ValueKey('my_tracker_list_view'),
-        padding: EdgeInsets.fromLTRB(12, 0, 12, 90),
+      final (title, icon) = switch (viewModel.filter) {
+        MyTrackerFilter.all => (
+            'No personal expenses yet',
+            Icons.receipt_long_outlined
+          ),
+        MyTrackerFilter.myExpenses => (
+            'No 100% personal expenses',
+            Icons.person_outline_rounded
+          ),
+        MyTrackerFilter.exchanges => (
+            'No exchanges yet',
+            Icons.sync_alt_rounded
+          ),
+        MyTrackerFilter.sharedExpenses => (
+            'No split expenses',
+            Icons.group_outlined
+          ),
+      };
+
+      return SingleChildScrollView(
+        key: const ValueKey('my_tracker_list_view'),
+        padding: const EdgeInsets.fromLTRB(12, 0, 12, 90),
         child: EmptyState(
-          icon: Icons.receipt_long_outlined,
-          title: 'No personal expenses yet',
+          icon: icon,
+          title: title,
           subtitle: 'Expenses where you have a personal share will appear here.',
         ),
       );
@@ -59,6 +78,7 @@ class MyTrackerExpenseList extends StatelessWidget {
               personalShare: share,
               isMyTrackerView: true,
               isPrimaryUser: viewModel.isPrimaryUser,
+              tileIndex: index,
               onEdit: () => MyTrackerActions.openEditExpenseDialog(
                 context: context,
                 expense: exp,
@@ -85,6 +105,18 @@ class MyTrackerExpenseList extends StatelessWidget {
             friendName: friendName,
             isMyTrackerView: true,
             isPrimaryUser: viewModel.isPrimaryUser,
+            tileIndex: index,
+            onEdit: () => MyTrackerActions.openEditExchangeDialog(
+              context: context,
+              exchange: exch,
+              currentUserId: user.uid,
+              viewModel: viewModel,
+            ),
+            onDelete: () => MyTrackerActions.openDeleteExchangeDialog(
+              context: context,
+              exchange: exch,
+              viewModel: viewModel,
+            ),
           ),
         );
       },

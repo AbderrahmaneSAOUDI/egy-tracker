@@ -15,6 +15,7 @@ Widget buildExpenseTile({
   required bool isPrimaryUser,
   required bool isMyTrackerView,
   required double? personalShare,
+  Widget? trailingAffordance,
 }) {
   final isUsd = expense.currency.toUpperCase().trim() == 'USD';
   final currencyColor = isUsd
@@ -78,22 +79,36 @@ Widget buildExpenseTile({
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 expense.title,
-                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, letterSpacing: -0.2),
+                style: const TextStyle(
+                  fontSize: 15,
+                  height: 1.2,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: -0.2,
+                ),
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 3),
+              const SizedBox(height: 2),
               Text(
                 '$payerLabel · $splitLabel',
-                style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                style: TextStyle(
+                  fontSize: 12,
+                  height: 1.2,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 3),
+              const SizedBox(height: 2),
               Text(
                 Formatters.formatDate(expense.date),
-                style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.outline),
+                style: TextStyle(
+                  fontSize: 11,
+                  height: 1.2,
+                  color: Theme.of(context).colorScheme.outline,
+                ),
               ),
             ],
           ),
@@ -107,6 +122,10 @@ Widget buildExpenseTile({
           isMyTrackerView: isMyTrackerView,
           personalShare: personalShare,
         ),
+        if (trailingAffordance != null) ...[
+          const SizedBox(width: 4),
+          trailingAffordance,
+        ],
       ],
     ),
   );

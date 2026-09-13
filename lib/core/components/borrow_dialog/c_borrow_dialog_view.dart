@@ -95,6 +95,7 @@ class _BorrowDialogViewState extends State<BorrowDialogView> {
         onModeChanged: (m) => setState(() => _borrowMode = m),
         onChanged: () => setState(() {}),
         onDateChanged: (d) => setState(() => _selectedDate = d),
+        onSubmit: limits.canSubmit && !_isSubmitting ? doSubmit : null,
       ),
     );
   }

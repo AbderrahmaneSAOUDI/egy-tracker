@@ -61,7 +61,7 @@ class _InitialBalancesCardState extends State<InitialBalancesCard> {
       iconColor: isDark ? AppTheme.usdColorDark : AppTheme.usdColorLight,
       title: 'Initial Balances',
       isCollapsible: true,
-      initiallyExpanded: false,
+      initiallyExpanded: true,
       child: StreamBuilder<List<InitialBalance>>(
         stream: _initialBalancesStream,
         builder: (context, balancesSnap) {
@@ -111,7 +111,9 @@ class _InitialBalancesCardState extends State<InitialBalancesCard> {
                             ? () => showEditInitialBalancesDialog(
                                 context: context,
                                 userId: data.friendUserId!,
-                                userName: data.friendDisplayName ?? 'Friend',
+                                userName: data.friendDisplayName ??
+                                    data.friendEmailDoc?.email ??
+                                    '',
                                 currentUsd: data.friendBalance?.usdAmount ?? 0.0,
                                 currentEgp: data.friendBalance?.egpAmount ?? 0.0,
                                 onSave: widget.viewModel.setInitialBalances,

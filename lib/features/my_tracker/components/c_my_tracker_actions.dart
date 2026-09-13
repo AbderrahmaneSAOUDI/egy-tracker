@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import '../../../core/components/c_add_exchange_dialog.dart';
 import '../../../core/components/c_add_expense_dialog.dart';
 import '../../../core/components/c_delete_activity_dialog.dart';
 import '../../../core/models/mod_activity_item.dart';
+import '../../../core/models/mod_exchange.dart';
 import '../../../core/models/mod_expense.dart';
 import '../vm_my_tracker.dart';
 
@@ -28,8 +30,8 @@ class MyTrackerActions {
       friendUserEmail: friendEmail,
       myUsdBalance: viewModel.myUsdBalance,
       myEgpBalance: viewModel.myEgpBalance,
-      friendUsdBalance: 0.0,
-      friendEgpBalance: 0.0,
+      friendUsdBalance: viewModel.friendUsdBalance,
+      friendEgpBalance: viewModel.friendEgpBalance,
       initialExpense: expense,
       isPrimaryUser: viewModel.isPrimaryUser,
       onSave: (updated) => viewModel.updateExpense(updated),
@@ -45,6 +47,35 @@ class MyTrackerActions {
       context: context,
       item: ActivityItem.expense(expense),
       onDelete: () => viewModel.deleteExpense(expense.id),
+    );
+  }
+
+  static void openEditExchangeDialog({
+    required BuildContext context,
+    required Exchange exchange,
+    required String currentUserId,
+    required MyTrackerViewModel viewModel,
+  }) {
+    showAddExchangeDialog(
+      context: context,
+      currentUserId: currentUserId,
+      currentUserName: viewModel.myProfile?.name ?? 'You',
+      myUsdBalance: viewModel.myUsdBalance,
+      myEgpBalance: viewModel.myEgpBalance,
+      initialExchange: exchange,
+      onSave: viewModel.updateExchange,
+    );
+  }
+
+  static void openDeleteExchangeDialog({
+    required BuildContext context,
+    required Exchange exchange,
+    required MyTrackerViewModel viewModel,
+  }) {
+    showDeleteActivityDialog(
+      context: context,
+      item: ActivityItem.exchange(exchange),
+      onDelete: () => viewModel.deleteExchange(exchange.id),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// Styled input field for entering a single currency balance in initial balances.
 class InitialBalanceInputField extends StatelessWidget {
@@ -9,6 +10,8 @@ class InitialBalanceInputField extends StatelessWidget {
   final Color colorDark;
   final bool isSubmitting;
   final bool isDark;
+  final TextInputAction? textInputAction;
+  final ValueChanged<String>? onFieldSubmitted;
 
   const InitialBalanceInputField({
     super.key,
@@ -19,6 +22,8 @@ class InitialBalanceInputField extends StatelessWidget {
     required this.colorDark,
     required this.isSubmitting,
     required this.isDark,
+    this.textInputAction,
+    this.onFieldSubmitted,
   });
 
   @override
@@ -27,7 +32,19 @@ class InitialBalanceInputField extends StatelessWidget {
       controller: controller,
       textAlign: TextAlign.right,
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      textInputAction: textInputAction,
+      onFieldSubmitted: onFieldSubmitted,
       enabled: !isSubmitting,
+      inputFormatters: [
+        FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+        TextInputFormatter.withFunction((oldValue, newValue) {
+          final text = newValue.text;
+          if (text.indexOf('.') != text.lastIndexOf('.')) {
+            return oldValue;
+          }
+          return newValue;
+        }),
+      ],
       decoration: InputDecoration(
         labelText: label,
         hintText: '0.00',

@@ -6,6 +6,7 @@ import 'package:egy_tracker/core/models/mod_borrow.dart';
 import 'package:egy_tracker/core/models/mod_exchange.dart';
 import 'package:egy_tracker/core/models/mod_expense.dart';
 import 'package:egy_tracker/core/theme/t_app_theme.dart';
+import 'package:egy_tracker/core/components/c_add_action_sheet.dart';
 import 'package:egy_tracker/core/components/c_add_exchange_dialog.dart';
 import 'package:egy_tracker/core/components/c_add_expense_dialog.dart';
 import 'package:egy_tracker/core/components/c_borrow_dialog.dart';
@@ -94,6 +95,8 @@ void main() {
                     friendUserName: 'Friend',
                     myUsdBalance: 200,
                     myEgpBalance: 5000,
+                    friendUsdBalance: 200,
+                    friendEgpBalance: 5000,
                     onSave: (exp) async {
                       savedExpense = exp;
                       return true;
@@ -195,29 +198,152 @@ void main() {
       await tester.enterText(textFields.at(1), '1200');
       await tester.pumpAndSettle();
 
-      // Exceeds available physical cash -> Shows soft warning, but Save button remains enabled (Item 2.1)
-      expect(find.textContaining('Amount exceeds available cash'), findsOneWidget);
-      expect(tester.widget<FilledButton>(saveBtnFinder).onPressed, isNotNull);
+      // Exceeds available physical cash -> Shows error and disables Save button
+      expect(find.textContaining('exceeds your available cash'), findsOneWidget);
+      expect(tester.widget<FilledButton>(saveBtnFinder).onPressed, isNull);
 
       // Enter amount within balance (400 <= 1000) -> enabled and warning disappears
       await tester.enterText(textFields.at(1), '400');
       await tester.pumpAndSettle();
-      expect(find.textContaining('Amount exceeds available cash'), findsNothing);
+      expect(find.textContaining('exceeds your available cash'), findsNothing);
       expect(tester.widget<FilledButton>(saveBtnFinder).onPressed, isNotNull);
 
       // Switch to USD (user has 50 USD)
       await tester.tap(find.text('USD'));
       await tester.pumpAndSettle();
 
-      // 400 > 50 USD -> Shows soft warning, Save button remains enabled
-      expect(find.textContaining('Amount exceeds available cash'), findsOneWidget);
-      expect(tester.widget<FilledButton>(saveBtnFinder).onPressed, isNotNull);
+      // 400 > 50 USD -> Shows error, Save button is disabled
+      expect(find.textContaining('exceeds your available cash'), findsOneWidget);
+      expect(tester.widget<FilledButton>(saveBtnFinder).onPressed, isNull);
 
       // 40 <= 50 USD -> Save button enabled, warning disappears
       await tester.enterText(textFields.at(1), '40');
       await tester.pumpAndSettle();
-      expect(find.textContaining('Amount exceeds available cash'), findsNothing);
+      expect(find.textContaining('exceeds your available cash'), findsNothing);
       expect(tester.widget<FilledButton>(saveBtnFinder).onPressed, isNotNull);
+    });
+
+    testWidgets(
+        'Add Expense Dialog with 50/50 and custom split blocks saving when either share exceeds available cash',
+        (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () {
+                  showAddExpenseDialog(
+                    context: context,
+                    currentUserId: 'me_id',
+                    currentUserName: 'Me',
+                    friendUserId: 'friend_id',
+                    friendUserName: 'Friend',
+                    myUsdBalance: 100,
+                    myEgpBalance: 100, // Me has 100 EGP
+                    friendUsdBalance: 40,
+                    friendEgpBalance: 40, // Friend has 40 EGP
+                    onSave: (exp) async => true,
+                  );
+                },
+                child: const Text('Open Expense'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Open Expense'));
+      await tester.pumpAndSettle();
+
+      final textFields = find.byType(TextFormField);
+      final saveBtnFinder = find.widgetWithText(FilledButton, 'Save');
+
+      await tester.enterText(textFields.at(0), 'Lunch');
+      await tester.enterText(textFields.at(1), '120');
+      await tester.pumpAndSettle();
+
+      // Select 50 / 50 split
+      await tester.tap(find.text('50 / 50'));
+      await tester.pumpAndSettle();
+
+      // In 50/50 split of 120 EGP, each share is 60 EGP.
+      // Friend only has 40 EGP, so friend's share exceeds available cash!
+      expect(find.textContaining("Friend's share"), findsOneWidget);
+      expect(tester.widget<FilledButton>(saveBtnFinder).onPressed, isNull);
+
+      // Change amount to 60 EGP (each share is 30 EGP <= 40 EGP for friend and <= 100 EGP for me)
+      await tester.enterText(textFields.at(1), '60');
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining("exceeds available cash"), findsNothing);
+      expect(tester.widget<FilledButton>(saveBtnFinder).onPressed, isNotNull);
+    });
+
+    testWidgets(
+        'ExpenseCashWarning animates the hint in and out using AnimatedSize and AnimatedSwitcher',
+        (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () {
+                  showAddExpenseDialog(
+                    context: context,
+                    currentUserId: 'me_id',
+                    currentUserName: 'Me',
+                    friendUserId: 'friend_id',
+                    friendUserName: 'Friend',
+                    myUsdBalance: 50,
+                    myEgpBalance: 1000,
+                    onSave: (exp) async => true,
+                  );
+                },
+                child: const Text('Open Expense'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Open Expense'));
+      await tester.pumpAndSettle();
+
+      // AnimatedSize and AnimatedSwitcher exist in the tree
+      expect(find.byType(ExpenseCashWarning), findsOneWidget);
+      expect(
+        find.descendant(of: find.byType(ExpenseCashWarning), matching: find.byType(AnimatedSize)),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: find.byType(ExpenseCashWarning), matching: find.byType(AnimatedSwitcher)),
+        findsOneWidget,
+      );
+
+      final textFields = find.byType(TextFormField);
+
+      // Initially amount is empty, no hint visible
+      expect(find.textContaining('exceeds your available cash'), findsNothing);
+
+      // Enter amount exceeding available cash (1200 > 1000 EGP)
+      await tester.enterText(textFields.at(1), '1200');
+      // Pump frame to start animation
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      // Settle animation
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('exceeds your available cash'), findsOneWidget);
+
+      // Lower amount within balance (500 <= 1000 EGP)
+      await tester.enterText(textFields.at(1), '500');
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('exceeds your available cash'), findsNothing);
     });
   });
 
@@ -265,12 +391,15 @@ void main() {
       await tester.enterText(textFields.at(1), '7500');
       await tester.pumpAndSettle();
 
-      // Error message indicates amount exceeds owned money (soft warning)
+      // Error message indicates amount exceeds owned money and Save button is disabled
       expect(find.textContaining('Exceeds owned money'), findsOneWidget);
+      final saveBtnFinder = find.widgetWithText(FilledButton, 'Save');
+      expect(tester.widget<FilledButton>(saveBtnFinder).onPressed, isNull);
 
       // Enter valid amount within owned ($50 <= $100)
       await tester.enterText(textFields.at(0), '50');
       await tester.pumpAndSettle();
+      expect(tester.widget<FilledButton>(saveBtnFinder).onPressed, isNotNull);
 
       // Try to save
       await tester.tap(find.text('Save'));
@@ -814,6 +943,251 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(deleted, isTrue);
+    });
+
+    testWidgets('showDeleteActivityDialog shows detailed exchange amount and currencies', (tester) async {
+      final exc = Exchange(
+        id: 'exc_1',
+        userId: 'u1',
+        fromCurrency: 'USD',
+        fromAmount: 50,
+        toCurrency: 'EGP',
+        toAmount: 2500,
+        exchangeRate: 50,
+        date: DateTime.now(),
+        createdAt: DateTime.now(),
+      );
+
+      bool deleted = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () => showDeleteActivityDialog(
+                  context: context,
+                  item: ActivityItem.exchange(exc),
+                  onDelete: () async => deleted = true,
+                ),
+                child: const Text('Delete Exc'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Delete Exc'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Delete Exchange'), findsOneWidget);
+      expect(
+        find.text('Are you sure you want to delete "\$50.00 → 2,500.00 EGP"? Cash balances will be updated.'),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.text('Delete'));
+      await tester.pumpAndSettle();
+
+      expect(deleted, isTrue);
+    });
+
+    testWidgets('showDeleteActivityDialog shows detailed borrow amounts', (tester) async {
+      final bor = Borrow(
+        id: 'bor_1',
+        borrowerId: 'u1',
+        lenderId: 'u2',
+        usdAmount: 30,
+        egpAmount: 500,
+        date: DateTime.now(),
+        createdAt: DateTime.now(),
+      );
+
+      bool deleted = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () => showDeleteActivityDialog(
+                  context: context,
+                  item: ActivityItem.borrow(bor),
+                  onDelete: () async => deleted = true,
+                ),
+                child: const Text('Delete Bor'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Delete Bor'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Delete Borrow Record'), findsOneWidget);
+      expect(
+        find.text('Are you sure you want to delete "\$30.00 & 500.00 EGP"? Cash balances will be updated.'),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.text('Delete'));
+      await tester.pumpAndSettle();
+
+      expect(deleted, isTrue);
+    });
+
+    testWidgets('showAddExpenseDialog submits form on keyboard done action', (tester) async {
+      Expense? savedExpense;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () {
+                  showAddExpenseDialog(
+                    context: context,
+                    currentUserId: 'me_id',
+                    currentUserName: 'Me',
+                    friendUserId: 'friend_id',
+                    friendUserName: 'Friend',
+                    myUsdBalance: 200,
+                    myEgpBalance: 5000,
+                    onSave: (exp) async {
+                      savedExpense = exp;
+                      return true;
+                    },
+                  );
+                },
+                child: const Text('Open Expense'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Open Expense'));
+      await tester.pumpAndSettle();
+
+      final textFields = find.byType(TextFormField);
+      await tester.enterText(textFields.at(0), 'Quick Taxi');
+      await tester.enterText(textFields.at(1), '75');
+      await tester.pumpAndSettle();
+
+      // Submit using keyboard action
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+
+      expect(savedExpense, isNotNull);
+      expect(savedExpense!.title, 'Quick Taxi');
+      expect(savedExpense!.amount, 75.0);
+    });
+
+    testWidgets('showAddExchangeDialog submits form on keyboard done action', (tester) async {
+      Exchange? savedExchange;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () {
+                  showAddExchangeDialog(
+                    context: context,
+                    currentUserId: 'me_id',
+                    currentUserName: 'Me',
+                    myUsdBalance: 100,
+                    myEgpBalance: 2000,
+                    onSave: (exc) async {
+                      savedExchange = exc;
+                      return true;
+                    },
+                  );
+                },
+                child: const Text('Open Exchange'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Open Exchange'));
+      await tester.pumpAndSettle();
+
+      final textFields = find.byType(TextFormField);
+      await tester.enterText(textFields.at(0), '40');
+      await tester.enterText(textFields.at(1), '2000');
+      await tester.pumpAndSettle();
+
+      // Submit using keyboard action on the focused field
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+
+      expect(savedExchange, isNotNull);
+      expect(savedExchange!.fromAmount, 40.0);
+      expect(savedExchange!.toAmount, 2000.0);
+    });
+
+    testWidgets('showAddActionSheet directly calls onAddExpense when borrow is disabled', (tester) async {
+      bool expenseTapped = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () => showAddActionSheet(
+                  context: context,
+                  onAddExpense: () => expenseTapped = true,
+                  onBorrowCurrency: () {},
+                ),
+                child: const Text('Open Sheet'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Open Sheet'));
+      await tester.pumpAndSettle();
+
+      expect(expenseTapped, isTrue);
+      expect(find.text('Add Expense'), findsNothing);
+    });
+
+    testWidgets('ExpenseCustomSplitSlider has 20 divisions for 5% step increments', (tester) async {
+      double selectedMe = 50.0;
+      double selectedFriend = 50.0;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: Scaffold(
+            body: ExpenseCustomSplitSlider(
+              customMePercentage: selectedMe,
+              customFriendPercentage: selectedFriend,
+              friendName: 'Ahmed',
+              blueColor: Colors.blue,
+              outlineColor: Colors.grey,
+              onCustomPercentageChanged: (me, friend) {
+                selectedMe = me;
+                selectedFriend = friend;
+              },
+            ),
+          ),
+        ),
+      );
+
+      final sliderFinder = find.byType(Slider);
+      expect(sliderFinder, findsOneWidget);
+      final slider = tester.widget<Slider>(sliderFinder);
+      expect(slider.divisions, equals(20));
     });
   });
 }

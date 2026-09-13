@@ -391,7 +391,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Balances card should be present
-      expect(find.text('You'), findsWidgets);
+      expect(find.text('Saoudi'), findsWidgets);
       expect(find.text('Friend'), findsWidgets);
       expect(find.text('\$150.00'), findsOneWidget);
       expect(find.text('2,000.00 EGP'), findsOneWidget);

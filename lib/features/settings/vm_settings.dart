@@ -121,7 +121,8 @@ class SettingsViewModel extends ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
-      _errorMessage = '$errorPrefix: $e';
+      final msg = e.toString().replaceFirst(RegExp(r'^Exception:\s*'), '');
+      _errorMessage = '$errorPrefix: $msg';
       _isProcessing = false;
       notifyListeners();
       return false;

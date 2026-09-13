@@ -36,11 +36,9 @@ class HomeTabScreen extends StatelessWidget {
 
         final activities = viewModel.filteredActivities;
 
-        return RefreshIndicator(
-          onRefresh: viewModel.refresh,
-          child: CustomScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            slivers: [
+        return CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(12, 10, 12, 0),
@@ -111,9 +109,8 @@ class HomeTabScreen extends StatelessWidget {
                 viewModel: viewModel,
               ),
             ],
-          ),
-        );
-      },
-    );
+          );
+        },
+      );
   }
 }

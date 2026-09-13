@@ -5,6 +5,7 @@ import 'c_expense_dialog_models.dart';
 import 'c_expense_dialog_payer.dart';
 import 'c_expense_dialog_split.dart';
 import 'c_expense_dialog_warning.dart';
+import '../../utils/m_validators.dart';
 
 /// Form body layout for the add/edit expense dialog.
 class ExpenseDialogBody extends StatelessWidget {
@@ -24,6 +25,7 @@ class ExpenseDialogBody extends StatelessWidget {
   final ValueChanged<String> onSplitTypeChanged;
   final void Function(double, double) onCustomSplitChanged;
   final ValueChanged<DateTime> onDateChanged;
+  final VoidCallback? onSubmit;
 
   const ExpenseDialogBody({
     super.key,
@@ -43,6 +45,7 @@ class ExpenseDialogBody extends StatelessWidget {
     required this.onSplitTypeChanged,
     required this.onCustomSplitChanged,
     required this.onDateChanged,
+    this.onSubmit,
   });
 
   @override
@@ -68,14 +71,26 @@ class ExpenseDialogBody extends StatelessWidget {
                 currencyColor: currencyColor,
                 isDark: isDark,
                 onCurrencyChanged: onCurrencyChanged,
+                onSubmit: onSubmit,
+                amountValidator: (val) {
+                  final posErr = Validators.validatePositiveAmount(val, selectedCurrency);
+                  if (posErr != null) return posErr;
+                  final amount = double.tryParse(val!.trim()) ?? 0.0;
+                  return balances.getOverdraftError(
+                    amount: amount,
+                    splitType: splitState.splitType,
+                    customMePercentage: splitState.customMePercentage,
+                    customFriendPercentage: splitState.customFriendPercentage,
+                    paidBy: paidBy,
+                    currency: selectedCurrency,
+                  );
+                },
               ),
               ExpenseCashWarning(
                 amountController: amountController,
                 paidBy: paidBy,
-                effectiveMyAvailable: balances.effectiveMyAvailable,
-                effectiveFriendAvailable: balances.effectiveFriendAvailable,
-                friendAvailableCash: balances.friendAvailableCash,
-                friendName: balances.friendName,
+                balances: balances,
+                splitState: splitState,
                 selectedCurrency: selectedCurrency,
                 isDark: isDark,
               ),

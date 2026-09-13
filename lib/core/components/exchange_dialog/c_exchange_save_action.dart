@@ -5,6 +5,7 @@ import '../../theme/t_app_theme.dart';
 class ExchangeSaveButton extends StatelessWidget {
   final TextEditingController fromAmountController;
   final TextEditingController toAmountController;
+  final double effectiveAvailable;
   final bool isSubmitting;
   final bool isDark;
   final VoidCallback onSave;
@@ -13,6 +14,7 @@ class ExchangeSaveButton extends StatelessWidget {
     super.key,
     required this.fromAmountController,
     required this.toAmountController,
+    required this.effectiveAvailable,
     required this.isSubmitting,
     required this.isDark,
     required this.onSave,
@@ -27,7 +29,10 @@ class ExchangeSaveButton extends StatelessWidget {
             double.tryParse(fromAmountController.text.trim()) ?? 0.0;
         final currentToAmt =
             double.tryParse(toAmountController.text.trim()) ?? 0.0;
-        final canSubmit = currentFromAmt > 0 && currentToAmt > 0 && !isSubmitting;
+        final canSubmit = currentFromAmt > 0 &&
+            currentToAmt > 0 &&
+            currentFromAmt <= effectiveAvailable &&
+            !isSubmitting;
 
         return FilledButton(
           onPressed: canSubmit ? onSave : null,

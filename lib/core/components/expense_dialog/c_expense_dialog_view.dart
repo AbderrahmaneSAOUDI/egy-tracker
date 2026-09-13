@@ -41,6 +41,18 @@ class _ExpenseDialogViewState extends State<ExpenseDialogView> {
 
   void _submit() {
     if (_isSubmitting) return;
+    final balances = ExpenseDialogBalances.calculate(
+      selectedCurrency: _currency,
+      myUsdBalance: p.myUsdBalance,
+      myEgpBalance: p.myEgpBalance,
+      friendUsdBalance: p.friendUsdBalance,
+      friendEgpBalance: p.friendEgpBalance,
+      initialExpense: p.initialExpense,
+      currentUserId: p.currentUserId,
+      friendId: p.friendId,
+      friendName: p.friendName,
+      isPrimaryUser: p.isPrimaryUser,
+    );
     ExpenseSubmitHandler.submit(
       context: context,
       params: p,
@@ -51,6 +63,7 @@ class _ExpenseDialogViewState extends State<ExpenseDialogView> {
       customMePercentage: _customMePct,
       customFriendPercentage: _customFriendPct,
       selectedDate: _selectedDate,
+      balances: balances,
       setSubmitting: (val) => setState(() => _isSubmitting = val),
     );
   }
@@ -63,10 +76,16 @@ class _ExpenseDialogViewState extends State<ExpenseDialogView> {
         : (isDark ? AppTheme.egpColorDark : AppTheme.egpColorLight);
 
     final balances = ExpenseDialogBalances.calculate(
-      selectedCurrency: _currency, myUsdBalance: p.myUsdBalance,
-      myEgpBalance: p.myEgpBalance, friendUsdBalance: p.friendUsdBalance,
-      friendEgpBalance: p.friendEgpBalance, initialExpense: p.initialExpense,
-      currentUserId: p.currentUserId, friendId: p.friendId, friendName: p.friendName,
+      selectedCurrency: _currency,
+      myUsdBalance: p.myUsdBalance,
+      myEgpBalance: p.myEgpBalance,
+      friendUsdBalance: p.friendUsdBalance,
+      friendEgpBalance: p.friendEgpBalance,
+      initialExpense: p.initialExpense,
+      currentUserId: p.currentUserId,
+      friendId: p.friendId,
+      friendName: p.friendName,
+      isPrimaryUser: p.isPrimaryUser,
     );
     final splitState = ExpenseDialogSplitState(
       splitType: _splitType,
@@ -83,8 +102,15 @@ class _ExpenseDialogViewState extends State<ExpenseDialogView> {
       onCancel: () => Navigator.of(p.dialogContext).pop(),
       onAction: _isSubmitting ? null : _submit,
       customAction: ExpenseSaveButton(
-        titleController: p.titleController, amountController: p.amountController,
-        splitState: splitState, isSubmitting: _isSubmitting, isDark: isDark, onSave: _submit,
+        titleController: p.titleController,
+        amountController: p.amountController,
+        splitState: splitState,
+        balances: balances,
+        paidBy: _paidBy,
+        currency: _currency,
+        isSubmitting: _isSubmitting,
+        isDark: isDark,
+        onSave: _submit,
       ),
       content: ExpenseDialogBody(
         formKey: _formKey, titleController: p.titleController, amountController: p.amountController,
@@ -95,6 +121,7 @@ class _ExpenseDialogViewState extends State<ExpenseDialogView> {
         onSplitTypeChanged: (s) => setState(() => _splitType = s),
         onCustomSplitChanged: (me, fr) => setState(() { _customMePct = me; _customFriendPct = fr; }),
         onDateChanged: (d) => setState(() => _selectedDate = d),
+        onSubmit: _submit,
       ),
     );
   }

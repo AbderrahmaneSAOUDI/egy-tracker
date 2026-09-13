@@ -50,6 +50,10 @@ mixin FirestoreEmailsMixin on FirestoreServiceBase {
       return;
     }
 
+    if (snapshot.docs.length >= 2) {
+      throw Exception('Maximum of 2 allowed users reached (you + 1 friend).');
+    }
+
     final docRef = _allowedEmailsCollection.doc();
     final allowedEmail = AllowedEmail(
       id: docRef.id,

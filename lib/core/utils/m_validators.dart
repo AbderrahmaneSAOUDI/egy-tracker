@@ -61,6 +61,23 @@ class Validators {
     return null;
   }
 
+  /// Validates that a cash amount is strictly positive and does not exceed [maxLimit].
+  static String? validateAmountWithinLimit(
+    String? value,
+    String currencyLabel,
+    double maxLimit, {
+    String? limitDescription,
+  }) {
+    final posErr = validatePositiveAmount(value, currencyLabel);
+    if (posErr != null) return posErr;
+    final parsed = double.tryParse(value!.trim()) ?? 0.0;
+    if (parsed > maxLimit) {
+      final desc = limitDescription ?? 'available $currencyLabel';
+      return 'Amount exceeds $desc';
+    }
+    return null;
+  }
+
   /// Validates that from and to currencies are distinct and supported (USD/EGP).
   static String? validateExchangeCurrencies(String fromCurrency, String toCurrency) {
     if (fromCurrency.trim().toUpperCase() == toCurrency.trim().toUpperCase()) {

@@ -19,6 +19,7 @@ class ActivityTile extends StatelessWidget {
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
   final VoidCallback? onTap;
+  final int? tileIndex;
 
   const ActivityTile({
     super.key,
@@ -32,11 +33,37 @@ class ActivityTile extends StatelessWidget {
     this.onEdit,
     this.onDelete,
     this.onTap,
+    this.tileIndex,
   });
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final hintColor = isDark
+        ? Colors.white.withValues(alpha: 0.35)
+        : Colors.black.withValues(alpha: 0.28);
+
+    Widget? trailingAffordance;
+    if (tileIndex == 0 && onEdit != null) {
+      trailingAffordance = Tooltip(
+        message: 'Swipe right to edit',
+        child: Icon(
+          Icons.chevron_right_rounded,
+          size: 18,
+          color: hintColor,
+        ),
+      );
+    } else if (tileIndex == 1 && onDelete != null) {
+      trailingAffordance = Tooltip(
+        message: 'Swipe left to delete',
+        child: Icon(
+          Icons.chevron_left_rounded,
+          size: 18,
+          color: hintColor,
+        ),
+      );
+    }
+
     Widget cardFace;
 
     if (item.isExpense && item.expense != null) {
@@ -50,6 +77,7 @@ class ActivityTile extends StatelessWidget {
         isPrimaryUser: isPrimaryUser,
         isMyTrackerView: isMyTrackerView,
         personalShare: personalShare,
+        trailingAffordance: trailingAffordance,
       );
     } else if (item.isExchange && item.exchange != null) {
       cardFace = buildExchangeTile(
@@ -58,6 +86,7 @@ class ActivityTile extends StatelessWidget {
         isDark: isDark,
         currentUserId: currentUserId,
         friendName: friendName,
+        trailingAffordance: trailingAffordance,
       );
     } else if (item.isBorrow && item.borrow != null) {
       cardFace = buildBorrowTile(
@@ -67,6 +96,7 @@ class ActivityTile extends StatelessWidget {
         currentUserId: currentUserId,
         currentUserEmail: currentUserEmail,
         friendName: friendName,
+        trailingAffordance: trailingAffordance,
       );
     } else {
       cardFace = const SizedBox.shrink();

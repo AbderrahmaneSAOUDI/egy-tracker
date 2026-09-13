@@ -6,6 +6,7 @@ import '../../../core/models/mod_user_profile.dart';
 import '../../../core/utils/m_auth_helpers.dart';
 import '../vm_settings.dart';
 import 'c_add_email_dialog.dart';
+import 'c_add_friend_placeholder_tile.dart';
 import 'c_allowed_email_tile.dart';
 import 'c_confirm_delete_email_dialog.dart';
 
@@ -29,57 +30,71 @@ class AllowedEmailsList extends StatelessWidget {
       builder: (context, usersSnapshot) {
         final users = usersSnapshot.data ?? [];
 
-        return Column(
-          children: emails.map((allowed) {
-            final normEmail = allowed.email.toLowerCase().trim();
-            final isCurrentUser =
-                normEmail == (user.email ?? '').toLowerCase().trim();
-            final isSuperAdminEmail =
-                normEmail == AppConfig.adminEmail.toLowerCase().trim();
-            final canManage =
-                viewModel.isSuperAdmin && !isCurrentUser && !isSuperAdminEmail;
+        final emailTiles = emails.map((allowed) {
+          final normEmail = allowed.email.toLowerCase().trim();
+          final isCurrentUser =
+              normEmail == (user.email ?? '').toLowerCase().trim();
+          final isSuperAdminEmail =
+              normEmail == AppConfig.adminEmail.toLowerCase().trim();
+          final canManage =
+              viewModel.isSuperAdmin && !isCurrentUser && !isSuperAdminEmail;
 
-            UserProfile? matchingProfile;
-            for (final u in users) {
-              if (u.email.toLowerCase().trim() == normEmail) {
-                matchingProfile = u;
-                break;
-              }
+          UserProfile? matchingProfile;
+          for (final u in users) {
+            if (u.email.toLowerCase().trim() == normEmail) {
+              matchingProfile = u;
+              break;
             }
+          }
 
-            final photoUrl = isCurrentUser
-                ? resolveUserPhoto(user, matchingProfile?.photoUrl)
-                : matchingProfile?.photoUrl;
-            final displayName = isCurrentUser
-                ? resolveUserName(user, matchingProfile?.name)
-                : matchingProfile?.name;
+          final photoUrl = isCurrentUser
+              ? resolveUserPhoto(user, matchingProfile?.photoUrl)
+              : matchingProfile?.photoUrl;
+          final displayName = isCurrentUser
+              ? resolveUserName(user, matchingProfile?.name)
+              : matchingProfile?.name;
 
-            return AllowedEmailTile(
-              allowedEmail: allowed,
-              isCurrentUser: isCurrentUser,
-              photoUrl: photoUrl,
-              displayName: displayName,
-              onEdit: canManage
-                  ? () => showAddEmailDialog(
-                        context: context,
-                        initialEmail: allowed.email,
-                        onAddEmail: (newEmail) async {
-                          await viewModel.updateAllowedEmail(
-                              allowed.id, newEmail);
-                          return true;
-                        },
-                      )
-                  : null,
-              onDelete: canManage
-                  ? () => showConfirmDeleteEmailDialog(
-                        context: context,
-                        allowedEmail: allowed,
-                        isCurrentUser: isCurrentUser,
-                        onDeleteEmail: viewModel.deleteAllowedEmail,
-                      )
-                  : null,
-            );
-          }).toList(),
+          return AllowedEmailTile(
+            allowedEmail: allowed,
+            isCurrentUser: isCurrentUser,
+            photoUrl: photoUrl,
+            displayName: displayName,
+            onEdit: canManage
+                ? () => showAddEmailDialog(
+                      context: context,
+                      initialEmail: allowed.email,
+                      onAddEmail: (newEmail) async {
+                        await viewModel.updateAllowedEmail(
+                            allowed.id, newEmail);
+                        return true;
+                      },
+                    )
+                : null,
+            onDelete: canManage
+                ? () => showConfirmDeleteEmailDialog(
+                      context: context,
+                      allowedEmail: allowed,
+                      isCurrentUser: isCurrentUser,
+                      onDeleteEmail: viewModel.deleteAllowedEmail,
+                    )
+                : null,
+          );
+        }).toList();
+
+        final showPlaceholder = viewModel.isSuperAdmin && emails.length == 1;
+
+        return Column(
+          children: [
+            ...emailTiles,
+            if (showPlaceholder)
+              AddFriendPlaceholderTile(
+                onTap: () => showAddEmailDialog(
+                  context: context,
+                  onAddEmail: viewModel.addAllowedEmail,
+                  getErrorMessage: () => viewModel.errorMessage,
+                ),
+              ),
+          ],
         );
       },
     );

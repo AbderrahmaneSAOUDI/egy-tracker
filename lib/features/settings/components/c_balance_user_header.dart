@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../core/components/c_badge.dart';
 import '../../../core/components/c_user_avatar.dart';
 import '../../../core/theme/t_app_theme.dart';
 import 'c_balance_edit_button.dart';
@@ -68,11 +67,6 @@ class BalanceUserHeader extends StatelessWidget {
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  const SizedBox(width: 6),
-                  StatusBadge(
-                    label: isCurrentUser ? 'You' : 'Friend',
-                    color: color,
                   ),
                 ],
               ),

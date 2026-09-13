@@ -16,6 +16,7 @@ class ExchangeDialogContent extends StatelessWidget {
   final DateTime selectedDate;
   final void Function(String from, String to) onDirectionChanged;
   final ValueChanged<DateTime> onDateChanged;
+  final VoidCallback? onSubmit;
 
   const ExchangeDialogContent({
     super.key,
@@ -30,6 +31,7 @@ class ExchangeDialogContent extends StatelessWidget {
     required this.selectedDate,
     required this.onDirectionChanged,
     required this.onDateChanged,
+    this.onSubmit,
   });
 
   @override
@@ -55,6 +57,7 @@ class ExchangeDialogContent extends StatelessWidget {
               effectiveAvailable: effectiveAvailable,
               isSubmitting: isSubmitting,
               isDark: isDark,
+              onSubmit: onSubmit,
             ),
             const SizedBox(height: 14),
             ExchangeDatePicker(

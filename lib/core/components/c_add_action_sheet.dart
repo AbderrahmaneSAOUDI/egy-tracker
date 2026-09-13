@@ -10,7 +10,6 @@ Future<void> showAddActionSheet({
   required BuildContext context,
   required VoidCallback onAddExpense,
   required VoidCallback onBorrowCurrency,
-  VoidCallback? onAddExchange,
 }) {
   if (!FeatureFlags.enableBorrow) {
     onAddExpense();
@@ -52,17 +51,19 @@ Future<void> showAddActionSheet({
                 },
                 isDark: isDark,
               ),
-              const SizedBox(height: 10),
-              ActionSheetTile(
-                icon: Icons.handshake_outlined,
-                iconColor: isDark ? AppTheme.googleYellowDark : AppTheme.googleYellow,
-                title: 'Borrow Currency',
-                onTap: () {
-                  Navigator.of(context).pop();
-                  onBorrowCurrency();
-                },
-                isDark: isDark,
-              ),
+              if (FeatureFlags.enableBorrow) ...[
+                const SizedBox(height: 10),
+                ActionSheetTile(
+                  icon: Icons.handshake_outlined,
+                  iconColor: isDark ? AppTheme.googleYellowDark : AppTheme.googleYellow,
+                  title: 'Borrow Currency',
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    onBorrowCurrency();
+                  },
+                  isDark: isDark,
+                ),
+              ],
             ],
           ),
         ),

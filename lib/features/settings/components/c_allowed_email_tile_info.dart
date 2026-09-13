@@ -44,13 +44,6 @@ class AllowedEmailTileInfo extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            if (isCurrentUser) ...[
-              const SizedBox(width: 6),
-              StatusBadge(
-                label: 'You',
-                color: accentColor,
-              ),
-            ],
             if (isSuperAdmin) ...[
               const SizedBox(width: 6),
               StatusBadge(

@@ -14,6 +14,7 @@ import 'package:egy_tracker/core/services/f_firestore.dart';
 import 'package:egy_tracker/core/theme/t_app_theme.dart';
 import 'package:egy_tracker/features/auth/s_auth_gate.dart';
 import 'package:egy_tracker/features/settings/components/c_allowed_emails_card.dart';
+import 'package:egy_tracker/features/settings/components/c_theme_selector_card.dart';
 import 'package:egy_tracker/features/settings/s_settings.dart';
 import 'package:egy_tracker/features/settings/vm_settings.dart';
 
@@ -172,16 +173,27 @@ void main() {
       firestoreService.emitEmails([]);
       await tester.pump();
 
-      // Check Theme Mode Card header
+      // Verify Theme Mode card is expanded by default
       expect(find.text('Theme Mode'), findsOneWidget);
-
-      // Expand Theme Mode card
-      await tester.tap(find.text('Theme Mode'));
-      await tester.pumpAndSettle();
-
       expect(find.text('Light'), findsOneWidget);
       expect(find.text('Dark'), findsOneWidget);
       expect(find.text('Auto'), findsOneWidget);
+
+      final sizeTransitionFinder = find.descendant(
+        of: find.byType(ThemeSelectorCard),
+        matching: find.byType(SizeTransition),
+      );
+      expect(tester.widget<SizeTransition>(sizeTransitionFinder).sizeFactor.value, equals(1.0));
+
+      // Verify toggling collapses the card
+      await tester.tap(find.text('Theme Mode'));
+      await tester.pumpAndSettle();
+      expect(tester.widget<SizeTransition>(sizeTransitionFinder).sizeFactor.value, equals(0.0));
+
+      // Toggle again re-expands the card
+      await tester.tap(find.text('Theme Mode'));
+      await tester.pumpAndSettle();
+      expect(tester.widget<SizeTransition>(sizeTransitionFinder).sizeFactor.value, equals(1.0));
 
       expect(AppTheme.themeModeNotifier.value, equals(ThemeMode.system));
 
@@ -208,15 +220,10 @@ void main() {
       await tester.pump();
 
       expect(find.text('Allowed Emails'), findsOneWidget);
-
-      // Expand Allowed Emails card
-      await tester.tap(find.text('Allowed Emails'));
-      await tester.pumpAndSettle();
-
       expect(find.text('No allowed emails yet'), findsOneWidget);
     });
 
-    testWidgets('Renders emails and identifies current user with You badge', (tester) async {
+    testWidgets('Renders allowed emails list with Super Admin badge', (tester) async {
       setLargeSurface(tester);
       await tester.pumpWidget(createWidget());
       firestoreService.emitEmails([
@@ -233,13 +240,10 @@ void main() {
       ]);
       await tester.pump();
 
-      // Expand Allowed Emails card
-      await tester.tap(find.text('Allowed Emails'));
-      await tester.pumpAndSettle();
-
+      expect(find.text('Allowed Emails'), findsOneWidget);
       expect(find.text('abderrahmane.saoudi.26@gmail.com'), findsNWidgets(3));
       expect(find.text('friend@example.com'), findsWidgets);
-      expect(find.text('You'), findsWidgets);
+      expect(find.text('Super Admin'), findsWidgets);
     });
 
     testWidgets('Opens Add Email dialog, validates and adds email', (tester) async {
@@ -248,8 +252,8 @@ void main() {
       firestoreService.emitEmails([]);
       await tester.pump();
 
-      // Tap Add button in header
-      await tester.tap(find.widgetWithText(FilledButton, 'Add'));
+      // Tap placeholder tile to open Add dialog (card is already expanded)
+      await tester.tap(find.byKey(const ValueKey('add_friend_placeholder_tile')));
       await tester.pumpAndSettle();
 
       expect(find.text('Add Allowed Email'), findsOneWidget);
@@ -294,11 +298,7 @@ void main() {
       ]);
       await tester.pump();
 
-      // Expand Allowed Emails card
-      await tester.tap(find.text('Allowed Emails'));
-      await tester.pumpAndSettle();
-
-      // Drag left on email tile to trigger remove action
+      // Drag left on email tile to trigger remove action (card is already expanded)
       final emailSlideCard = find.byType(SlideActionCard);
       expect(emailSlideCard, findsOneWidget);
 
@@ -362,11 +362,7 @@ void main() {
       expect(find.text('Theme Mode'), findsOneWidget);
       expect(find.text('Settings'), findsOneWidget); // Nav item
 
-      // Expand Theme Mode card
-      await tester.tap(find.text('Theme Mode'));
-      await tester.pumpAndSettle();
-
-      // Now toggle theme to Dark from within the Settings card
+      // Theme Mode card is already expanded; toggle to Dark
       await tester.tap(find.text('Dark'));
       await tester.pumpAndSettle();
 
@@ -419,11 +415,6 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Initial Balances'), findsOneWidget);
-
-      // Expand Initial Balances card
-      await tester.tap(find.text('Initial Balances'));
-      await tester.pumpAndSettle();
-
       expect(find.text('\$150'), findsOneWidget);
       expect(find.text('0 EGP'), findsOneWidget);
       expect(find.text('\$200'), findsOneWidget);
@@ -438,10 +429,6 @@ void main() {
       firestoreService.emitBalances([]);
       await tester.pumpAndSettle();
 
-      // Expand Initial Balances card
-      await tester.tap(find.text('Initial Balances'));
-      await tester.pumpAndSettle();
-
       final editYouBtn = find.byKey(const ValueKey('edit_balance_you'));
       expect(editYouBtn, findsOneWidget);
 
@@ -453,14 +440,15 @@ void main() {
       expect(find.text('Starting EGP (EGP)'), findsOneWidget);
       expect(find.widgetWithText(OutlinedButton, 'Cancel'), findsOneWidget);
 
-      // Enter negative amount to test validation
+      // Verify negative signs are stripped and multiple decimal points blocked by formatter
       final textFields = find.byType(TextFormField);
       await tester.enterText(textFields.first, '-50');
-      await tester.tap(find.text('Save'));
       await tester.pumpAndSettle();
+      expect(tester.widget<TextFormField>(textFields.first).controller?.text, '50');
 
-      expect(find.text('Amount must be positive'), findsOneWidget);
-      expect(firestoreService.savedBalances, isEmpty);
+      await tester.enterText(textFields.first, '50.25.10');
+      await tester.pumpAndSettle();
+      expect(tester.widget<TextFormField>(textFields.first).controller?.text, '50');
 
       // Enter valid amounts
       await tester.enterText(textFields.first, '250');
@@ -478,10 +466,6 @@ void main() {
       await tester.pumpWidget(createWidget());
       firestoreService.emitEmails([]);
       firestoreService.emitBalances([]);
-      await tester.pumpAndSettle();
-
-      // Expand Trip Data & Reset card
-      await tester.tap(find.text('Trip Data & Reset'));
       await tester.pumpAndSettle();
 
       final deleteBtn = find.byKey(const ValueKey('delete_all_data_button'));
@@ -551,10 +535,6 @@ void main() {
       // Non-admin does NOT see the Add button
       expect(find.widgetWithText(FilledButton, 'Add'), findsNothing);
 
-      // Expand Allowed Emails card
-      await tester.tap(find.text('Allowed Emails'));
-      await tester.pumpAndSettle();
-
       // Super Admin badge is visible on the super admin email
       expect(find.text('Super Admin'), findsOneWidget);
 
@@ -602,6 +582,70 @@ void main() {
       expect(vm.errorMessage, contains('Only the super admin can delete trip data'));
       expect(await vm.deleteAllTripData(), isFalse);
       expect(vm.errorMessage, contains('Only the super admin can delete trip data'));
+    });
+
+    testWidgets('Limits allowed emails to 2: Add button & placeholder hide when 2 exist and reappear when removed', (tester) async {
+      setLargeSurface(tester);
+      await tester.pumpWidget(createWidget());
+
+      // Start with 1 email (the admin)
+      firestoreService.emitEmails([
+        AllowedEmail(
+          id: 'doc-1',
+          email: 'abderrahmane.saoudi.26@gmail.com',
+          createdAt: DateTime.now(),
+        ),
+      ]);
+      await tester.pump();
+
+      // Header Add button is completely removed
+      expect(find.widgetWithText(FilledButton, 'Add'), findsNothing);
+
+      // With 1 email: friend placeholder tile is visible
+      expect(find.byKey(const ValueKey('add_friend_placeholder_tile')), findsOneWidget);
+      expect(find.text("Add friend's email"), findsOneWidget);
+
+      // Tapping the placeholder tile opens the Add dialog
+      await tester.tap(find.byKey(const ValueKey('add_friend_placeholder_tile')));
+      await tester.pumpAndSettle();
+      expect(find.text('Add Allowed Email'), findsOneWidget);
+
+      // Cancel the dialog
+      await tester.tap(find.widgetWithText(OutlinedButton, 'Cancel'));
+      await tester.pumpAndSettle();
+
+      // Now emit 2 emails (me + 1 friend)
+      firestoreService.emitEmails([
+        AllowedEmail(
+          id: 'doc-1',
+          email: 'abderrahmane.saoudi.26@gmail.com',
+          createdAt: DateTime.now(),
+        ),
+        AllowedEmail(
+          id: 'doc-2',
+          email: 'friend@example.com',
+          createdAt: DateTime.now(),
+        ),
+      ]);
+      await tester.pumpAndSettle();
+
+      // When 2 emails exist: placeholder tile is hidden and no Add button
+      expect(find.widgetWithText(FilledButton, 'Add'), findsNothing);
+      expect(find.byKey(const ValueKey('add_friend_placeholder_tile')), findsNothing);
+
+      // Now remove the friend's email (back to 1 email)
+      firestoreService.emitEmails([
+        AllowedEmail(
+          id: 'doc-1',
+          email: 'abderrahmane.saoudi.26@gmail.com',
+          createdAt: DateTime.now(),
+        ),
+      ]);
+      await tester.pumpAndSettle();
+
+      // Placeholder tile reappears in slot 2!
+      expect(find.byKey(const ValueKey('add_friend_placeholder_tile')), findsOneWidget);
+      expect(find.widgetWithText(FilledButton, 'Add'), findsNothing);
     });
   });
 }

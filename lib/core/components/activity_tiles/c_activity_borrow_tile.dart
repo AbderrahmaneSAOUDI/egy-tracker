@@ -10,6 +10,7 @@ Widget buildBorrowTile({
   required String currentUserId,
   required String? currentUserEmail,
   required String? friendName,
+  Widget? trailingAffordance,
 }) {
   final borrowerId = borrow.borrowerId.toLowerCase().trim();
   final isBorrower = borrowerId == currentUserId.toLowerCase().trim() ||
@@ -58,17 +59,24 @@ Widget buildBorrowTile({
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 actionTitle,
-                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, letterSpacing: -0.2),
+                style: const TextStyle(
+                  fontSize: 15,
+                  height: 1.2,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: -0.2,
+                ),
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 3),
+              const SizedBox(height: 2),
               Text(
                 amountsText,
                 style: TextStyle(
                   fontSize: 12,
+                  height: 1.2,
                   fontWeight: FontWeight.w600,
                   color: isBorrower
                       ? (isDark ? AppTheme.googleGreenDark : AppTheme.googleGreen)
@@ -76,10 +84,14 @@ Widget buildBorrowTile({
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 3),
+              const SizedBox(height: 2),
               Text(
                 Formatters.formatDate(borrow.date),
-                style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.outline),
+                style: TextStyle(
+                  fontSize: 11,
+                  height: 1.2,
+                  color: Theme.of(context).colorScheme.outline,
+                ),
               ),
             ],
           ),
@@ -96,6 +108,10 @@ Widget buildBorrowTile({
             style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold, color: borrowColor),
           ),
         ),
+        if (trailingAffordance != null) ...[
+          const SizedBox(width: 4),
+          trailingAffordance,
+        ],
       ],
     ),
   );

@@ -17,7 +17,6 @@ Future<void> showDeleteAllDataDialog({
   })? onDeleteSelectedData,
   String? Function()? getErrorMessage,
 }) async {
-  final messenger = ScaffoldMessenger.of(context);
   final selection = DeleteDataSelection();
   bool isSubmitting = false;
 
@@ -41,9 +40,8 @@ Future<void> showDeleteAllDataDialog({
             onCancel: () => Navigator.of(dialogContext).pop(false),
             onAction: selection.hasSelection && !isSubmitting
                 ? () => DeleteDataActionRunner.run(
+                      screenContext: context,
                       dialogContext: dialogContext,
-                      messenger: messenger,
-                      colorScheme: colorScheme,
                       selection: selection,
                       setSubmitting: (v) =>
                           setDialogState(() => isSubmitting = v),

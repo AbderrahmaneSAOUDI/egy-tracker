@@ -48,11 +48,6 @@ class HomeActionHandler {
           onSave: feedViewModel.addExpense,
         );
       },
-      onAddExchange: () => openExchange(
-        context: context,
-        currentUserId: currentUserId,
-        feedViewModel: feedViewModel,
-      ),
       onBorrowCurrency: () {
         final friendId = feedViewModel.friendProfile?.id ?? feedViewModel.friendEmailDoc?.email;
         final friendName = feedViewModel.friendProfile?.name ?? feedViewModel.friendEmailDoc?.email;

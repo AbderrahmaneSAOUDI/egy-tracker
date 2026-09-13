@@ -8,7 +8,7 @@ Widget buildTravelerIdentityBar({
   required String? photoUrl,
   required bool isCurrentUser,
   required Color accentColor,
-  required String badge,
+  String? badge,
   required bool isDark,
 }) {
   final theme = Theme.of(context);
@@ -47,25 +47,26 @@ Widget buildTravelerIdentityBar({
           overflow: TextOverflow.ellipsis,
         ),
       ),
-      Container(
-        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3.5),
-        decoration: BoxDecoration(
-          color: accentColor.withValues(alpha: isDark ? 0.18 : 0.10),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: accentColor.withValues(alpha: isDark ? 0.35 : 0.22),
-            width: 1,
+      if (badge != null && badge.isNotEmpty)
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3.5),
+          decoration: BoxDecoration(
+            color: accentColor.withValues(alpha: isDark ? 0.18 : 0.10),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: accentColor.withValues(alpha: isDark ? 0.35 : 0.22),
+              width: 1,
+            ),
+          ),
+          child: Text(
+            badge,
+            style: TextStyle(
+              fontSize: 11.5,
+              fontWeight: FontWeight.bold,
+              color: accentColor,
+            ),
           ),
         ),
-        child: Text(
-          badge,
-          style: TextStyle(
-            fontSize: 11.5,
-            fontWeight: FontWeight.bold,
-            color: accentColor,
-          ),
-        ),
-      ),
     ],
   );
 }
